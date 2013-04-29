@@ -22,12 +22,14 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.Toast;
 
 public class MapActivity extends Activity implements LocationListener, MapViewConstants {
 
     private MapController mapController;
     private MapView mapView;
-    private ItemizedOverlay<OverlayItem> mMyLocationOverlay;
+    private ItemizedOverlay<OverlayItem> mMyItemsOverlay;
+    
     private ResourceProxy mResourceProxy;
 	
 	@Override
@@ -38,14 +40,14 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
 		
 		mapView = (MapView) findViewById(R.id.mapview);
-		mapView.setTileSource(TileSourceFactory.MAPNIK);
+		mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
 
-		mapView.setBuiltInZoomControls(true);
 		mapView.setMultiTouchControls(true);
+		mapView.setBuiltInZoomControls(true);
 		//mapView.set
 		
         mapController = mapView.getController();
-        mapController.setZoom(16);
+        
         
         //get current location
         
@@ -62,6 +64,8 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
         
         GeoPoint currentPosition = new GeoPoint(loc.getLatitude(), loc.getLongitude());
         
+        mapController.setCenter(currentPosition);
+        mapController.setZoom(15);
         
         //create overlay icon
         
@@ -70,25 +74,30 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
         GeoPoint erbaInsel = new GeoPoint(49903259,10869727);
         items.add(new OverlayItem("Erba Insel", "Erba Insel Descr", erbaInsel));
         
-        mapController.setCenter(currentPosition);
         
         /* OnTapListener for the Markers, shows a simple Toast. */
-        this.mMyLocationOverlay = new ItemizedIconOverlay<OverlayItem>(items,
+        this.mMyItemsOverlay = new ItemizedIconOverlay<OverlayItem>(items,
                         new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                                 @Override
                                 public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
+                                	Toast.makeText(
+                                			MapActivity.this,
+                                            "Item '" + item.mTitle+"'", Toast.LENGTH_LONG).show();
                                         Log.i("GM", "Pressed Icon");
                                         return true; // We 'handled' this event.
                                 }
 
                                 @Override
                                 public boolean onItemLongPress(final int index, final OverlayItem item) {
+                                	Toast.makeText(
+                                			MapActivity.this, 
+                                            "Item '" + item.mTitle +"'",Toast.LENGTH_LONG).show();
                                 	Log.i("GM", "Long Pressed Icon");
                                         return false;
                                 }
                         }, mResourceProxy);
         
-        this.mapView.getOverlays().add(this.mMyLocationOverlay);
+        this.mapView.getOverlays().add(this.mMyItemsOverlay);
         mapView.invalidate();
 		
 	}
