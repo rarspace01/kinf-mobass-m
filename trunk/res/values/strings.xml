@@ -6,5 +6,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="maps_status_txt">maps_status_txt</string>
+    <string name="maps_status_txt">maps_status_txt</string>
+    
 
 </resources>

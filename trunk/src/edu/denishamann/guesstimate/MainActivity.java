@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
 	        // Build an alert dialog here that requests that the user enable
 	        // the location services, then when the user clicks the "OK" button,
 	        // call enableLocationSettings()
+	    	enableLocationSettings();
 	    }
 	
 
