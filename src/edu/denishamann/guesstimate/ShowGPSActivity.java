@@ -1,21 +1,32 @@
 package edu.denishamann.guesstimate;
 
+import java.util.ArrayList;
+
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.GpsStatus.Listener;
+import android.location.GpsStatus;
+import android.location.GpsSatellite;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 
-public class ShowGPSActivity extends Activity implements LocationListener {
+public class ShowGPSActivity extends Activity implements LocationListener, GpsStatus.Listener {
 
+	private LocationManager lm;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_gps);
 		
+		lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		
-		
+		lm.addGpsStatusListener(this);
 		
 	}
 
@@ -28,7 +39,7 @@ public class ShowGPSActivity extends Activity implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location location) {
-		
+		Log.i("GM", "Location changed");
 		//location.getProvider().
 		
 		TextView tvlat = (TextView) findViewById( R.id.latitudeView);
@@ -37,15 +48,59 @@ public class ShowGPSActivity extends Activity implements LocationListener {
 		TextView tvlong = (TextView) findViewById( R.id.longitudeView);
 		tvlong.setText(""+location.getLongitude());
 		
-		TextView tvSatelites = (TextView) findViewById( R.id.satView);
-		//location.getProvider().toString()
 		TextView tvProvider = (TextView) findViewById( R.id.providerView);
 		tvProvider.setText(location.getProvider().toString());
 		
-		TextView tvSignalStrength = (TextView) findViewById( R.id.qualityView);
-		//tvProvider.setText(location.getProvider().toString());
+
 	}
 
+	@Override
+	public void onGpsStatusChanged(int event){
+		
+		if (event == GpsStatus.GPS_EVENT_FIRST_FIX){
+		
+		}else if (event == GpsStatus.GPS_EVENT_SATELLITE_STATUS)
+		{
+			GpsStatus gpsstat = lm.getGpsStatus(null);
+			
+			TextView tvSatelites = (TextView) findViewById(R.id.satView);
+			TextView tvSignalStrength = (TextView) findViewById( R.id.qualityView);
+			//location.getProvider().toString()
+			
+			Iterable<GpsSatellite> gpssats= gpsstat.getSatellites();
+			
+			GpsSatellite curSat;
+			int iSatCount=0;
+			
+			float sumSnr=0.0f;
+			
+			while((curSat = gpssats.iterator().next()) != null){
+				
+				sumSnr+=curSat.getSnr();
+				iSatCount++;
+			}
+			
+			
+			
+			tvSatelites.setText(""+iSatCount);
+			tvSignalStrength.setText(""+(sumSnr/iSatCount));
+			
+			
+		}
+		else if (event == GpsStatus.GPS_EVENT_STARTED)
+		{
+		}
+		else if (event == GpsStatus.GPS_EVENT_STOPPED){
+			
+		}
+		
+		
+		
+		
+		//tvProvider.setText(location.getProvider().toString());
+		
+	}
+	
 	@Override
 	public void onProviderDisabled(String provider) {
 		// TODO Auto-generated method stub

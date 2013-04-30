@@ -57,6 +57,11 @@ public class MainActivity extends Activity {
 		
 		if(item.getTitle().toString().contains(getString(R.string.show_gps))){
 			Log.i("GM", "Got correct item");
+			
+			Intent myIntent = new Intent(MainActivity.this, ShowGPSActivity.class);
+			//myIntent.putExtra("key", value); //Optional parameters
+			MainActivity.this.startActivity(myIntent);
+			
 		}
 		
 		return true;
