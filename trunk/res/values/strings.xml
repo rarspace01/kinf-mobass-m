@@ -6,7 +6,15 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="maps_status_txt">maps_status_txt</string>
-    <string name="maps_status_txt">maps_status_txt</string>
-    
+    <string name="show_gps">Show GPS</string>
+    <string name="title_activity_show_gps">ShowGPSActivity</string>
+
+    <string name="gpsStatus">GPS Status</string>
+    <string name="lat">Latitude</string>
+    <string name="empty">--</string>
+    <string name="longitude">Longitude</string>
+    <string name="sat">Satellites in View</string>
+    <string name="qual">Signalqualität</string>
+    <string name="prov">Location Provider</string>
 
 </resources>
