@@ -53,7 +53,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
         
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         //refresh location every 10sec or 100meter if we move
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 100,
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 50,
                 this);
         Criteria crit = new Criteria();
         crit.setAccuracy(Criteria.ACCURACY_FINE);
@@ -109,7 +109,9 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		return true;
 	}
 
+	@Override
     public void onLocationChanged(Location location) {
+		Log.i("GM", "Locatino updated & redraw");
         int lat = (int) (location.getLatitude() * 1E6);
         int lng = (int) (location.getLongitude() * 1E6);
         GeoPoint gpt = new GeoPoint(lat, lng);
