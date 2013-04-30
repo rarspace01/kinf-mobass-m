@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 
 public class MainActivity extends Activity {
 	
@@ -45,6 +47,18 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item){
+		
+		Log.i("GM", "Menu item: "+item.getTitle());
+		
+		if(item.getTitle().toString().contains(getString(R.string.show_gps))){
+			Log.i("GM", "Got correct item");
+		}
+		
 		return true;
 	}
 
