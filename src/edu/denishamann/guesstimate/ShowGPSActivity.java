@@ -74,8 +74,10 @@ public class ShowGPSActivity extends Activity implements LocationListener, GpsSt
 			
 			float sumSnr=0.0f;
 			
-			while((curSat = gpssats.iterator().next()) != null){
-				
+			
+			
+			while(gpssats.iterator().hasNext()){
+				curSat = gpssats.iterator().next();
 				sumSnr+=curSat.getSnr();
 				iSatCount++;
 			}
