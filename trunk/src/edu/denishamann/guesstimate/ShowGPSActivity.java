@@ -2,6 +2,7 @@ package edu.denishamann.guesstimate;
 
 import java.util.ArrayList;
 
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -28,7 +29,13 @@ public class ShowGPSActivity extends Activity implements LocationListener, GpsSt
 		
 		lm.addGpsStatusListener(this);
 		
+	      
+        //refresh location every 10sec or 100meter if we move
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0,
+                this);
+		
 	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
