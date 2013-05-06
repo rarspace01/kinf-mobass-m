@@ -15,6 +15,7 @@ import org.osmdroid.views.util.constants.MapViewConstants;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -22,6 +23,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 public class MapActivity extends Activity implements LocationListener, MapViewConstants {
@@ -53,7 +55,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
         
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         //refresh location every 10sec or 100meter if we move
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0,
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0,
                 this);
         Criteria crit = new Criteria();
         crit.setAccuracy(Criteria.ACCURACY_FINE);
@@ -110,8 +112,26 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	}
 
 	@Override
+	public boolean onOptionsItemSelected(MenuItem item){
+		
+		Log.i("GM", "Menu item: "+item.getTitle());
+		
+		if(item.getTitle().toString().contains(getString(R.string.show_gps))){
+			Log.i("GM", "Got correct item");
+			
+			Intent myIntent = new Intent(MapActivity.this, ShowGPSActivity.class);
+			//myIntent.putExtra("key", value); //Optional parameters
+			MapActivity.this.startActivity(myIntent);
+			
+		}
+		
+		return true;
+	}
+	
+	@Override
     public void onLocationChanged(Location location) {
 		Log.i("GM", "Locatino updated & redraw");
+		//mapController.
         int lat = (int) (location.getLatitude() * 1E6);
         int lng = (int) (location.getLongitude() * 1E6);
         GeoPoint gpt = new GeoPoint(lat, lng);

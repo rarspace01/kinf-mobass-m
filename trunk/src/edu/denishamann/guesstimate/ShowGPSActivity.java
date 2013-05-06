@@ -18,21 +18,25 @@ import android.widget.TextView;
 
 public class ShowGPSActivity extends Activity implements LocationListener, GpsStatus.Listener {
 
-	private LocationManager lm;
+	private LocationManager lm_;
+	private GpsStatus gpsStatus_;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_show_gps);
 		
-		lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		lm_ = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		
-		lm.addGpsStatusListener(this);
+		lm_.addGpsStatusListener(this);
 		
 	      
         //refresh location every 10sec or 100meter if we move
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0,
+        lm_.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0,
                 this);
+        
+        Log.i("GM", "Finished loading activity");
+        
 		
 	}
 
@@ -64,43 +68,61 @@ public class ShowGPSActivity extends Activity implements LocationListener, GpsSt
 	@Override
 	public void onGpsStatusChanged(int event){
 		
-		if (event == GpsStatus.GPS_EVENT_FIRST_FIX){
+		Log.i("GM", "onGpsStatusChanged");
 		
+		if (event == GpsStatus.GPS_EVENT_FIRST_FIX){
+			Log.i("GM", "GPS_EVENT_FIRST_FIX");
 		}else if (event == GpsStatus.GPS_EVENT_SATELLITE_STATUS)
 		{
-			GpsStatus gpsstat = lm.getGpsStatus(null);
+			Log.i("GM", "GPS_EVENT_SATELLITE_STATUS1");
+			gpsStatus_ = lm_.getGpsStatus(gpsStatus_);
+			
+			Log.i("GM", "GPS_EVENT_SATELLITE_STATUS2");
 			
 			TextView tvSatelites = (TextView) findViewById(R.id.satView);
 			TextView tvSignalStrength = (TextView) findViewById( R.id.qualityView);
 			//location.getProvider().toString()
 			
-			Iterable<GpsSatellite> gpssats= gpsstat.getSatellites();
+			Log.i("GM", "GPS_EVENT_SATELLITE_STATUS2 - "+gpsStatus_.getMaxSatellites());
 			
-			GpsSatellite curSat;
+			Iterable<GpsSatellite> gpsstatList= gpsStatus_.getSatellites();
+			
 			int iSatCount=0;
+			int iSatUsedCount=0;
 			
 			float sumSnr=0.0f;
 			
+			Log.i("GM", "GPS_EVENT_SATELLITE_STATUS3");
 			
-			
-			while(gpssats.iterator().hasNext()){
-				curSat = gpssats.iterator().next();
-				sumSnr+=curSat.getSnr();
+			for (GpsSatellite sat : gpsStatus_.getSatellites()){
+				//Log.i("GM", "GPS_EVENT_SATELLITE_STATUS3 - LOOPS - "+iSatCount);
+				if(sat.usedInFix()){
+				Log.i("GM", "DEBUG SNR: "+sat.getSnr());
+				sumSnr+=sat.getSnr();
+				iSatUsedCount++;
+				}
 				iSatCount++;
+				//Log.i("GM", "GPS_EVENT_SATELLITE_STATUS3 - LOOPF - "+iSatCount);
 			}
 			
+			Log.i("GM", "GPS_EVENT_SATELLITE_STATUS4");
 			
+			tvSatelites.setText(""+iSatUsedCount);
+			if(iSatUsedCount>0){
+				tvSignalStrength.setText(""+(sumSnr/iSatUsedCount)+" Last fix on: "+System.currentTimeMillis());
+			}else{
+				tvSignalStrength.setText("0");
+			}
 			
-			tvSatelites.setText(""+iSatCount);
-			tvSignalStrength.setText(""+(sumSnr/iSatCount));
-			
+			Log.i("GM", "GPS_EVENT_SATELLITE_STATUS5");
 			
 		}
 		else if (event == GpsStatus.GPS_EVENT_STARTED)
 		{
+			Log.i("GM", "GPS_EVENT_STARTED");
 		}
 		else if (event == GpsStatus.GPS_EVENT_STOPPED){
-			
+			Log.i("GM", "GPS_EVENT_STOPPED");
 		}
 		
 		
