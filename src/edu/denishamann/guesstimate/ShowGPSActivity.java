@@ -20,6 +20,7 @@ public class ShowGPSActivity extends Activity implements LocationListener, GpsSt
 
 	private LocationManager lm_;
 	private GpsStatus gpsStatus_;
+	private long lastFixTime_=0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -109,9 +110,10 @@ public class ShowGPSActivity extends Activity implements LocationListener, GpsSt
 			
 			tvSatelites.setText(""+iSatUsedCount);
 			if(iSatUsedCount>0){
-				tvSignalStrength.setText(""+(sumSnr/iSatUsedCount)+" Last fix on: "+System.currentTimeMillis());
+				lastFixTime_=System.currentTimeMillis();
+				tvSignalStrength.setText(""+(sumSnr/iSatUsedCount)+" Last fix on: "+lastFixTime_);
 			}else{
-				tvSignalStrength.setText("0");
+				tvSignalStrength.setText("0 Last fix on: "+lastFixTime_);
 			}
 			
 			Log.i("GM", "GPS_EVENT_SATELLITE_STATUS5");
