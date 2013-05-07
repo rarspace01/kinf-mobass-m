@@ -88,18 +88,31 @@ public class MapActivity extends Activity implements LocationListener,
 
 		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		// refresh location every 10sec or 100meter if we move
+		//lm.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 5000, 0, this);
+		//lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, this);
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, this);
 		Criteria crit = new Criteria();
 		crit.setAccuracy(Criteria.ACCURACY_FINE);
 		String provider = lm.getBestProvider(crit, true);
+		
+		Log.i("GM", provider);
+		
 		Location loc = lm.getLastKnownLocation(provider);
-
+		GeoPoint currentPosition=null;
+		
+		if(loc != null){
 		Log.i("GM",
 				"Current Location: " + loc.getLatitude() + " - "
 						+ loc.getLongitude());
-
-		GeoPoint currentPosition = new GeoPoint(loc.getLatitude(),
+			currentPosition = new GeoPoint(loc.getLatitude(),
 				loc.getLongitude());
+		}else{
+			Log.i("GM", "Loc == null, using default value");
+			currentPosition = new GeoPoint(49.903038,10.869427);
+		}
+		
+		
+		
 
 		mapController.setZoom(15);
 		if(intentPoint!=null){
@@ -171,7 +184,7 @@ public class MapActivity extends Activity implements LocationListener,
 
 	@Override
 	public void onLocationChanged(Location location) {
-		Log.i("GM", "Locatino updated & redraw");
+		Log.i("GM", "Location updated & redraw");
 		// mapController.
 		int lat = (int) (location.getLatitude() * 1E6);
 		int lng = (int) (location.getLongitude() * 1E6);
