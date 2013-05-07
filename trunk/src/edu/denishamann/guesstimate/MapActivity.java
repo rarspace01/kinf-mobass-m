@@ -26,82 +26,122 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class MapActivity extends Activity implements LocationListener, MapViewConstants {
+public class MapActivity extends Activity implements LocationListener,
+		MapViewConstants {
 
-    private MapController mapController;
-    private MapView mapView;
-    private ItemizedOverlay<OverlayItem> mMyItemsOverlay;
-    
-    private ResourceProxy mResourceProxy;
-	
+	private MapController mapController;
+	private MapView mapView;
+	private ItemizedOverlay<OverlayItem> mMyItemsOverlay;
+
+	private ResourceProxy mResourceProxy;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 
-		mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
+		// get Intent Data if available
+
+		Log.i("GM", "pre intent test");
 		
+		Intent intent = getIntent();
+		
+		Log.i("GM", "after intent test");
+		
+		String intentData="";
+		
+		if(intent!=null){
+			intentData = intent.getDataString();
+		}
+		GeoPoint intentPoint = null;
+		/* regex check: 
+		 * ^geo:(([\d]{1,3})|([\d]{1,3}[.][\d]*))[,](([\d]{1,3})|([\d]{1,3}[.][\d]*))$
+		 * 
+		 */
+		if(intentData != null){
+			if(intentData.matches("^geo:(([\\d]{1,3})|([\\d]{1,3}[.][\\d]*))[,](([\\d]{1,3})|([\\d]{1,3}[.][\\d]*))$")){
+				Log.i("GM","Intent data: "+intentData);
+				
+				intentData=intentData.substring(intentData.indexOf("geo:")+"geo:".length());
+				
+				Log.i("GM","Intent data2: "+intentData);
+				
+				intentData.substring(0, intentData.indexOf(","));
+				intentData.substring(intentData.indexOf(",")+1);
+				
+				intentPoint=new GeoPoint(Double.parseDouble(intentData.substring(0, intentData.indexOf(","))), Double.parseDouble(intentData.substring(intentData.indexOf(",")+1)));
+			}
+		}
+		
+		mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
+
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
 
 		mapView.setMultiTouchControls(true);
 		mapView.setBuiltInZoomControls(true);
-		//mapView.set
-		
-        mapController = mapView.getController();
-        
-        
-        //get current location
-        
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        //refresh location every 10sec or 100meter if we move
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0,
-                this);
-        Criteria crit = new Criteria();
-        crit.setAccuracy(Criteria.ACCURACY_FINE);
-        String provider = lm.getBestProvider(crit, true);
-        Location loc = lm.getLastKnownLocation(provider);
-        
-        Log.i("GM", "Current Location: "+loc.getLatitude()+" - "+loc.getLongitude());
-        
-        GeoPoint currentPosition = new GeoPoint(loc.getLatitude(), loc.getLongitude());
-        
-        mapController.setCenter(currentPosition);
-        mapController.setZoom(15);
-        
-        //create overlay icon
-        
-        ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
-        
-        GeoPoint erbaInsel = new GeoPoint(49903259,10869727);
-        items.add(new OverlayItem("Erba Insel", "Erba Insel Descr", erbaInsel));
-        
-        
-        /* OnTapListener for the Markers, shows a simple Toast. */
-        this.mMyItemsOverlay = new ItemizedIconOverlay<OverlayItem>(items,
-                        new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
-                                @Override
-                                public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                                	Toast.makeText(
-                                			MapActivity.this,
-                                            "Item '" + item.mTitle+"'", Toast.LENGTH_LONG).show();
-                                        Log.i("GM", "Pressed Icon");
-                                        return true; // We 'handled' this event.
-                                }
+		// mapView.set
 
-                                @Override
-                                public boolean onItemLongPress(final int index, final OverlayItem item) {
-                                	Toast.makeText(
-                                			MapActivity.this, 
-                                            "Item '" + item.mTitle +"'",Toast.LENGTH_LONG).show();
-                                	Log.i("GM", "Long Pressed Icon");
-                                        return false;
-                                }
-                        }, mResourceProxy);
-        
-        this.mapView.getOverlays().add(this.mMyItemsOverlay);
-        mapView.invalidate();
-		
+		mapController = mapView.getController();
+
+		// get current location
+
+		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		// refresh location every 10sec or 100meter if we move
+		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, this);
+		Criteria crit = new Criteria();
+		crit.setAccuracy(Criteria.ACCURACY_FINE);
+		String provider = lm.getBestProvider(crit, true);
+		Location loc = lm.getLastKnownLocation(provider);
+
+		Log.i("GM",
+				"Current Location: " + loc.getLatitude() + " - "
+						+ loc.getLongitude());
+
+		GeoPoint currentPosition = new GeoPoint(loc.getLatitude(),
+				loc.getLongitude());
+
+		mapController.setZoom(15);
+		if(intentPoint!=null){
+			mapController.setCenter(intentPoint);
+		}else{
+			mapController.setCenter(currentPosition);
+		}
+
+		// create overlay icon
+
+		ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
+
+		GeoPoint erbaInsel = new GeoPoint(49903259, 10869727);
+		items.add(new OverlayItem("Erba Insel", "Erba Insel Descr", erbaInsel));
+
+		/* OnTapListener for the Markers, shows a simple Toast. */
+		this.mMyItemsOverlay = new ItemizedIconOverlay<OverlayItem>(items,
+				new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+					@Override
+					public boolean onItemSingleTapUp(final int index,
+							final OverlayItem item) {
+						Toast.makeText(MapActivity.this,
+								"Item '" + item.mTitle + "'", Toast.LENGTH_LONG)
+								.show();
+						Log.i("GM", "Pressed Icon");
+						return true; // We 'handled' this event.
+					}
+
+					@Override
+					public boolean onItemLongPress(final int index,
+							final OverlayItem item) {
+						Toast.makeText(MapActivity.this,
+								"Item '" + item.mTitle + "'", Toast.LENGTH_LONG)
+								.show();
+						Log.i("GM", "Long Pressed Icon");
+						return false;
+					}
+				}, mResourceProxy);
+
+		this.mapView.getOverlays().add(this.mMyItemsOverlay);
+		mapView.invalidate();
+
 	}
 
 	@Override
@@ -112,49 +152,50 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item){
-		
-		Log.i("GM", "Menu item: "+item.getTitle());
-		
-		if(item.getTitle().toString().contains(getString(R.string.show_gps))){
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		Log.i("GM", "Menu item: " + item.getTitle());
+
+		if (item.getTitle().toString().contains(getString(R.string.show_gps))) {
 			Log.i("GM", "Got correct item");
-			
-			Intent myIntent = new Intent(MapActivity.this, ShowGPSActivity.class);
-			//myIntent.putExtra("key", value); //Optional parameters
+
+			Intent myIntent = new Intent(MapActivity.this,
+					ShowGPSActivity.class);
+			// myIntent.putExtra("key", value); //Optional parameters
 			MapActivity.this.startActivity(myIntent);
-			
+
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
-    public void onLocationChanged(Location location) {
+	public void onLocationChanged(Location location) {
 		Log.i("GM", "Locatino updated & redraw");
-		//mapController.
-        int lat = (int) (location.getLatitude() * 1E6);
-        int lng = (int) (location.getLongitude() * 1E6);
-        GeoPoint gpt = new GeoPoint(lat, lng);
-        mapController.setCenter(gpt);
-        mapView.invalidate();
-    }
+		// mapController.
+		int lat = (int) (location.getLatitude() * 1E6);
+		int lng = (int) (location.getLongitude() * 1E6);
+		GeoPoint gpt = new GeoPoint(lat, lng);
+		mapController.setCenter(gpt);
+		mapView.invalidate();
+	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 }

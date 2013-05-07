@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends Activity {
 	
@@ -67,6 +69,22 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+	public void startWebIntent(View view){
+		Log.i("GM", "Web Intent");
+		Uri uri = Uri.parse("http://www.uni-bamberg.de"); 
+		Intent intent = new Intent(Intent.ACTION_VIEW); 
+		intent.setData(uri); 
+		startActivity(intent); 
+	}
+	
+	public void startGeoIntent(View view){
+		Log.i("GM", "Geo Intent");
+		Uri uri = Uri.parse("geo:49.906277,10.903387"); 
+		Intent intent = new Intent(Intent.ACTION_VIEW); 
+		intent.setData(uri); 
+		startActivity(intent); 
+	}
+	
 	private void enableLocationSettings() {
 	    Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 	    startActivity(settingsIntent);
