@@ -16,6 +16,7 @@ import org.osmdroid.views.util.constants.MapViewConstants;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -26,14 +27,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class MapActivity extends Activity implements LocationListener,
-		MapViewConstants {
+public class MapActivity extends Activity implements LocationListener, MapViewConstants {
 
-	private MapController mapController;
-	private MapView mapView;
-	private ItemizedOverlay<OverlayItem> mMyItemsOverlay;
+	private MapController					mapController;
+	private MapView							mapView;
+	private ItemizedOverlay<OverlayItem>	mMyItemsOverlay;
+	private LocationManager					lm;
+	private ArrayList<OverlayItem>			items;
+	private GeoPoint						curLoc;
+	private ProximityAlert					proximityAlert;
 
-	private ResourceProxy mResourceProxy;
+	private ResourceProxy					mResourceProxy;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,36 +47,38 @@ public class MapActivity extends Activity implements LocationListener,
 		// get Intent Data if available
 
 		Log.i("GM", "pre intent test");
-		
+
 		Intent intent = getIntent();
-		
+
 		Log.i("GM", "after intent test");
-		
-		String intentData="";
-		
-		if(intent!=null){
+
+		String intentData = "";
+
+		if (intent != null) {
 			intentData = intent.getDataString();
 		}
 		GeoPoint intentPoint = null;
-		/* regex check: 
-		 * ^geo:(([\d]{1,3})|([\d]{1,3}[.][\d]*))[,](([\d]{1,3})|([\d]{1,3}[.][\d]*))$
-		 * 
+		/*
+		 * regex check:
+		 * ^geo:(([\d]{1,3})|([\d]{1,3}[.][\d]*))[,](([\d]{1,3})|([\
+		 * d]{1,3}[.][\d]*))$
 		 */
-		if(intentData != null){
-			if(intentData.matches("^geo:(([\\d]{1,3})|([\\d]{1,3}[.][\\d]*))[,](([\\d]{1,3})|([\\d]{1,3}[.][\\d]*))$")){
-				Log.i("GM","Intent data: "+intentData);
-				
-				intentData=intentData.substring(intentData.indexOf("geo:")+"geo:".length());
-				
-				Log.i("GM","Intent data2: "+intentData);
-				
+		if (intentData != null) {
+			if (intentData.matches("^geo:(([\\d]{1,3})|([\\d]{1,3}[.][\\d]*))[,](([\\d]{1,3})|([\\d]{1,3}[.][\\d]*))$")) {
+				Log.i("GM", "Intent data: " + intentData);
+
+				intentData = intentData.substring(intentData.indexOf("geo:") + "geo:".length());
+
+				Log.i("GM", "Intent data2: " + intentData);
+
 				intentData.substring(0, intentData.indexOf(","));
-				intentData.substring(intentData.indexOf(",")+1);
-				
-				intentPoint=new GeoPoint(Double.parseDouble(intentData.substring(0, intentData.indexOf(","))), Double.parseDouble(intentData.substring(intentData.indexOf(",")+1)));
+				intentData.substring(intentData.indexOf(",") + 1);
+
+				intentPoint = new GeoPoint(Double.parseDouble(intentData.substring(0, intentData.indexOf(","))),
+						Double.parseDouble(intentData.substring(intentData.indexOf(",") + 1)));
 			}
 		}
-		
+
 		mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
 
 		mapView = (MapView) findViewById(R.id.mapview);
@@ -86,73 +92,73 @@ public class MapActivity extends Activity implements LocationListener,
 
 		// get current location
 
-		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		// refresh location every 10sec or 100meter if we move
-		//lm.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 5000, 0, this);
-		//lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, this);
-		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, this);
+		// lm.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 5000, 0,
+		// this);
+		// lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0,
+		// this);
+		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+		//		lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, this);
 		Criteria crit = new Criteria();
 		crit.setAccuracy(Criteria.ACCURACY_FINE);
 		String provider = lm.getBestProvider(crit, true);
-		
+
 		Log.i("GM", provider);
-		
+
 		Location loc = lm.getLastKnownLocation(provider);
-		GeoPoint currentPosition=null;
-		
-		if(loc != null){
-		Log.i("GM",
-				"Current Location: " + loc.getLatitude() + " - "
-						+ loc.getLongitude());
-			currentPosition = new GeoPoint(loc.getLatitude(),
-				loc.getLongitude());
-		}else{
+		GeoPoint currentPosition = null;
+
+		if (loc != null) {
+			Log.i("GM", "Current Location: " + loc.getLatitude() + " - " + loc.getLongitude());
+			currentPosition = new GeoPoint(loc.getLatitude(), loc.getLongitude());
+		} else {
 			Log.i("GM", "Loc == null, using default value");
-			currentPosition = new GeoPoint(49.903038,10.869427);
+			currentPosition = new GeoPoint(49.903038, 10.869427);
 		}
-		
-		
-		
 
 		mapController.setZoom(15);
-		if(intentPoint!=null){
+		if (intentPoint != null) {
 			mapController.setCenter(intentPoint);
-		}else{
+		} else {
 			mapController.setCenter(currentPosition);
 		}
 
 		// create overlay icon
 
-		ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
+		items = new ArrayList<OverlayItem>();
 
 		GeoPoint erbaInsel = new GeoPoint(49903259, 10869727);
+
+		curLoc = new GeoPoint(currentPosition);
+		OverlayItem curLocItem = new OverlayItem("ProxAlertPoint", "ProxAlertPoint Decsription", curLoc);
+		Drawable newMarker = getResources().getDrawable(R.drawable.curloc);
+		curLocItem.setMarker(newMarker);
+
 		items.add(new OverlayItem("Erba Insel", "Erba Insel Descr", erbaInsel));
+		items.add(curLocItem);
+
+		proximityAlert = new ProximityAlert(this, new GeoPoint(49907635, 10901713));
 
 		/* OnTapListener for the Markers, shows a simple Toast. */
-		this.mMyItemsOverlay = new ItemizedIconOverlay<OverlayItem>(items,
+		mMyItemsOverlay = new ItemizedIconOverlay<OverlayItem>(items,
 				new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
 					@Override
-					public boolean onItemSingleTapUp(final int index,
-							final OverlayItem item) {
-						Toast.makeText(MapActivity.this,
-								"Item '" + item.mTitle + "'", Toast.LENGTH_LONG)
-								.show();
+					public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
+						Toast.makeText(MapActivity.this, "Item '" + item.mTitle + "'", Toast.LENGTH_LONG).show();
 						Log.i("GM", "Pressed Icon");
 						return true; // We 'handled' this event.
 					}
 
 					@Override
-					public boolean onItemLongPress(final int index,
-							final OverlayItem item) {
-						Toast.makeText(MapActivity.this,
-								"Item '" + item.mTitle + "'", Toast.LENGTH_LONG)
-								.show();
+					public boolean onItemLongPress(final int index, final OverlayItem item) {
+						Toast.makeText(MapActivity.this, item.mDescription, Toast.LENGTH_LONG).show();
 						Log.i("GM", "Long Pressed Icon");
 						return false;
 					}
 				}, mResourceProxy);
 
-		this.mapView.getOverlays().add(this.mMyItemsOverlay);
+		mapView.getOverlays().add(mMyItemsOverlay);
 		mapView.invalidate();
 
 	}
@@ -172,8 +178,7 @@ public class MapActivity extends Activity implements LocationListener,
 		if (item.getTitle().toString().contains(getString(R.string.show_gps))) {
 			Log.i("GM", "Got correct item");
 
-			Intent myIntent = new Intent(MapActivity.this,
-					ShowGPSActivity.class);
+			Intent myIntent = new Intent(MapActivity.this, ShowGPSActivity.class);
 			// myIntent.putExtra("key", value); //Optional parameters
 			MapActivity.this.startActivity(myIntent);
 
@@ -184,12 +189,12 @@ public class MapActivity extends Activity implements LocationListener,
 
 	@Override
 	public void onLocationChanged(Location location) {
-		Log.i("GM", "Location updated & redraw");
-		// mapController.
 		int lat = (int) (location.getLatitude() * 1E6);
 		int lng = (int) (location.getLongitude() * 1E6);
-		GeoPoint gpt = new GeoPoint(lat, lng);
-		mapController.setCenter(gpt);
+		Log.i("GM", "Location updated & redraw to " + lat + ":" + lng);
+
+		curLoc.setCoordsE6(lat, lng);
+
 		mapView.invalidate();
 	}
 
@@ -211,4 +216,26 @@ public class MapActivity extends Activity implements LocationListener,
 
 	}
 
+	protected void onPause() {
+		Log.i("GM", "GM paused");
+		proximityAlert.unregisterReceiver();
+
+		super.onPause();
+	}
+
+	protected void onResume() {
+		Log.i("GM", "GM resumed");
+		if (!proximityAlert.isRegistered)
+			proximityAlert.registerReceiver();
+
+		super.onResume();
+	}
+
+	public LocationManager getLocationManager() {
+		return lm;
+	}
+
+	public ArrayList<OverlayItem> getOverlayItems() {
+		return items;
+	}
 }
