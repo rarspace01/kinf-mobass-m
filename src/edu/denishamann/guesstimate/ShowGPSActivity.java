@@ -1,17 +1,13 @@
 package edu.denishamann.guesstimate;
 
-import java.util.ArrayList;
-
-import android.location.Criteria;
+import android.app.Activity;
+import android.content.Context;
+import android.location.GpsSatellite;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.GpsStatus.Listener;
-import android.location.GpsStatus;
-import android.location.GpsSatellite;
 import android.os.Bundle;
-import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
@@ -86,9 +82,6 @@ public class ShowGPSActivity extends Activity implements LocationListener, GpsSt
 			
 			Log.i("GM", "GPS_EVENT_SATELLITE_STATUS2 - "+gpsStatus_.getMaxSatellites());
 			
-			Iterable<GpsSatellite> gpsstatList= gpsStatus_.getSatellites();
-			
-			int iSatCount=0;
 			int iSatUsedCount=0;
 			
 			float sumSnr=0.0f;
@@ -102,7 +95,6 @@ public class ShowGPSActivity extends Activity implements LocationListener, GpsSt
 				sumSnr+=sat.getSnr();
 				iSatUsedCount++;
 				}
-				iSatCount++;
 				//Log.i("GM", "GPS_EVENT_SATELLITE_STATUS3 - LOOPF - "+iSatCount);
 			}
 			

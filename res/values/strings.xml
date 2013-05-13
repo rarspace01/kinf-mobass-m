@@ -16,5 +16,10 @@
     <string name="sat">Satellites in View</string>
     <string name="qual">Signalqualität</string>
     <string name="prov">Location Provider</string>
+    <string name="start_service">Start Service</string>
+    <string name="stop_service">Stop Service</string>
+    <string name="bind_service">Bind Service</string>
+    <string name="read_value">Read Value</string>
+    <string name="unbind_service">Unbind Service</string>
 
 </resources>

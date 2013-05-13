@@ -1,19 +1,29 @@
 package edu.denishamann.guesstimate;
 
+import edu.denishamann.guesstimate.BackgroundService.TimerBinder;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	
+	protected TimerBinder binder;
+	protected BackgroundService mService;
+	protected boolean mBound;
+	private ServiceConnection mConnection;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,8 +47,8 @@ public class MainActivity extends Activity {
 	    }
 	
 
-
-		
+	    //start map activity
+	    
 		Intent myIntent = new Intent(MainActivity.this, MapActivity.class);
 		//myIntent.putExtra("key", value); //Optional parameters
 		MainActivity.this.startActivity(myIntent);
@@ -66,6 +76,26 @@ public class MainActivity extends Activity {
 			
 		}
 		
+		if(item.getTitle().toString().contains(getString(R.string.start_service))){
+			startTickerService();
+		}
+		
+		if(item.getTitle().toString().contains(getString(R.string.stop_service))){
+			stopTickerService();
+		}
+		
+		if(item.getTitle().toString().contains(getString(R.string.bind_service))){
+			bindService();
+		}
+		
+		if(item.getTitle().toString().contains(getString(R.string.unbind_service))){
+			unbindService();
+		}
+		
+		if(item.getTitle().toString().contains(getString(R.string.read_value))){
+			readValue();
+		}
+		
 		return true;
 	}
 
@@ -85,9 +115,71 @@ public class MainActivity extends Activity {
 		startActivity(intent); 
 	}
 	
+
+	//methods
+	
 	private void enableLocationSettings() {
 	    Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 	    startActivity(settingsIntent);
 	}
 	
+	private void startTickerService(){
+		  Intent intent = new Intent(this, BackgroundService.class); 
+		  startService(intent); 
+	}
+	
+	private void stopTickerService() { 
+	    Intent intent = new Intent(this, BackgroundService.class); 
+	    stopService(intent); 
+	} 
+	
+	private void readValue(){
+		Log.i("GM", "readValue");
+		if(!mBound){
+			//error
+			Log.e("GM", "Service not bound");
+		}
+		if(mBound){
+			TextView tvValue = (TextView) findViewById( R.id.tvValue);
+			tvValue.setText(""+this.mService.getValue());
+		}
+		
+	}
+	
+	private void bindService(){
+		
+		mConnection = new 
+				ServiceConnection() { 
+				 
+				@Override 
+				public void onServiceConnected (ComponentName 
+				className, IBinder service) { 
+				  binder = (TimerBinder) service; 
+				  mService = binder.getService(); 
+				  mBound = true; 
+				  }  
+				 
+				@Override 
+				public void onServiceDisconnected 
+				(ComponentName arg0) { 
+				   mBound = false;  
+				  }
+				};
+		
+		bindService( 
+				new Intent(this, BackgroundService.class),           //wie bei startService 
+				  mConnection,   //ServiceConnection 
+				  //Flag, die das Verhältnis von 
+				  //Service und Acitivity festlegt 
+				  MainActivity.BIND_IMPORTANT     
+				); 
+	}
+	
+	private void unbindService(){
+		unbindService(mConnection);
+	}
+	
+	//inner classes
+	
+ 
 }

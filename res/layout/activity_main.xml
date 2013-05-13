@@ -6,7 +6,7 @@
 <!-- android:clickable="true" -->
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/TextView01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Main Activity"
@@ -25,5 +25,19 @@
         android:layout_height="wrap_content"
         android:onClick="startGeoIntent"
         android:text="Start Geo Intent" />
+
+    <TextView
+        android:id="@+id/valueDescr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Value: "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/tvValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Value: "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>
