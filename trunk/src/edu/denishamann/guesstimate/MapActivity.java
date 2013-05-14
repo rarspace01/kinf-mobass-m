@@ -27,6 +27,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+/**
+ * 
+ * @author denis
+ *
+ */
 public class MapActivity extends Activity implements LocationListener, MapViewConstants {
 
 	private MapController					mapController;
