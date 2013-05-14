@@ -12,6 +12,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 
+/**
+ * 
+ * @author denis
+ *
+ */
 public class ShowGPSActivity extends Activity implements LocationListener, GpsStatus.Listener {
 
 	private LocationManager lm_;

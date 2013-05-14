@@ -1,6 +1,6 @@
 package edu.denishamann.guesstimate;
 
-import edu.denishamann.guesstimate.BackgroundService.TimerBinder;
+import edu.denishamann.guesstimate.BackgroundService.BackgroundServiceBinder;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -17,9 +17,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+/**
+ * 
+ * @author denis
+ *
+ */
 public class MainActivity extends Activity {
 	
-	protected TimerBinder binder;
+	protected BackgroundServiceBinder binder;
 	protected BackgroundService mService;
 	protected boolean mBound;
 	private ServiceConnection mConnection;
@@ -154,7 +159,7 @@ public class MainActivity extends Activity {
 				@Override 
 				public void onServiceConnected (ComponentName 
 				className, IBinder service) { 
-				  binder = (TimerBinder) service; 
+				  binder = (BackgroundServiceBinder) service; 
 				  mService = binder.getService(); 
 				  mBound = true; 
 				  }  
