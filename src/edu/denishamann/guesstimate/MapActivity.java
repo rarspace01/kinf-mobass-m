@@ -11,6 +11,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.OverlayItem.HotspotPlace;
 import org.osmdroid.views.util.constants.MapViewConstants;
 
 import android.app.Activity;
@@ -25,12 +26,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 /**
  * 
  * @author denis
- *
+ * 
  */
 public class MapActivity extends Activity implements LocationListener, MapViewConstants {
 
@@ -49,62 +51,40 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 
-		// get Intent Data if available
-
-		Log.i("GM", "pre intent test");
-
 		Intent intent = getIntent();
-
-		Log.i("GM", "after intent test");
-
-		String intentData = "";
-
+		String intentDataString = "";
 		if (intent != null) {
-			intentData = intent.getDataString();
+			intentDataString = intent.getDataString();
 		}
+
 		GeoPoint intentPoint = null;
-		/*
-		 * regex check:
-		 * ^geo:(([\d]{1,3})|([\d]{1,3}[.][\d]*))[,](([\d]{1,3})|([\
-		 * d]{1,3}[.][\d]*))$
-		 */
-		if (intentData != null) {
-			if (intentData.matches("^geo:(([\\d]{1,3})|([\\d]{1,3}[.][\\d]*))[,](([\\d]{1,3})|([\\d]{1,3}[.][\\d]*))$")) {
-				Log.i("GM", "Intent data: " + intentData);
+		if (intentDataString != null) {
+			if (intentDataString
+					.matches("^geo:(([\\d]{1,3})|([\\d]{1,3}[.][\\d]*))[,](([\\d]{1,3})|([\\d]{1,3}[.][\\d]*))$")) {
+				Log.i("GM", "Intent data: " + intentDataString);
 
-				intentData = intentData.substring(intentData.indexOf("geo:") + "geo:".length());
+				intentDataString = intentDataString.substring(intentDataString.indexOf("geo:") + "geo:".length());
 
-				Log.i("GM", "Intent data2: " + intentData);
+				Log.i("GM", "Intent data2: " + intentDataString);
 
-				intentData.substring(0, intentData.indexOf(","));
-				intentData.substring(intentData.indexOf(",") + 1);
-
-				intentPoint = new GeoPoint(Double.parseDouble(intentData.substring(0, intentData.indexOf(","))),
-						Double.parseDouble(intentData.substring(intentData.indexOf(",") + 1)));
+				intentPoint = new GeoPoint(Double.parseDouble(intentDataString.substring(0,
+						intentDataString.indexOf(","))), Double.parseDouble(intentDataString.substring(intentDataString
+						.indexOf(",") + 1)));
 			}
 		}
-
-		mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
 
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
 
 		mapView.setMultiTouchControls(true);
 		mapView.setBuiltInZoomControls(true);
-		// mapView.set
 
 		mapController = mapView.getController();
 
 		// get current location
-
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		// refresh location every 10sec or 100meter if we move
-		// lm.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 5000, 0,
-		// this);
-		// lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0,
-		// this);
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
-		//		lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, this);
+
 		Criteria crit = new Criteria();
 		crit.setAccuracy(Criteria.ACCURACY_FINE);
 		String provider = lm.getBestProvider(crit, true);
@@ -130,21 +110,17 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		}
 
 		// create overlay icon
-
 		items = new ArrayList<OverlayItem>();
 
-		GeoPoint erbaInsel = new GeoPoint(49903259, 10869727);
-
 		curLoc = new GeoPoint(currentPosition);
-		OverlayItem curLocItem = new OverlayItem("ProxAlertPoint", "ProxAlertPoint Decsription", curLoc);
 		Drawable newMarker = getResources().getDrawable(R.drawable.curloc);
+		newMarker.setAlpha(155);
+		OverlayItem curLocItem = new OverlayItem("ProxAlertPoint", "ProxAlertPoint Decsription", curLoc);
 		curLocItem.setMarker(newMarker);
-
-		items.add(new OverlayItem("Erba Insel", "Erba Insel Descr", erbaInsel));
+		curLocItem.setMarkerHotspot(HotspotPlace.CENTER);
 		items.add(curLocItem);
 
-		proximityAlert = new ProximityAlert(this, new GeoPoint(49907635, 10901713));
-
+		mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
 		/* OnTapListener for the Markers, shows a simple Toast. */
 		mMyItemsOverlay = new ItemizedIconOverlay<OverlayItem>(items,
 				new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
@@ -163,30 +139,25 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 					}
 				}, mResourceProxy);
 
+		proximityAlert = new ProximityAlert(this, new GeoPoint(49907035, 10901013));
+
 		mapView.getOverlays().add(mMyItemsOverlay);
 		mapView.invalidate();
-
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.map, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
 		Log.i("GM", "Menu item: " + item.getTitle());
 
 		if (item.getTitle().toString().contains(getString(R.string.show_gps))) {
-			Log.i("GM", "Got correct item");
-
 			Intent myIntent = new Intent(MapActivity.this, ShowGPSActivity.class);
-			// myIntent.putExtra("key", value); //Optional parameters
 			MapActivity.this.startActivity(myIntent);
-
 		}
 
 		return true;
@@ -196,10 +167,15 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	public void onLocationChanged(Location location) {
 		int lat = (int) (location.getLatitude() * 1E6);
 		int lng = (int) (location.getLongitude() * 1E6);
-		Log.i("GM", "Location updated & redraw to " + lat + ":" + lng);
+		Log.i("GM", "Location updated & redraw to " + lat + ":" + lng + " | zoom: " + mapView.getZoomLevel());
 
 		curLoc.setCoordsE6(lat, lng);
 
+		mapView.invalidate();
+	}
+
+	public void goToLoc(View view) {
+		mapController.setCenter(new GeoPoint(curLoc));
 		mapView.invalidate();
 	}
 
@@ -240,7 +216,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		return lm;
 	}
 
-	public ArrayList<OverlayItem> getOverlayItems() {
-		return items;
+	public MapView getMapView() {
+		return mapView;
 	}
 }

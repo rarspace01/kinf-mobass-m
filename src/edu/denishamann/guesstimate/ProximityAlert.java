@@ -1,7 +1,6 @@
 package edu.denishamann.guesstimate;
 
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.OverlayItem;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -22,6 +21,10 @@ public class ProximityAlert extends BroadcastReceiver {
 	private GeoPoint					proximityPoint;
 
 	public boolean						isRegistered	= false;
+	public boolean						isFired			= false;
+
+	private CircleOverlay				circleOverlay;
+	private int							radius;
 
 	public ProximityAlert() {
 	}
@@ -29,27 +32,35 @@ public class ProximityAlert extends BroadcastReceiver {
 	public ProximityAlert(MapActivity mActivity, GeoPoint pPoint) {
 		mapActivity = mActivity;
 		proximityPoint = pPoint;
-
-		Intent proxIntent = new Intent(PROXIMITY_ALERT);
-		pIntent = PendingIntent.getBroadcast(mapActivity, 0, proxIntent, PendingIntent.FLAG_ONE_SHOT); // TODO: POI-ID statt 0?
+		radius = 50;
 
 		registerReceiver();
 
-		mapActivity.getOverlayItems().add(
-				new OverlayItem("ProxAlertPoint", "ProxAlertPoint Decsription", proximityPoint));
+		circleOverlay = new CircleOverlay(mapActivity, proximityPoint, mapActivity.getMapView());
+		circleOverlay.setRadius(radius);
+		mapActivity.getMapView().getOverlays().add(circleOverlay);
 
 		Log.i("GM", "Set up ProximityAlert");
 	}
 
 	public void setProximityPoint(GeoPoint pPoint) {
+		proximityPoint = pPoint;
 
+		mapActivity.getLocationManager().removeProximityAlert(pIntent);
+		mapActivity.getLocationManager().addProximityAlert(proximityPoint.getLatitudeE6() / 1e6,
+				proximityPoint.getLongitudeE6() / 1e6, radius, -1, pIntent);
+
+		isFired = false;
 	}
 
 	public void registerReceiver() {
 		Log.i("GM", "ProxAlert registered");
+
+		pIntent = PendingIntent.getBroadcast(mapActivity, 0, new Intent(PROXIMITY_ALERT), PendingIntent.FLAG_ONE_SHOT);
 		mapActivity.registerReceiver(this, iFilter);
 		mapActivity.getLocationManager().addProximityAlert(proximityPoint.getLatitudeE6() / 1e6,
-				proximityPoint.getLongitudeE6() / 1e6, 10, -1, pIntent);
+				proximityPoint.getLongitudeE6() / 1e6, radius, -1, pIntent);
+
 		isRegistered = true;
 	}
 
@@ -62,14 +73,18 @@ public class ProximityAlert extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		String info = "ProximityAlert: ";
-		if (intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false)) {
-			Toast.makeText(context, "You are here!", Toast.LENGTH_LONG).show();
-			info += "incoming";
-		} else {
-			Toast.makeText(context, "Where are you going?", Toast.LENGTH_LONG).show();
-			info += "outgoing";
+		if (!isFired) {
+			isFired = true;
+
+			String info = "ProximityAlert: ";
+			if (intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false)) {
+				Toast.makeText(context, "You are here!", Toast.LENGTH_LONG).show();
+				info += "incoming";
+			} else {
+				Toast.makeText(context, "Where are you going?", Toast.LENGTH_LONG).show();
+				info += "outgoing";
+			}
+			Log.i("GM", info);
 		}
-		Log.i("GM", info);
 	}
 }
