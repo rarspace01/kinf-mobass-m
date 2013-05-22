@@ -24,7 +24,7 @@
         >
 
     </org.osmdroid.views.MapView>
-
+<!--
     <TextView
         android:id="@+id/valueDescr"
         android:layout_width="wrap_content"
@@ -33,5 +33,15 @@
         android:layout_alignTop="@+id/mapview"
         android:text="@string/maps_status_txt"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+ -->
+     
+    <Button
+        android:id="@+id/webIntentButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/mapview"
+        android:onClick="goToLoc"
+        android:text="..." />
 
 </RelativeLayout>
