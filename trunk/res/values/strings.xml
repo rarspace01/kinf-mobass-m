@@ -21,5 +21,6 @@
     <string name="bind_service">Bind Service</string>
     <string name="read_value">Read Value</string>
     <string name="unbind_service">Unbind Service</string>
+    <string name="enter_guesstimate">Guess Distance</string>
 
 </resources>

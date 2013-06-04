@@ -7,6 +7,8 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="15" />
+    
+    
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -16,6 +18,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
+    <instrumentation android:name="android.test.InstrumentationTestRunner" android:targetPackage="edu.denishamann.guesstimate" android:label="My Test label"></instrumentation>
 
     <application
         android:allowBackup="true"
@@ -56,5 +59,6 @@
                           <action android:name="edu.denishamann.guesstimate.PROXIMITYALERT"/>
             </intent-filter>
         </receiver>
+        <uses-library android:name="android.test.runner" />
     </application>
 </manifest>

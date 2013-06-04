@@ -15,7 +15,10 @@ import org.osmdroid.views.overlay.OverlayItem.HotspotPlace;
 import org.osmdroid.views.util.constants.MapViewConstants;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
@@ -26,6 +29,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.view.View;
 import android.widget.Toast;
 
@@ -159,6 +163,11 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			Intent myIntent = new Intent(MapActivity.this, ShowGPSActivity.class);
 			MapActivity.this.startActivity(myIntent);
 		}
+		
+		if(item.getTitle().toString().contains(getString(R.string.enter_guesstimate))){
+			inputDialog();
+		}
+		
 
 		return true;
 	}
@@ -218,5 +227,23 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 
 	public MapView getMapView() {
 		return mapView;
+	}
+	
+	private void inputDialog()
+	{
+	AlertDialog.Builder alert = new AlertDialog.Builder(this);
+	alert.setTitle("Please enter guessed Distance");
+	final EditText input = new EditText(this);
+	alert.setView(input);
+	
+	alert.setPositiveButton("Ok", null);
+
+	alert.setNegativeButton("Cancel", null);
+
+	alert.show();
+	}
+	
+	public void drawRouteOnMap(){
+		
 	}
 }
