@@ -18,7 +18,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
-    <instrumentation android:name="android.test.InstrumentationTestRunner" android:targetPackage="edu.denishamann.guesstimate" android:label="My Test label"></instrumentation>
 
     <application
         android:allowBackup="true"
@@ -59,6 +58,22 @@
                           <action android:name="edu.denishamann.guesstimate.PROXIMITYALERT"/>
             </intent-filter>
         </receiver>
+        
+
+        <activity
+            android:name="edu.denishamann.guesstimate.StartActivity"
+            android:label="@string/title_activity_start" >
+        </activity>
+        <activity
+            android:name="edu.denishamann.guesstimate.HowToActivity"
+            android:label="@string/title_activity_how_to" >
+        </activity>
+        <activity
+            android:name="edu.denishamann.guesstimate.AboutActivity"
+            android:label="@string/title_activity_about" >
+        </activity>
+        
         <uses-library android:name="android.test.runner" />
+    
     </application>
 </manifest>

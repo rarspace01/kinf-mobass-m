@@ -1,24 +1,35 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center_vertical"
-    android:orientation="vertical" >
-
-    <!-- android:clickable="true" -->
-
-    <TextView
-        android:id="@+id/TextView01"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.74"
-        android:text="Welcome to Guesstimate.
-        On the next Screen ...lorem ipsum"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/howto_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Game" />
+        android:layout_above="@+id/about_button"
+        android:layout_centerHorizontal="true"
+        android:text="@string/howto"
+        android:onClick="startHowTo" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/about_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp"
+        android:text="@string/about"
+        android:onClick="startAbout" />
+
+    <Button
+        android:id="@+id/start_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/howto_button"
+        android:layout_centerHorizontal="true"
+        android:text="@string/start"
+        android:onClick="startGame" />
+
+</RelativeLayout>
