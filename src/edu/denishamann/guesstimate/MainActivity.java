@@ -144,10 +144,10 @@ public class MainActivity extends Activity {
 			//error
 			Log.e("GM", "Service not bound");
 		}
-		if(mBound){
-			TextView tvValue = (TextView) findViewById( R.id.tvValue);
-			tvValue.setText(""+this.mService.getValue());
-		}
+//		if(mBound){
+//			TextView tvValue = (TextView) findViewById( R.id.tvValue);
+//			tvValue.setText(""+this.mService.getValue());
+//		}
 		
 	}
 	

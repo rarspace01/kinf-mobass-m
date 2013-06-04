@@ -1,43 +1,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
-<!-- android:clickable="true" -->
+    android:gravity="center_vertical"
+    android:orientation="vertical" >
+
+    <!-- android:clickable="true" -->
 
     <TextView
         android:id="@+id/TextView01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Main Activity"
+        android:layout_weight="0.74"
+        android:text="Welcome to Guesstimate.
+        On the next Screen ...lorem ipsum"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
-        android:id="@+id/webIntentButton"
+        android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="startWebIntent"
-        android:text="Start Web Intent" />
-
-    <Button
-        android:id="@+id/geoIntentButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="startGeoIntent"
-        android:text="Start Geo Intent" />
-
-    <TextView
-        android:id="@+id/valueDescr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Value: "
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/tvValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Value: "
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:text="Start Game" />
 
 </LinearLayout>
