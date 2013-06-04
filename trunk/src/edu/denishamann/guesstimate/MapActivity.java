@@ -1,6 +1,8 @@
 package edu.denishamann.guesstimate;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;
@@ -12,26 +14,29 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.OverlayItem.HotspotPlace;
+import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.util.constants.MapViewConstants;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
+import edu.denishamann.guesstimate.model.GeoLocation;
+import edu.denishamann.ors_api.Route;
 
 /**
  * 
@@ -166,7 +171,8 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		}
 		
 		if(item.getTitle().toString().contains(getString(R.string.enter_guesstimate))){
-			inputDialog();
+			drawRouteOnMap(new Route(new GeoLocation(49.904005,10.859725), new GeoLocation(49.902637,10.870646)));
+			//inputDialog();
 		}
 		
 
@@ -244,7 +250,33 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	alert.show();
 	}
 	
-	public void drawRouteOnMap(){
+	public void drawRouteOnMap(Route route){
+
+		new RetrieveRouteTask().execute(route);
+		
+	}
+	
+	private  class RetrieveRouteTask extends AsyncTask<Route, Void, List<GeoLocation> > {
+
+		@Override
+		protected List<GeoLocation> doInBackground(Route... params) {
+			Route route = params[0];
+			return route.getPath();
+		}
+
+	    protected void onPostExecute(List<GeoLocation> route) {
+
+	    	List <GeoLocation> glList=new LinkedList<GeoLocation>();
+			glList = route;	
+			
+			PathOverlay routePath = new PathOverlay(Color.RED, MapActivity.this);
+			for(int i=0; i<glList.size(); i++){
+				routePath.addPoint(new GeoPoint(glList.get(i).getLatitude(),glList.get(i).getLongitude()));
+			}
+			MapActivity.this.mapView.getOverlays().add(routePath);
+			MapActivity.this.mapView.invalidate();
+	    	
+	    }
 		
 	}
 }
