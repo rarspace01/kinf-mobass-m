@@ -92,8 +92,10 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 
 		// get current location
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+		    lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
+		}
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
-		lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
 
 		Criteria crit = new Criteria();
 		crit.setAccuracy(Criteria.ACCURACY_FINE);
