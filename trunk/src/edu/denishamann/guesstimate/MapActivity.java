@@ -90,7 +90,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 
 		mapController = mapView.getController();
 
-		// get current location
+		// start location updates
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 		    lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
@@ -173,7 +173,11 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		}
 		
 		if(item.getTitle().toString().contains(getString(R.string.enter_guesstimate))){
-			drawRouteOnMap(new Route(new GeoLocation(49.904005,10.859725), new GeoLocation(49.902637,10.870646)));
+			Criteria crit = new Criteria();
+			crit.setAccuracy(Criteria.ACCURACY_FINE);
+			String provider = lm.getBestProvider(crit, true);
+			Location loc = lm.getLastKnownLocation(provider);
+			drawRouteOnMap(new Route(new GeoLocation(49.904005,10.859725), new GeoLocation(loc.getLatitude(),loc.getLongitude())));
 			//inputDialog();
 		}
 		

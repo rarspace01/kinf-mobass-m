@@ -7,6 +7,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import android.util.Log;
+
 import edu.denishamann.guesstimate.model.GeoLocation;
 import edu.denishamann.io.HttpHelper;
 
@@ -42,7 +44,7 @@ public class Route {
 		System.out.println(sURL);
 		sPuffer=HttpHelper.getPage(sURL);
 		
-		//System.out.println(sPuffer);
+		Log.v("GM",sPuffer);
 		
 		XMLParser parser = new XMLParser();
 		
@@ -54,21 +56,24 @@ public class Route {
 		
 		if(nl.getLength()>0){
 			nlm = nl.item(0).getChildNodes();
+			
+			System.out.println("Count: "+nlm.getLength());
+			// looping through all item nodes <item>      
+			for (int i = 0; i < nlm.getLength(); i++) {
+				Element e = (Element) nlm.item(i);
+				if(parser.getValue(e, "lat").matches("^[\\d]{1,3}[.][\\d]*$")&&parser.getValue(e, "lng").matches("^[\\d]{1,3}[.][\\d]*$")){
+					Double lat = Double.parseDouble(parser.getValue(e, "lat"));
+					Double lng = Double.parseDouble(parser.getValue(e, "lng"));
+					gl.add(new GeoLocation(lat, lng));
+				}else{
+					System.out.println("input error on : "+parser.getValue(e, "lat")+ " - "+ parser.getValue(e, "lng"));
+				}
+				//add new 
+			}
+		}else{
+			Log.e("GM", "couldn't retrieve path");
 		}
 		
-		System.out.println("Count: "+nlm.getLength());
-		// looping through all item nodes <item>      
-		for (int i = 0; i < nlm.getLength(); i++) {
-			Element e = (Element) nlm.item(i);
-			if(parser.getValue(e, "lat").matches("^[\\d]{1,3}[.][\\d]*$")&&parser.getValue(e, "lng").matches("^[\\d]{1,3}[.][\\d]*$")){
-				Double lat = Double.parseDouble(parser.getValue(e, "lat"));
-				Double lng = Double.parseDouble(parser.getValue(e, "lng"));
-				gl.add(new GeoLocation(lat, lng));
-			}else{
-				System.out.println("input error on : "+parser.getValue(e, "lat")+ " - "+ parser.getValue(e, "lng"));
-			}
-			//add new 
-		}
 		
 		
 		return gl;
