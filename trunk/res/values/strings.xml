@@ -40,5 +40,6 @@
     <string name="mobile_ass">Mobile Assistance Systems</string>
     <string name="c2013">(c) 2013</string>
     <string name="descprition">Easy Difficulty:\nWhen you started the game, tap on the markers on the map and guess the distance to this point. Based on your guessed distances to four map markers, a point will be calculated where you should be if your estimates would be correct. You then have to go with a certain radius of this point before you can take a guess for the next four points. The goal of this game is to go to as many points as possible in a fixed time.</string>
+    <string name="real_lateration">Use Real Lateration</string>
 
 </resources>

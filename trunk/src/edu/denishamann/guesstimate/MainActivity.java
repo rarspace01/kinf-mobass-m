@@ -25,11 +25,21 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
+
+		menu.findItem(R.id.real_lateration).setChecked(true);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.real_lateration:
+				item.setChecked(!item.isChecked());
+				break;
+
+			default:
+				break;
+		}
 		return true;
 	}
 

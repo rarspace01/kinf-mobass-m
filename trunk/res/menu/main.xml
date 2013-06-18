@@ -5,20 +5,9 @@
         android:showAsAction="always"
         android:title="@string/action_settings">
 	    <menu>
-		    <item android:id="@+id/show_gps"
-		        android:orderInCategory="101"
-		        android:title="@string/show_gps"
-		        android:checkable="true" ></item>
-		    <item android:id="@+id/start_service"
-		        android:title="@string/start_service"></item>
-		    <item android:id="@+id/stop_service"
-		        android:title="@string/stop_service"></item>
-		    <item android:id="@+id/bind_service"
-		        android:title="@string/bind_service"></item>
-		    <item android:id="@+id/unbind_service"
-		        android:title="@string/unbind_service"></item>
-		    <item android:id="@+id/read_value"
-		        android:title="@string/read_value"></item>
+		    <item android:id="@+id/real_lateration" 
+		        android:checkable="true" 
+         		android:title="@string/real_lateration" />
 		</menu>
 	</item>
 </menu>
