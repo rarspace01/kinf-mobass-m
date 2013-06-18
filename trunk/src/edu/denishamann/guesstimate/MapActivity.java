@@ -55,8 +55,14 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 
 	private ResourceProxy					mResourceProxy;
 
+	private boolean							started	= false;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		if (started) {
+			return;
+		}
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 
@@ -93,7 +99,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		// start location updates
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-		    lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
+			lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
 		}
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
 
@@ -155,6 +161,8 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 
 		mapView.getOverlays().add(mMyItemsOverlay);
 		mapView.invalidate();
+
+		started = true;
 	}
 
 	@Override
@@ -171,13 +179,14 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			Intent myIntent = new Intent(MapActivity.this, ShowGPSActivity.class);
 			MapActivity.this.startActivity(myIntent);
 		}
-		
-		if(item.getTitle().toString().contains(getString(R.string.enter_guesstimate))){
+
+		if (item.getTitle().toString().contains(getString(R.string.enter_guesstimate))) {
 			Criteria crit = new Criteria();
 			crit.setAccuracy(Criteria.ACCURACY_FINE);
 			String provider = lm.getBestProvider(crit, true);
 			Location loc = lm.getLastKnownLocation(provider);
-			drawRouteOnMap(new Route(new GeoLocation(49.904005,10.859725), new GeoLocation(loc.getLatitude(),loc.getLongitude())));
+			drawRouteOnMap(new Route(new GeoLocation(49.904005, 10.859725), new GeoLocation(loc.getLatitude(),
+					loc.getLongitude())));
 			//inputDialog();
 		}
 
