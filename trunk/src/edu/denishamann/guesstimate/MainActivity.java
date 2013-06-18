@@ -1,6 +1,5 @@
 package edu.denishamann.guesstimate;
 
-import edu.denishamann.guesstimate.BackgroundService.BackgroundServiceBinder;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
