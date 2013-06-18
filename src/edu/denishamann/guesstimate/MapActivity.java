@@ -180,7 +180,6 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			drawRouteOnMap(new Route(new GeoLocation(49.904005,10.859725), new GeoLocation(loc.getLatitude(),loc.getLongitude())));
 			//inputDialog();
 		}
-		
 
 		return true;
 	}
@@ -241,28 +240,27 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	public MapView getMapView() {
 		return mapView;
 	}
-	
-	private void inputDialog()
-	{
-	AlertDialog.Builder alert = new AlertDialog.Builder(this);
-	alert.setTitle("Please enter guessed Distance");
-	final EditText input = new EditText(this);
-	alert.setView(input);
-	
-	alert.setPositiveButton("Ok", null);
 
-	alert.setNegativeButton("Cancel", null);
+	private void inputDialog() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle("Please enter guessed Distance");
+		final EditText input = new EditText(this);
+		alert.setView(input);
 
-	alert.show();
+		alert.setPositiveButton("Ok", null);
+
+		alert.setNegativeButton("Cancel", null);
+
+		alert.show();
 	}
-	
-	public void drawRouteOnMap(Route route){
+
+	public void drawRouteOnMap(Route route) {
 
 		new RetrieveRouteTask().execute(route);
-		
+
 	}
-	
-	private  class RetrieveRouteTask extends AsyncTask<Route, Void, List<GeoLocation> > {
+
+	private class RetrieveRouteTask extends AsyncTask<Route, Void, List<GeoLocation>> {
 
 		@Override
 		protected List<GeoLocation> doInBackground(Route... params) {
@@ -270,19 +268,19 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			return route.getPath();
 		}
 
-	    protected void onPostExecute(List<GeoLocation> route) {
+		protected void onPostExecute(List<GeoLocation> route) {
 
-	    	List <GeoLocation> glList=new LinkedList<GeoLocation>();
-			glList = route;	
-			
+			List<GeoLocation> glList = new LinkedList<GeoLocation>();
+			glList = route;
+
 			PathOverlay routePath = new PathOverlay(Color.RED, MapActivity.this);
-			for(int i=0; i<glList.size(); i++){
-				routePath.addPoint(new GeoPoint(glList.get(i).getLatitude(),glList.get(i).getLongitude()));
+			for (int i = 0; i < glList.size(); i++) {
+				routePath.addPoint(new GeoPoint(glList.get(i).getLatitude(), glList.get(i).getLongitude()));
 			}
 			MapActivity.this.mapView.getOverlays().add(routePath);
 			MapActivity.this.mapView.invalidate();
-	    	
-	    }
-		
+
+		}
+
 	}
 }
