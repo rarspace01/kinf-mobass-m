@@ -1,13 +1,12 @@
 package edu.denishamann.guesstimate.activitys;
 
-import edu.denishamann.guesstimate.R;
-import edu.denishamann.guesstimate.R.layout;
-import edu.denishamann.guesstimate.R.menu;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Spinner;
+import edu.denishamann.guesstimate.R;
 
 public class StartActivity extends Activity {
 
@@ -25,7 +24,23 @@ public class StartActivity extends Activity {
 	}
 
 	public void startGame(View view) {
-		Intent i = new Intent(this, MapActivity.class);
+		Spinner diffSpinner = (Spinner) findViewById(R.id.difficulty_spinner);
+
+		Intent i = null;
+		switch (diffSpinner.getSelectedItemPosition()) {
+			case 0:
+				i = new Intent(this, MapActivity.class);
+				break;
+
+			case 1:
+				i = new Intent(this, GuessActivity.class);
+				break;
+
+			default:
+				i = new Intent(this, MapActivity.class);
+				break;
+		}
+
 		this.startActivity(i);
 		overridePendingTransition(0, 0);
 	}

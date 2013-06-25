@@ -1,11 +1,10 @@
 package edu.denishamann.guesstimate.activitys;
 
-import edu.denishamann.guesstimate.R;
-import edu.denishamann.guesstimate.R.layout;
-import edu.denishamann.guesstimate.R.menu;
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
+import edu.denishamann.guesstimate.R;
 
 public class GuessActivity extends Activity {
 
@@ -22,4 +21,15 @@ public class GuessActivity extends Activity {
 		return true;
 	}
 
+	public void startGame() {
+		Intent i = new Intent(this, MapActivity.class);
+
+		this.startActivity(i);
+		overridePendingTransition(0, 0);
+	}
+
+	public void onPause() {
+		super.onPause();
+		overridePendingTransition(0, 0);
+	}
 }
