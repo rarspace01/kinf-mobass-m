@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.test.ActivityInstrumentationTestCase2;
-import edu.denishamann.guesstimate.MainActivity;
+import edu.denishamann.guesstimate.activitys.MainActivity;
 import edu.denishamann.guesstimate.database.GuessCollection;
 import edu.denishamann.guesstimate.database.IGuessCollection;
 import edu.denishamann.guesstimate.model.GeoLocation;

@@ -1,5 +1,8 @@
-package edu.denishamann.guesstimate;
+package edu.denishamann.guesstimate.activitys;
 
+import edu.denishamann.guesstimate.R;
+import edu.denishamann.guesstimate.R.layout;
+import edu.denishamann.guesstimate.R.menu;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;

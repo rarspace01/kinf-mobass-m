@@ -1,4 +1,4 @@
-package edu.denishamann.guesstimate;
+package edu.denishamann.guesstimate.activitys;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -35,6 +35,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import edu.denishamann.guesstimate.ProximityAlert;
+import edu.denishamann.guesstimate.R;
+import edu.denishamann.guesstimate.R.drawable;
+import edu.denishamann.guesstimate.R.id;
+import edu.denishamann.guesstimate.R.layout;
+import edu.denishamann.guesstimate.R.menu;
+import edu.denishamann.guesstimate.R.string;
 import edu.denishamann.guesstimate.model.GeoLocation;
 import edu.denishamann.ors_api.Route;
 

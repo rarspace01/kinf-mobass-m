@@ -2,6 +2,8 @@ package edu.denishamann.guesstimate;
 
 import org.osmdroid.util.GeoPoint;
 
+import edu.denishamann.guesstimate.activitys.MapActivity;
+
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
