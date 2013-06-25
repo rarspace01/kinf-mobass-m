@@ -12,7 +12,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"/>
         
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/lblGuess3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/valueDescr"
@@ -23,7 +23,7 @@
         android:id="@+id/latitudeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/lblGuess3"
         android:text="@string/empty"
         android:textAppearance="?android:attr/textAppearanceSmall" />
     
