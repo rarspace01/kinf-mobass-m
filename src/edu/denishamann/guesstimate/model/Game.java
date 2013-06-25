@@ -1,5 +1,6 @@
 package edu.denishamann.guesstimate.model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import edu.denishamann.guesstimate.database.IGuessCollection;
@@ -8,7 +9,7 @@ import edu.denishamann.guesstimate.lateration.PseudoLateration;
 public class Game {
 
 	private GeoLocation guessedLocation_;
-	private List<GuessPoint> guessedRanges_;
+	private List<GuessPoint> guessedRanges_ = new LinkedList<GuessPoint>();
 	private int gamestate_=0;
 	private int difficulty_=0;
 	private boolean USE_CIRCULARLATERATION=false;
@@ -27,11 +28,12 @@ public class Game {
 		return null;
 	}
 	
-	public int evalueGuesses(){
+	public int evaluateGuesses(){
 		int result=0;
 		
 		if(guessedRanges_.size()<4){
 			result = 1;
+			System.out.println("to few guesses");
 		}else{
 			if(USE_CIRCULARLATERATION){
 				guessedLocation_ = null; 
@@ -41,6 +43,10 @@ public class Game {
 		}
 		
 		return result;
+	}
+
+	public GeoLocation getGuessedLocation_() {
+		return guessedLocation_;
 	}
 
 	
