@@ -37,11 +37,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 import edu.denishamann.guesstimate.ProximityAlert;
 import edu.denishamann.guesstimate.R;
-import edu.denishamann.guesstimate.R.drawable;
-import edu.denishamann.guesstimate.R.id;
-import edu.denishamann.guesstimate.R.layout;
-import edu.denishamann.guesstimate.R.menu;
-import edu.denishamann.guesstimate.R.string;
 import edu.denishamann.guesstimate.model.GeoLocation;
 import edu.denishamann.ors_api.Route;
 
@@ -231,15 +226,17 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 
 	protected void onPause() {
 		Log.i("GM", "GM paused");
-		proximityAlert.unregisterReceiver();
+
+		// proximityAlert.unregisterReceiver();
 
 		super.onPause();
 	}
 
 	protected void onResume() {
 		Log.i("GM", "GM resumed");
-		if (!proximityAlert.isRegistered)
-			proximityAlert.registerReceiver();
+
+		//		if (!proximityAlert.isRegistered)
+		//			proximityAlert.registerReceiver();
 
 		super.onResume();
 	}
