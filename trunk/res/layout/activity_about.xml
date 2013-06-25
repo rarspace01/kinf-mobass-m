@@ -9,7 +9,7 @@
     tools:context=".AboutActivity" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/lblDeveloperTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -19,34 +19,34 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/lblPaul"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/lblGuess1"
         android:layout_centerHorizontal="true"
         android:text="@string/paul"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/lblDennis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/lblGuess3"
         android:layout_centerHorizontal="true"
         android:text="@string/denis"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/lblLukas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3"
+        android:layout_below="@+id/lblGuess4"
         android:layout_centerHorizontal="true"
         android:text="@string/lukas"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/lblCourse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
