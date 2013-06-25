@@ -10,6 +10,17 @@ public class GuessCollection implements IGuessCollection {
 
 	private List<GuessPoint> gpl_=new LinkedList<GuessPoint>();
 	
+	public GuessCollection() {
+		this.add(new GuessPoint(new GeoLocation(49.903549,10.869554), "ERBA Campus"));
+		this.add(new GuessPoint(new GeoLocation(49.900523,10.898606), "Bamberg Bahnhof"));
+		this.add(new GuessPoint(new GeoLocation(49.891082,10.882707), "Bamberg Dom"));
+		this.add(new GuessPoint(new GeoLocation(49.892734,10.88833), "Gabelmo"));
+		this.add(new GuessPoint(new GeoLocation(49.891631,10.886887), "Altes Rathhaus"));
+		this.add(new GuessPoint(new GeoLocation(49.891303,10.897361), "Wilhelmlspost"));
+		this.add(new GuessPoint(new GeoLocation(49.893446,10.891505), "Bamberg ZOB"));
+		this.add(new GuessPoint(new GeoLocation(49.8841,10.886698), "Wilde Rose Keller"));
+	}
+	
 	@Override
 	public List<GuessPoint> getAll() {
 		return gpl_;
