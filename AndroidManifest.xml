@@ -52,11 +52,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="edu.denishamann.guesstimate.ShowGPSActivity"
-            android:label="@string/title_activity_show_gps"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name="edu.denishamann.guesstimate.StartActivity"
             android:label="@string/title_activity_start"
             android:screenOrientation="portrait" >

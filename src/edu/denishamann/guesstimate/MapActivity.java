@@ -175,11 +175,6 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Log.i("GM", "Menu item: " + item.getTitle());
 
-		if (item.getTitle().toString().contains(getString(R.string.show_gps))) {
-			Intent myIntent = new Intent(MapActivity.this, ShowGPSActivity.class);
-			MapActivity.this.startActivity(myIntent);
-		}
-
 		if (item.getTitle().toString().contains(getString(R.string.enter_guesstimate))) {
 			Criteria crit = new Criteria();
 			crit.setAccuracy(Criteria.ACCURACY_FINE);

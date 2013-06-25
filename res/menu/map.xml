@@ -5,7 +5,6 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
-    <item android:id="@+id/show_gps" android:title="@string/show_gps" android:orderInCategory="101"></item>
     <item android:id="@+id/enter_guesstimate" android:title="@string/enter_guesstimate" android:orderInCategory="102"></item>
 
 </menu>
