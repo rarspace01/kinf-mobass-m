@@ -30,7 +30,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="edu.denishamann.guesstimate.MainActivity"
+            android:name="edu.denishamann.guesstimate.activitys.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="edu.denishamann.guesstimate.MapActivity"
+            android:name="edu.denishamann.guesstimate.activitys.MapActivity"
             android:label="@string/title_activity_map"
             android:theme="@style/NoBackground" >
             <intent-filter>
@@ -52,23 +52,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="edu.denishamann.guesstimate.StartActivity"
+            android:name= "edu.denishamann.guesstimate.activitys.StartActivity"
             android:label="@string/title_activity_start"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="edu.denishamann.guesstimate.HowToActivity"
+            android:name="edu.denishamann.guesstimate.activitys.HowToActivity"
             android:label="@string/title_activity_how_to"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeSimple" >
         </activity>
         <activity
-            android:name="edu.denishamann.guesstimate.AboutActivity"
+            android:name="edu.denishamann.guesstimate.activitys.AboutActivity"
             android:label="@string/title_activity_about"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="edu.denishamann.guesstimate.GuessActivity"
+      		android:name= "edu.denishamann.guesstimate.activitys.GuessActivity"
             android:label="@string/title_activity_guess"
             android:theme="@style/AppThemeSimple" >
         </activity>
