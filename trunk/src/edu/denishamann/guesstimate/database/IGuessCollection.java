@@ -33,13 +33,6 @@ public interface IGuessCollection {
 	 * adds a guesspoint
 	 * @param guessPoint
 	 */
-	public void add(GuessPoint guessPoint);
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public GuessPoint getNext();
-	
+	public void addGuessPoint(GuessPoint guessPoint);
 	
 }
