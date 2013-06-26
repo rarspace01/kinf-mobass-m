@@ -26,7 +26,16 @@ public class GeoLocation {
 		this.latitude_ = latitude_;
 	}
 	
-	
+	public String toString()
+	{
+		StringBuilder s = new StringBuilder();
+		s.append("");
+		s.append(latitude_);
+		s.append(", ");
+		s.append(longitude_);
+		
+		return s.toString();
+	}
 	
 	
 }
