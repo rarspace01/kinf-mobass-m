@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.denishamann.guesstimate.database.IGuessCollection;
+import edu.denishamann.guesstimate.lateration.CircularLateration;
 import edu.denishamann.guesstimate.lateration.PseudoLateration;
 
 public class Game {
@@ -36,7 +37,7 @@ public class Game {
 			System.out.println("to few guesses");
 		}else{
 			if(USE_CIRCULARLATERATION){
-				guessedLocation_ = null; 
+				guessedLocation_ = new CircularLateration().getLateration(guessedRanges_); 
 			}else{
 				guessedLocation_ = new PseudoLateration().getLateration(guessedRanges_);
 			}
