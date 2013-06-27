@@ -18,7 +18,7 @@ public class PseudoLateration implements ILateration {
 		double tmpLong = 0;
 		for (GuessPoint guessPoint : guessPoints) {
 			tmpLat += guessPoint.getLocation_().getLatitude();
-			tmpLong = guessPoint.getLocation_().getLongitude();
+			tmpLong += guessPoint.getLocation_().getLongitude();
 		}
 
 		return new GeoLocation(tmpLat / guessPoints.size(), tmpLong / guessPoints.size());
