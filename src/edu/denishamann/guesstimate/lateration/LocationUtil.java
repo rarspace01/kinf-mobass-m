@@ -28,6 +28,25 @@ public class LocationUtil
 		return converted;
 	}
 
+	/**
+	 * @author denis
+	 * @param g1 - First Coordinate
+	 * @param g2 - Second Coordinate
+	 * @return distance in meters
+	 */
+	public static double distance(GeoLocation g1, GeoLocation g2) {
+	    double dLat = Math.toRadians(g2.getLatitude()-g1.getLatitude());
+	    double dLng = Math.toRadians(g2.getLongitude()-g1.getLongitude());
+	    double sindLat = Math.sin(dLat / 2);
+	    double sindLng = Math.sin(dLng / 2);
+	    double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2)
+	            * Math.cos(Math.toRadians(g1.getLatitude())) * Math.cos(Math.toRadians(g2.getLatitude()));
+	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+	    double dist = EARTH_RADIUS * c;
+
+	    return dist;
+	    }
+	
 	public static class Cartesian
 	{
 		private Double X, Y, Z;

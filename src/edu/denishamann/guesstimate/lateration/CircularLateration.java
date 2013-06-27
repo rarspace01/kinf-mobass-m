@@ -1,6 +1,5 @@
 package edu.denishamann.guesstimate.lateration;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.codeproject.math.Matrix;
@@ -15,6 +14,8 @@ import edu.denishamann.guesstimate.model.GuessPoint;
  * Circular Lateration class
  * 
  * calculates a circular lateration based on distance estimations
+ * 
+ * @author lukas
  */
 public class CircularLateration implements ILateration
 {
@@ -22,71 +23,9 @@ public class CircularLateration implements ILateration
 	private double				DELTA = 0.0001;	/* delta value to stop calculations */ 
 	
 	private List<GuessPoint>	locations;			/* locations of the objects */
-	private Cartesian			ownCoordinates; 	/* own location in cartesian */
+	//private Cartesian			ownCoordinates; 	/* own location in cartesian */
 	
 	private Cartesian			currentEstimation;	/* current best estimation */
-	
-	public static void main(String[] args)
-	{
-		
-		GeoLocation testBahnhofCoor = new GeoLocation(0.0, 0.0);
-		testBahnhofCoor.setLatitude(49.902209);
-		testBahnhofCoor.setLongitude(10.900826);
-		GuessPoint testBahnhof = new GuessPoint(testBahnhofCoor, "Bahnhof");
-		testBahnhof.setGuessDistance_(2.5);
-		//testBahnhof.setGuessDistance_(2.220432);
-
-		GeoLocation testMaccasCoor = new GeoLocation(0.0, 0.0);
-		testMaccasCoor.setLatitude(49.911495);
-		testMaccasCoor.setLongitude(10.872416);
-		GuessPoint testMaccas = new GuessPoint(testMaccasCoor, "Maccas");
-		testMaccas.setGuessDistance_(1.0);
-		//testMaccas.setGuessDistance_(1.039676);
-
-		GeoLocation testFekiCoor = new GeoLocation(0.0, 0.0);
-		testFekiCoor.setLatitude(49.907681);
-		testFekiCoor.setLongitude(10.904603);
-		GuessPoint testFeki = new GuessPoint(testFekiCoor, "Feki");
-		testFeki.setGuessDistance_(3.0);
-		//testFeki.setGuessDistance_(2.56152233);
-		
-		GeoLocation testDomCoor = new GeoLocation(0.0, 0.0);
-		testDomCoor.setLatitude(49.890823);
-		testDomCoor.setLongitude(10.882794);
-		GuessPoint testDom = new GuessPoint(testFekiCoor, "Dom");
-		testDom.setGuessDistance_(2.5);
-		//testDom.setGuessDistance_(2.56162233);
-
-		GeoLocation ownLocation = new GeoLocation(0.0, 0.0);
-		ownLocation.setLatitude(49.902292);
-		ownLocation.setLongitude(10.869806);
-		
-		List<GuessPoint> testLocations = new LinkedList<GuessPoint>();
-		testLocations.add(testBahnhof);
-		testLocations.add(testMaccas);
-		testLocations.add(testFeki);
-		testLocations.add(testDom);
-		
-		CircularLateration testLateration = new CircularLateration();
-		testLateration.getLateration(testLocations);
-		
-	}
-	
-	public CircularLateration()
-	{
-		
-	}
-	
-	public CircularLateration(List<GuessPoint> locations, GeoLocation ownLocation)
-	{
-		this.locations		= locations;
-		this.ownCoordinates	= LocationUtil.convertLocationToCarthesian(ownLocation);
-		
-		this.currentEstimation = ownCoordinates; // our first approximation is the real position
-		// maybe this is a bit "dirty" considering that usually we want to calculate our
-		// position. But whoreever, live with it.
-		// TODO: make estimation accessible, or rather the location-object
-	}
 	
 	public GeoLocation getLateration(List<GuessPoint> guessPoints) {
 		this.locations		= guessPoints;
