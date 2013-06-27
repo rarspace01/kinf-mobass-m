@@ -13,7 +13,7 @@ public class Game {
 	private List<GuessPoint> guessedRanges_ = new LinkedList<GuessPoint>();
 	private int gamestate_=0;
 	private int difficulty_=0;
-	private boolean USE_CIRCULARLATERATION=false;
+	private boolean USE_CIRCULARLATERATION=true;
 	
 	public void startGame(int difficulty){
 		this.difficulty_ = difficulty;
@@ -31,14 +31,16 @@ public class Game {
 	
 	public int evaluateGuesses(){
 		int result=0;
-		
+				
 		if(guessedRanges_.size()<4){
 			result = 1;
 			System.out.println("to few guesses");
 		}else{
 			if(USE_CIRCULARLATERATION){
+				System.out.println("using circular");
 				guessedLocation_ = new CircularLateration().getLateration(guessedRanges_); 
 			}else{
+				System.out.println("using pseudo lateration");
 				guessedLocation_ = new PseudoLateration().getLateration(guessedRanges_);
 			}
 		}
