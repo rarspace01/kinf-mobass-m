@@ -1,4 +1,4 @@
-package com.codeproject.math;
+package edu.denishamann.guesstimate.lateration;
 
 /**
  * code as CPOL license

@@ -47,10 +47,10 @@ public class GameModelTests extends
 			System.out.println(gpl.get(i).getDescription_());
 		}
 		
-		gpl.get(0).setGuessDistance_(800.00); //erba
-		gpl.get(1).setGuessDistance_(1800.00); //dom
-		gpl.get(2).setGuessDistance_(1800.00); //altes rathaus
-		gpl.get(3).setGuessDistance_(1800.00); //gabelmo
+		gpl.get(0).setGuessDistance_(500); //erba
+		gpl.get(1).setGuessDistance_(500); //dom
+		gpl.get(2).setGuessDistance_(500); //altes rathaus
+		gpl.get(3).setGuessDistance_(500); //gabelmo
 
 		
 		

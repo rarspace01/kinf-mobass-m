@@ -1,17 +1,17 @@
-package com.codeproject.math;
+package edu.denishamann.guesstimate.lateration;
 
 /**
  * code as CPOL license
  * http://www.codeproject.com/Articles/405128/Matrix-operations-in-Java
  */
-public class IllegalDimensionException extends Exception {
+public class NoSquareException extends Exception {
 
-	public IllegalDimensionException() {
+	public NoSquareException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public IllegalDimensionException(String message) {
+	public NoSquareException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
