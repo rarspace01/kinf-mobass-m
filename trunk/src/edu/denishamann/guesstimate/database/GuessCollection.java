@@ -3,6 +3,9 @@ package edu.denishamann.guesstimate.database;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.location.Location;
+
+import edu.denishamann.guesstimate.lateration.LocationUtil;
 import edu.denishamann.guesstimate.model.GeoLocation;
 import edu.denishamann.guesstimate.model.GuessPoint;
 
@@ -64,11 +67,7 @@ public class GuessCollection implements IGuessCollection {
 
 		for (int i = 0; i < gpl_.size(); i++) {
 
-			dx = gpl_.get(i).getLocation_().getLatitude()
-					- searchLocation.getLatitude();
-			dy = gpl_.get(i).getLocation_().getLongitude()
-					- searchLocation.getLongitude();
-			distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+			distance = LocationUtil.distance(searchLocation,gpl_.get(i).getLocation_());
 			if (distance > maxDistance) {
 				maxDistance = distance;
 			}

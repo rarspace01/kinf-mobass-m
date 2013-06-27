@@ -5,6 +5,11 @@ import java.util.List;
 import edu.denishamann.guesstimate.model.GeoLocation;
 import edu.denishamann.guesstimate.model.GuessPoint;
 
+/**
+ * 
+ * @author paul
+ *
+ */
 public class PseudoLateration implements ILateration {
 
 	@Override
