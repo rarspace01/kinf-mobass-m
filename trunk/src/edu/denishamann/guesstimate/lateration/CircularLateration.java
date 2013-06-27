@@ -2,9 +2,6 @@ package edu.denishamann.guesstimate.lateration;
 
 import java.util.List;
 
-import com.codeproject.math.Matrix;
-import com.codeproject.math.MatrixMathematics;
-import com.codeproject.math.NoSquareException;
 
 import edu.denishamann.guesstimate.lateration.LocationUtil.Cartesian;
 import edu.denishamann.guesstimate.model.GeoLocation;
@@ -21,6 +18,7 @@ public class CircularLateration implements ILateration
 {
 	
 	private double				DELTA = 0.01;	/* delta value to stop calculations */ 
+	private int					MAXITERATIONS = 5000;
 	
 	private List<GuessPoint>	locations;			/* locations of the objects */
 	//private Cartesian			ownCoordinates; 	/* own location in cartesian */
@@ -30,7 +28,12 @@ public class CircularLateration implements ILateration
 	public GeoLocation getLateration(List<GuessPoint> guessPoints) {
 		this.locations		= guessPoints;
 		this.currentEstimation = new Cartesian(0.0, 0.0, 0.0); // our first approximation, centre of earth
-		// TODO: get maybe a better estimation?
+		// TODO: get maybe a better estimation? -> use arethemtic AVG?
+		
+		//setting Estimation on the first Guesspoint for faster interations
+		if(guessPoints.size()>0){
+			this.currentEstimation = LocationUtil.convertLocationToCarthesian(guessPoints.get(0).getLocation_());
+		}
 		
 		calulcateCircularLateration();
 		
@@ -47,7 +50,7 @@ public class CircularLateration implements ILateration
 	{
 		int i = 0;
 		double delta=0.0;
-		while(true)
+		while(i<MAXITERATIONS)
 		{
 			i++;
 			Cartesian newDelta = calculateDeltaVector();
