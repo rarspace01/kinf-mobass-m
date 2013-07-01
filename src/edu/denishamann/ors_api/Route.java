@@ -32,6 +32,8 @@ public class Route {
 	public List<GeoLocation> getPath(){
 		List <GeoLocation> gl=new LinkedList<GeoLocation>();
 		
+		gl.add(start_);
+		
 		/* Draw Route
 		 * http://stackoverflow.com/questions/10104581/osmdroid-pathoverlay 
 		 */
@@ -64,6 +66,7 @@ public class Route {
 				if(parser.getValue(e, "lat").matches("^[\\d]{1,3}[.][\\d]*$")&&parser.getValue(e, "lng").matches("^[\\d]{1,3}[.][\\d]*$")){
 					Double lat = Double.parseDouble(parser.getValue(e, "lat"));
 					Double lng = Double.parseDouble(parser.getValue(e, "lng"));
+					System.out.println("Added Routepoint: "+lat+"/"+lng);
 					gl.add(new GeoLocation(lat, lng));
 				}else{
 					System.out.println("input error on : "+parser.getValue(e, "lat")+ " - "+ parser.getValue(e, "lng"));
@@ -74,7 +77,7 @@ public class Route {
 			Log.e("GM", "couldn't retrieve path");
 		}
 		
-		
+		gl.add(stop_);
 		
 		return gl;
 		
