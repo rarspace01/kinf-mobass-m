@@ -182,7 +182,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			crit.setAccuracy(Criteria.ACCURACY_FINE);
 			String provider = lm.getBestProvider(crit, true);
 			Location loc = lm.getLastKnownLocation(provider);
-			drawRouteOnMap(new Route(new GeoLocation(49.904005, 10.859725), new GeoLocation(loc.getLatitude(),
+			drawRouteOnMap(new Route(new GeoLocation(49.90337,10.894733), new GeoLocation(loc.getLatitude(),
 					loc.getLongitude())));
 			//inputDialog();
 		}

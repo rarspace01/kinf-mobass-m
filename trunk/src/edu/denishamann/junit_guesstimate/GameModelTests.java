@@ -70,6 +70,8 @@ public class GameModelTests extends
 			System.out.println("error on eval");
 		}
 
+		//assert
+		
 	}
 
 }
