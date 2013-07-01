@@ -4,7 +4,7 @@ import edu.denishamann.guesstimate.model.GeoLocation;
 
 public class LocationUtil
 {
-	private static double EARTH_RADIUS = 6367.450;
+	private static double EARTH_RADIUS = 6367450;
 	
 	public static Cartesian convertLocationToCarthesian(GeoLocation location)
 	{
@@ -42,7 +42,7 @@ public class LocationUtil
 	    double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2)
 	            * Math.cos(Math.toRadians(g1.getLatitude())) * Math.cos(Math.toRadians(g2.getLatitude()));
 	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-	    double dist = EARTH_RADIUS * c * 1000;
+	    double dist = EARTH_RADIUS * c;
 
 	    return dist;
 	    }
