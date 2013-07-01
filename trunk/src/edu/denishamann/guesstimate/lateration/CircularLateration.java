@@ -17,8 +17,8 @@ import edu.denishamann.guesstimate.model.GuessPoint;
 public class CircularLateration implements ILateration
 {
 	
-	private double				DELTA = 0.01;	/* delta value to stop calculations */ 
-	private int					MAXITERATIONS = 5000;
+	private double				DELTA = 0.09;	/* delta value to stop calculations */ 
+	private int					MAXITERATIONS = 500;
 	
 	private List<GuessPoint>	locations;			/* locations of the objects */
 	//private Cartesian			ownCoordinates; 	/* own location in cartesian */
@@ -32,7 +32,15 @@ public class CircularLateration implements ILateration
 		
 		//setting Estimation on the first Guesspoint for faster interations
 		if(guessPoints.size()>0){
-			this.currentEstimation = LocationUtil.convertLocationToCarthesian(guessPoints.get(0).getLocation_());
+			
+			for(GuessPoint currentGP : guessPoints) {
+				
+				Cartesian newDelta = LocationUtil.convertLocationToCarthesian(currentGP.getLocation_());	
+				this.currentEstimation.addDelta(newDelta);
+			}
+			currentEstimation.setX(Math.abs(currentEstimation.getX() / guessPoints.size()));		
+			currentEstimation.setY(Math.abs(currentEstimation.getY() / guessPoints.size()));	
+			currentEstimation.setZ(Math.abs(currentEstimation.getZ() / guessPoints.size()));
 		}
 		
 		calulcateCircularLateration();
@@ -58,8 +66,11 @@ public class CircularLateration implements ILateration
 			//System.out.println("Delta: " + newDelta);
 			currentEstimation.addDelta(newDelta);
 
-			//System.out.println("Iteration " + i);
-			//System.out.println(LocationUtil.convertCartesianToLocation(currentEstimation));
+			if(i % 10 == 0)
+			{
+				System.out.println("Iteration " + i);
+				System.out.println(currentEstimation.toString() + " - " + LocationUtil.convertCartesianToLocation(currentEstimation));
+			}
 			delta = newDelta.delta();
 			if(delta <= DELTA){
 				break;
@@ -175,7 +186,7 @@ public class CircularLateration implements ILateration
 			Cartesian currentLocationCartesian = LocationUtil.convertLocationToCarthesian(currentLocation.getLocation_());
 			// get difference between guessed distance and the pseudo-range for current approximation
 			Double vectorValue = (
-					((currentLocation.getGuessDistance_()/1000) -	
+					((currentLocation.getGuessDistance_()) -	
 					pseudoRange(currentLocationCartesian, currentEstimation)));
 			
 			vectorB.setValueAt(i, 0, vectorValue);
