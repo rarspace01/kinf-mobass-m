@@ -175,7 +175,7 @@ public class CircularLateration implements ILateration
 			Cartesian currentLocationCartesian = LocationUtil.convertLocationToCarthesian(currentLocation.getLocation_());
 			// get difference between guessed distance and the pseudo-range for current approximation
 			Double vectorValue = (
-					(currentLocation.getGuessDistance_() -	
+					((currentLocation.getGuessDistance_()/1000) -	
 					pseudoRange(currentLocationCartesian, currentEstimation)));
 			
 			vectorB.setValueAt(i, 0, vectorValue);
