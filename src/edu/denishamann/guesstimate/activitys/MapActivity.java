@@ -20,6 +20,7 @@ import org.osmdroid.views.util.constants.MapViewConstants;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -29,6 +30,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,7 +39,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 import edu.denishamann.guesstimate.ProximityAlert;
 import edu.denishamann.guesstimate.R;
+import edu.denishamann.guesstimate.model.Game;
 import edu.denishamann.guesstimate.model.GeoLocation;
+import edu.denishamann.guesstimate.model.GuessPoint;
 import edu.denishamann.ors_api.Route;
 
 /**
@@ -54,6 +58,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	private ArrayList<OverlayItem>			items;
 	private GeoPoint						curLoc;
 	private ProximityAlert					proximityAlert;
+	private List<GuessPoint>				guessPoints;
 
 	private ResourceProxy					mResourceProxy;
 
@@ -129,8 +134,16 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			mapController.setCenter(currentPosition);
 		}
 
-		// create overlay icon
+		guessPoints = Game.getUniqueInstance().getLocationsToBeGuessed(new GeoLocation(currentPosition));
+
 		items = new ArrayList<OverlayItem>();
+		if (Game.getUniqueInstance().getDifficulty_() == 0) {
+			for (GuessPoint gp : guessPoints) {
+				OverlayItem guessItem = new OverlayItem(gp.getDescription_(), gp.getDescription_(), gp.getLocation_()
+						.toGeoPoint());
+				items.add(guessItem);
+			}
+		}
 
 		curLoc = new GeoPoint(currentPosition);
 		Drawable newMarker = getResources().getDrawable(R.drawable.curloc);
@@ -146,8 +159,11 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 				new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
 					@Override
 					public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-						Toast.makeText(MapActivity.this, "Item '" + item.mTitle + "'", Toast.LENGTH_LONG).show();
-						Log.i("GM", "Pressed Icon");
+						for (GuessPoint gp : guessPoints) {
+							if (gp.getDescription_().equals(item.mTitle)) {
+								inputDialog(gp);
+							}
+						}
 						return true; // We 'handled' this event.
 					}
 
@@ -182,7 +198,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			crit.setAccuracy(Criteria.ACCURACY_FINE);
 			String provider = lm.getBestProvider(crit, true);
 			Location loc = lm.getLastKnownLocation(provider);
-			drawRouteOnMap(new Route(new GeoLocation(49.90337,10.894733), new GeoLocation(loc.getLatitude(),
+			drawRouteOnMap(new Route(new GeoLocation(49.90337, 10.894733), new GeoLocation(loc.getLatitude(),
 					loc.getLongitude())));
 			//inputDialog();
 		}
@@ -249,13 +265,31 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		return mapView;
 	}
 
-	private void inputDialog() {
+	private void inputDialog(final GuessPoint gp) {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle("Please enter guessed Distance");
+		alert.setTitle("Please enter the guessed distance to " + gp.getDescription_());
+
 		final EditText input = new EditText(this);
+		input.setInputType(InputType.TYPE_CLASS_NUMBER);
 		alert.setView(input);
 
-		alert.setPositiveButton("Ok", null);
+		alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				gp.setGuessDistance_(Double.valueOf(input.getText().toString()));
+
+				Game.getUniqueInstance().addGuess(gp);
+
+				if (Game.getUniqueInstance().evaluateGuesses() == 0) {
+					proximityAlert.setProximityPoint(Game.getUniqueInstance().getGuessedLocation_().toGeoPoint());
+					Log.i("GM", "proxpoint: " + Game.getUniqueInstance().getGuessedLocation_().getLatitude() + "|"
+							+ Game.getUniqueInstance().getGuessedLocation_().getLongitude());
+
+					mapView.getOverlays().remove(mMyItemsOverlay);
+				}
+			}
+		});
 
 		alert.setNegativeButton("Cancel", null);
 
