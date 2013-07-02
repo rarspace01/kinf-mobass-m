@@ -26,7 +26,7 @@ public class GameModelTests extends
 	public void testStart() {
 		// start game
 		Game game = new Game();
-		game.startGame(0);
+		game.startGame(0, "Denis");
 
 		// current location
 		GeoLocation currentLocation = new GeoLocation(49.904448, 10.859274);
@@ -70,6 +70,8 @@ public class GameModelTests extends
 			System.out.println("error on eval");
 		}
 
+		game.guessedLocationApproached(getActivity());
+		
 		//assert
 		
 	}
