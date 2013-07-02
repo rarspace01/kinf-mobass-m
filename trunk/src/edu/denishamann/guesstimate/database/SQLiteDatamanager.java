@@ -14,13 +14,15 @@ public class SQLiteDatamanager extends SQLiteOpenHelper{
 	 
 	public void onCreate(SQLiteDatabase db) { 
 	      db.execSQL("CREATE TABLE logging (trackid NUMERIC, timestamp NUMERIC, lat NUMERIC, long NUMERIC);"); 
-	      db.execSQL("CREATE TABLE guesstimate (id INTEGER PRIMARY KEY, lat NUMERIC, long NUMERIC, descr TEXT);"); 
+	      db.execSQL("CREATE TABLE guesstimate (id INTEGER PRIMARY KEY, lat NUMERIC, long NUMERIC, descr TEXT);");
+	      db.execSQL("CREATE TABLE highscore (name TEXT, score NUMERIC, difficulty NUMERIC);");
 	} 
 	 
 	public void onUpgrade(SQLiteDatabase db,  
 	              int oldVersion, int newVersion) { 
 	      db.execSQL("DROP TABLE logging"); 
 	      db.execSQL("DROP TABLE guesstimate"); 
+	      db.execSQL("DROP TABLE highscore"); 
 	      this.onCreate(db); 
 	} 
 	
