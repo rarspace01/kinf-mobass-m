@@ -48,6 +48,12 @@ public class ProximityAlert extends BroadcastReceiver {
 	public void setProximityPoint(GeoPoint pPoint) {
 		proximityPoint = pPoint;
 
+		mapActivity.getMapView().getOverlays().remove(circleOverlay);
+
+		circleOverlay = new CircleOverlay(mapActivity, proximityPoint, mapActivity.getMapView());
+		circleOverlay.setRadius(radius);
+		mapActivity.getMapView().getOverlays().add(circleOverlay);
+
 		mapActivity.getLocationManager().removeProximityAlert(pIntent);
 		mapActivity.getLocationManager().addProximityAlert(proximityPoint.getLatitudeE6() / 1e6,
 				proximityPoint.getLongitudeE6() / 1e6, radius, -1, pIntent);
