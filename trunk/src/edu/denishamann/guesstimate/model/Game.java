@@ -3,8 +3,11 @@ package edu.denishamann.guesstimate.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import edu.denishamann.guesstimate.database.GuessCollection;
 import edu.denishamann.guesstimate.database.IGuessCollection;
+import edu.denishamann.guesstimate.database.SQLiteDatamanager;
 import edu.denishamann.guesstimate.lateration.CircularLateration;
 import edu.denishamann.guesstimate.lateration.PseudoLateration;
 
@@ -16,10 +19,14 @@ public class Game {
 	private long timeLeft_=0;
 	private int successfullRounds_=0;
 	private int difficulty_ = 0;
+	
+	private String playerName_;
+	
 	private IGuessCollection currentGuessCollection=null;
+	private SQLiteDatabase dbConn;
 	
 	private boolean USE_CIRCULARLATERATION = true;
-	private int PLAYTIME = 60; //Rundenzeit in Min
+	private int PLAYTIME = 30; //Rundenzeit in Min
 	
 
 	private Game uniqueInstance_;
@@ -31,7 +38,8 @@ public class Game {
 		return uniqueInstance_;
 	}
 
-	public void startGame(int difficulty) {
+	public void startGame(int difficulty, String playerName) {
+		this.playerName_=playerName;
 		this.currentGuessCollection = new GuessCollection();
 		this.difficulty_ = difficulty;
 		gamestate_ = 1;
@@ -67,14 +75,21 @@ public class Game {
 		return result;
 	}
 
-	public boolean guessedLocationApproached(){
+	public boolean guessedLocationApproached(Context context){
 		boolean hasRoundsLeft=false;
 		if(System.currentTimeMillis()<timeLeft_){
 			this.successfullRounds_++;
 			hasRoundsLeft=true;
 		}else{
-			//save highscore
 			System.out.println("HS: "+successfullRounds_);
+			//save highscore
+			SQLiteDatamanager dbManager = new SQLiteDatamanager(context);
+			dbConn = dbManager.getWritableDatabase();
+			
+			dbConn.execSQL("INSERT INTO highscore (name, score, difficulty) VALUES ('"+this.playerName_+"','"+this.successfullRounds_+"','"+this.difficulty_+"');");
+			
+			this.gamestate_=0;
+			
 		}
 		return hasRoundsLeft;
 	}
