@@ -70,9 +70,18 @@ public class GameModelTests extends
 			System.out.println("error on eval");
 		}
 
+		// get 2 locations
+		
 		game.guessedLocationApproached(getActivity());
 		
-		//assert
+		game.guessedLocationApproached(getActivity());
+		
+		//lower the time left for testing purposes
+		
+		game.setTimeLeft_(0);
+		
+		//trigger the sql save action
+		game.guessedLocationApproached(getActivity());
 		
 	}
 
