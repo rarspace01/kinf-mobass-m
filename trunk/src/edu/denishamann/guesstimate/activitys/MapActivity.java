@@ -11,7 +11,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.OverlayItem.HotspotPlace;
 import org.osmdroid.views.overlay.PathOverlay;
@@ -37,6 +36,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import edu.denishamann.guesstimate.OsmItemizedOverlay;
 import edu.denishamann.guesstimate.ProximityAlert;
 import edu.denishamann.guesstimate.R;
 import edu.denishamann.guesstimate.model.Game;
@@ -51,18 +51,17 @@ import edu.denishamann.ors_api.Route;
  */
 public class MapActivity extends Activity implements LocationListener, MapViewConstants {
 
-	private MapController					mapController;
-	private MapView							mapView;
-	private ItemizedOverlay<OverlayItem>	mMyItemsOverlay;
-	private LocationManager					lm;
-	private ArrayList<OverlayItem>			items;
-	private GeoPoint						curLoc;
-	private ProximityAlert					proximityAlert;
-	private List<GuessPoint>				guessPoints;
+	private MapController		mapController;
+	private MapView				mapView;
+	private OsmItemizedOverlay	itemizedOverlay;
+	private LocationManager		lm;
+	private GeoPoint			curLoc;
+	private ProximityAlert		proximityAlert	= new ProximityAlert(this);
+	private List<GuessPoint>	guessPoints;
 
-	private ResourceProxy					mResourceProxy;
+	private ResourceProxy		mResourceProxy;
 
-	private boolean							started	= false;
+	private boolean				started			= false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -117,45 +116,26 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		Log.i("GM", provider);
 
 		Location loc = lm.getLastKnownLocation(provider);
-		GeoPoint currentPosition = null;
 
 		if (loc != null) {
 			Log.i("GM", "Current Location: " + loc.getLatitude() + " - " + loc.getLongitude());
-			currentPosition = new GeoPoint(loc.getLatitude(), loc.getLongitude());
+			curLoc = new GeoPoint(loc.getLatitude(), loc.getLongitude());
 		} else {
 			Log.i("GM", "Loc == null, using default value");
-			currentPosition = new GeoPoint(49.903038, 10.869427);
+			curLoc = new GeoPoint(49.903038, 10.869427);
 		}
 
 		mapController.setZoom(15);
 		if (intentPoint != null) {
 			mapController.setCenter(intentPoint);
 		} else {
-			mapController.setCenter(currentPosition);
+			mapController.setCenter(curLoc);
 		}
 
-		guessPoints = Game.getUniqueInstance().getLocationsToBeGuessed(new GeoLocation(currentPosition));
-
-		items = new ArrayList<OverlayItem>();
-		if (Game.getUniqueInstance().getDifficulty_() == 0) {
-			for (GuessPoint gp : guessPoints) {
-				OverlayItem guessItem = new OverlayItem(gp.getDescription_(), gp.getDescription_(), gp.getLocation_()
-						.toGeoPoint());
-				items.add(guessItem);
-			}
-		}
-
-		curLoc = new GeoPoint(currentPosition);
-		Drawable newMarker = getResources().getDrawable(R.drawable.curloc);
-		newMarker.setAlpha(155);
-		OverlayItem curLocItem = new OverlayItem("ProxAlertPoint", "ProxAlertPoint Decsription", curLoc);
-		curLocItem.setMarker(newMarker);
-		curLocItem.setMarkerHotspot(HotspotPlace.CENTER);
-		items.add(curLocItem);
+		guessPoints = Game.getUniqueInstance().getLocationsToBeGuessed(new GeoLocation(curLoc));
 
 		mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
-		/* OnTapListener for the Markers, shows a simple Toast. */
-		mMyItemsOverlay = new ItemizedIconOverlay<OverlayItem>(items,
+		itemizedOverlay = new OsmItemizedOverlay(new ArrayList<OverlayItem>(),
 				new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
 					@Override
 					public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
@@ -164,20 +144,32 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 								inputDialog(gp);
 							}
 						}
-						return true; // We 'handled' this event.
+						return true;
 					}
 
 					@Override
 					public boolean onItemLongPress(final int index, final OverlayItem item) {
 						Toast.makeText(MapActivity.this, item.mDescription, Toast.LENGTH_LONG).show();
-						Log.i("GM", "Long Pressed Icon");
-						return false;
+						return true;
 					}
 				}, mResourceProxy);
 
-		proximityAlert = new ProximityAlert(this, new GeoPoint(49907035, 10901013));
+		if (Game.getUniqueInstance().getDifficulty_() == 0) {
+			for (GuessPoint gp : guessPoints) {
+				OverlayItem guessItem = new OverlayItem(gp.getDescription_(), gp.getDescription_(), gp.getLocation_()
+						.toGeoPoint());
+				itemizedOverlay.addItem(guessItem);
+			}
+		}
 
-		mapView.getOverlays().add(mMyItemsOverlay);
+		Drawable newMarker = getResources().getDrawable(R.drawable.curloc);
+		newMarker.setAlpha(155);
+		OverlayItem curLocItem = new OverlayItem("ProxAlertPoint", "ProxAlertPoint Decsription", curLoc);
+		curLocItem.setMarker(newMarker);
+		curLocItem.setMarkerHotspot(HotspotPlace.CENTER);
+		itemizedOverlay.addItem(curLocItem);
+
+		mapView.getOverlays().add(itemizedOverlay);
 		mapView.invalidate();
 
 		started = true;
@@ -282,11 +274,21 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 				Game.getUniqueInstance().addGuess(gp);
 
 				if (Game.getUniqueInstance().evaluateGuesses() == 0) {
-					proximityAlert.setProximityPoint(Game.getUniqueInstance().getGuessedLocation_().toGeoPoint());
-					Log.i("GM", "proxpoint: " + Game.getUniqueInstance().getGuessedLocation_().getLatitude() + "|"
-							+ Game.getUniqueInstance().getGuessedLocation_().getLongitude());
+					GeoLocation loc = Game.getUniqueInstance().getGuessedLocation_();
+					proximityAlert.setProximityPoint(loc.toGeoPoint());
+					Log.i("GM", "proxpoint: " + loc + "|" + loc);
 
-					mapView.getOverlays().remove(mMyItemsOverlay);
+					mapView.getOverlays().remove(itemizedOverlay);
+					for (GuessPoint gp : guessPoints) {
+						itemizedOverlay.removeOverlayByTitle(gp.getDescription_());
+					}
+					mapView.getOverlays().add(itemizedOverlay);
+
+					mapController.zoomToSpan(Math.abs(curLoc.getLatitudeE6() - loc.toGeoPoint().getLatitudeE6()),
+							Math.abs(curLoc.getLongitudeE6() - loc.toGeoPoint().getLongitudeE6()));
+					mapController.animateTo(new GeoPoint(
+							(curLoc.getLatitudeE6() + loc.toGeoPoint().getLatitudeE6()) / 2,
+							(curLoc.getLongitudeE6() + loc.toGeoPoint().getLongitudeE6()) / 2));
 				}
 			}
 		});

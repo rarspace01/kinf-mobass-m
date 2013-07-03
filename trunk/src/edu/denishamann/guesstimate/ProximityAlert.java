@@ -2,8 +2,6 @@ package edu.denishamann.guesstimate;
 
 import org.osmdroid.util.GeoPoint;
 
-import edu.denishamann.guesstimate.activitys.MapActivity;
-
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,6 +10,7 @@ import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.util.Log;
 import android.widget.Toast;
+import edu.denishamann.guesstimate.activitys.MapActivity;
 
 public class ProximityAlert extends BroadcastReceiver {
 
@@ -26,15 +25,18 @@ public class ProximityAlert extends BroadcastReceiver {
 	public boolean						isFired			= false;
 
 	private CircleOverlay				circleOverlay;
-	private int							radius;
+	private int							radius			= 50;
 
 	public ProximityAlert() {
+	}
+
+	public ProximityAlert(MapActivity mActivity) {
+		mapActivity = mActivity;
 	}
 
 	public ProximityAlert(MapActivity mActivity, GeoPoint pPoint) {
 		mapActivity = mActivity;
 		proximityPoint = pPoint;
-		radius = 50;
 
 		registerReceiver();
 
@@ -48,15 +50,21 @@ public class ProximityAlert extends BroadcastReceiver {
 	public void setProximityPoint(GeoPoint pPoint) {
 		proximityPoint = pPoint;
 
-		mapActivity.getMapView().getOverlays().remove(circleOverlay);
+		if (circleOverlay != null) {
+			mapActivity.getMapView().getOverlays().remove(circleOverlay);
+		}
 
 		circleOverlay = new CircleOverlay(mapActivity, proximityPoint, mapActivity.getMapView());
 		circleOverlay.setRadius(radius);
 		mapActivity.getMapView().getOverlays().add(circleOverlay);
 
-		mapActivity.getLocationManager().removeProximityAlert(pIntent);
-		mapActivity.getLocationManager().addProximityAlert(proximityPoint.getLatitudeE6() / 1e6,
-				proximityPoint.getLongitudeE6() / 1e6, radius, -1, pIntent);
+		if (!isRegistered) {
+			registerReceiver();
+		} else {
+			mapActivity.getLocationManager().removeProximityAlert(pIntent);
+			mapActivity.getLocationManager().addProximityAlert(proximityPoint.getLatitudeE6() / 1e6,
+					proximityPoint.getLongitudeE6() / 1e6, radius, -1, pIntent);
+		}
 
 		isFired = false;
 	}
