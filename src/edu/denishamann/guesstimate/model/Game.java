@@ -36,6 +36,20 @@ public class Game {
 		return uniqueInstance_;
 	}
 
+	
+	
+	public long getTimeLeft_() {
+		return timeLeft_;
+	}
+
+
+
+	public void setTimeLeft_(long timeLeft_) {
+		this.timeLeft_ = timeLeft_;
+	}
+
+
+
 	public void startGame(int difficulty, String playerName) {
 		this.playerName_=playerName;
 		this.currentGuessCollection = new GuessCollection();
