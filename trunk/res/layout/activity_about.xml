@@ -19,33 +19,6 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/lblPaul"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/lblGuess1"
-        android:layout_centerHorizontal="true"
-        android:text="@string/paul"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/lblDennis"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/lblGuess3"
-        android:layout_centerHorizontal="true"
-        android:text="@string/denis"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/lblLukas"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/lblGuess4"
-        android:layout_centerHorizontal="true"
-        android:text="@string/lukas"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
         android:id="@+id/lblCourse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,5 +37,32 @@
         android:layout_marginBottom="18dp"
         android:text="@string/c2013"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/lblPaul"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lblDeveloperTop"
+        android:layout_centerHorizontal="true"
+        android:text="@string/paul"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/lblDennis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lblPaul"
+        android:layout_centerHorizontal="true"
+        android:text="@string/denis"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/lblLukas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lblDennis"
+        android:layout_centerHorizontal="true"
+        android:text="@string/lukas"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

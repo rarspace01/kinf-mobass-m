@@ -5,31 +5,40 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/howto_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/about_button"
-        android:layout_centerHorizontal="true"
-        android:text="@string/howto"
-        android:onClick="startHowTo" />
-
-    <Button
         android:id="@+id/about_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="18dp"
-        android:text="@string/about"
-        android:onClick="startAbout" />
+        android:onClick="startAbout"
+        android:text="@string/about" />
+
+    <Button
+        android:id="@+id/high_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/about_button"
+        android:layout_centerHorizontal="true"
+        android:onClick="startHighScore"
+        android:text="@string/high_score" />
 
     <Button
         android:id="@+id/start_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/howto_button"
-        android:layout_centerHorizontal="true"
-        android:text="@string/start"
-        android:onClick="startGame" />
+        android:layout_above="@+id/high_score"
+        android:layout_alignLeft="@+id/about_button"
+        android:onClick="startGame"
+        android:text="@string/start" />
+
+    <Button
+        android:id="@+id/howto_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/start_button"
+        android:layout_alignRight="@+id/high_score"
+        android:onClick="startHowTo"
+        android:text="@string/howto" />
 
 </RelativeLayout>

@@ -20,6 +20,7 @@
     <string name="unbind_service">Unbind Service</string>
     <string name="enter_guesstimate">Guess Distance</string>
     <string name="start">Start</string>
+    <string name="high_score">High Score</string>
     <string name="howto">How To Play</string>
     <string name="about">About</string>
     <string name="title_activity_start">Guesstimate</string>
@@ -33,7 +34,7 @@
     <string name="choosediff">Choose Difficulty</string>
     <string name="title_activity_how_to">How To Play</string>
     <string name="title_activity_about">About Guesstimate</string>
-    <string name="developer">Developer</string>
+    <string name="developer">Developer:</string>
     <string name="paul">Paul Birkenkampf</string>
     <string name="denis">Denis Hamann</string>
     <string name="lukas">Lukas Schwöbel</string>
@@ -41,6 +42,7 @@
     <string name="c2013">(c) 2013</string>
     <string name="descprition">Easy Difficulty:\nWhen you started the game, tap on the markers on the map and guess the distance to this point. Based on your guessed distances to four map markers, a point will be calculated where you should be if your estimates would be correct. You then have to go with a certain radius of this point before you can take a guess for the next four points. The goal of this game is to go to as many points as possible in a fixed time.</string>
     <string name="real_lateration">Use Real Lateration</string>
-    <string name="title_activity_guess">GuessActivity</string>
+    <string name="title_activity_guess">Guesstimate</string>
+    <string name="title_activity_high_score">Guesstimate - High Score</string>
 
 </resources>
