@@ -150,7 +150,7 @@ public class CircularLateration implements ILateration
 			Cartesian currentLocationCartesian = LocationUtil.convertLocationToCarthesian(currentLocation.getLocation_());
 			
 			// calculate matrix values a, b, and c for each location
-			// see  Küpper, LBS, Page 134 / Chapter 6, Circular Lateration
+			// see  KÃ¼pper, LBS, Page 134 / Chapter 6, Circular Lateration
 			Double valueA =
 					(currentLocationCartesian.getX() - currentEstimation.getX()) /
 					pseudoRange(currentLocationCartesian, currentEstimation);

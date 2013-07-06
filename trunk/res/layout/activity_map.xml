@@ -1,42 +1,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/RelativeLayout1"
-    android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    tools:context=".MapActivity" >
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
     <org.osmdroid.views.MapView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/mapview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        >
-
-    </org.osmdroid.views.MapView>
-<!--
-    <TextView
-        android:id="@+id/valueDescr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/mapview"
-        android:text="@string/maps_status_txt"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
- -->
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/mapview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     <ImageButton
-        android:id="@+id/imageButton1"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:onClick="goToLoc"
-        android:scaleType="centerCrop"
-        android:src="@drawable/target" />
-
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:onClick="goToCurrentLocation"
+            android:scaleType="centerCrop"
+            android:src="@drawable/target"/>
 </RelativeLayout>

@@ -32,7 +32,7 @@ public class HttpHelper {
 		String sPage = "";
 
 		URLConnection connection = null;
-		// Zerlegt einen String und fügt jeweils ein Zeilenende ein
+		// Zerlegt einen String und fÃ¼gt jeweils ein Zeilenende ein
 		try {
 			URL urlpage = new URL(surl);
 			connection = urlpage.openConnection();
@@ -67,7 +67,7 @@ public class HttpHelper {
 		String userPassword = usr + ":" + pwd;
 		String encoding = Base64Converter.encode(userPassword.getBytes());
 		URLConnection connection = null;
-		// Zerlegt einen String und fügt jeweils ein Zeilenende ein
+		// Zerlegt einen String und fÃ¼gt jeweils ein Zeilenende ein
 		try {
 			URL urlpage = new URL(surl);
 			connection = urlpage.openConnection();
@@ -99,7 +99,7 @@ public class HttpHelper {
 		String sPage = "";
 
 		URLConnection connection = null;
-		// Zerlegt einen String und fügt jeweils ein Zeilenende ein
+		// Zerlegt einen String und fÃ¼gt jeweils ein Zeilenende ein
 		try {
 			URL urlpage = new URL(surl);
 			connection = urlpage.openConnection();

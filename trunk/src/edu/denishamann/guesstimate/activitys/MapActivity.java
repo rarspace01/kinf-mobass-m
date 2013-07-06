@@ -20,7 +20,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
@@ -36,6 +36,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import edu.denishamann.guesstimate.OsmItemizedOverlay;
 import edu.denishamann.guesstimate.ProximityAlert;
 import edu.denishamann.guesstimate.R;
@@ -45,91 +46,60 @@ import edu.denishamann.guesstimate.model.GuessPoint;
 import edu.denishamann.ors_api.Route;
 
 /**
- * 
  * @author denis
- * 
  */
 public class MapActivity extends Activity implements LocationListener, MapViewConstants {
 
-	private MapController		mapController;
-	private MapView				mapView;
-	private OsmItemizedOverlay	itemizedOverlay;
-	private LocationManager		lm;
-	private GeoPoint			curLoc;
-	private ProximityAlert		proximityAlert	= new ProximityAlert(this);
-	private List<GuessPoint>	guessPoints;
-
-	private ResourceProxy		mResourceProxy;
-
-	private boolean				started			= false;
+	private MapController mapController;
+	private MapView mapView;
+	private OsmItemizedOverlay itemizedOverlay;
+	private LocationManager locationManager;
+	private GeoPoint curLoc;
+	private ProximityAlert proximityAlert = new ProximityAlert(this);
+	private List<GuessPoint> guessPoints;
+	private ResourceProxy mResourceProxy;
+	public boolean alreadyRunning = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		if (started) {
-			return;
+		Object obj = getLastNonConfigurationInstance();
+		if (obj != null) {
+			MapActivity lastInstance = (MapActivity) obj;
+			if (lastInstance.alreadyRunning) {
+				super.onCreate(savedInstanceState);
+				return;
+			}
 		}
-
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 
-		Intent intent = getIntent();
-		String intentDataString = "";
-		if (intent != null) {
-			intentDataString = intent.getDataString();
-		}
-
-		GeoPoint intentPoint = null;
-		if (intentDataString != null) {
-			if (intentDataString
-					.matches("^geo:(([\\d]{1,3})|([\\d]{1,3}[.][\\d]*))[,](([\\d]{1,3})|([\\d]{1,3}[.][\\d]*))$")) {
-				Log.i("GM", "Intent data: " + intentDataString);
-
-				intentDataString = intentDataString.substring(intentDataString.indexOf("geo:") + "geo:".length());
-
-				Log.i("GM", "Intent data2: " + intentDataString);
-
-				intentPoint = new GeoPoint(Double.parseDouble(intentDataString.substring(0,
-						intentDataString.indexOf(","))), Double.parseDouble(intentDataString.substring(intentDataString
-						.indexOf(",") + 1)));
-			}
-		}
-
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
-
 		mapView.setMultiTouchControls(true);
 		mapView.setBuiltInZoomControls(true);
 
 		mapController = mapView.getController();
 
 		// start location updates
-		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-			lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
+		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
 		}
-		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+		}
 
 		Criteria crit = new Criteria();
 		crit.setAccuracy(Criteria.ACCURACY_FINE);
-		String provider = lm.getBestProvider(crit, true);
+		String provider = locationManager.getBestProvider(crit, true);
 
-		Log.i("GM", provider);
-
-		Location loc = lm.getLastKnownLocation(provider);
-
+		Location loc = locationManager.getLastKnownLocation(provider);
 		if (loc != null) {
 			Log.i("GM", "Current Location: " + loc.getLatitude() + " - " + loc.getLongitude());
 			curLoc = new GeoPoint(loc.getLatitude(), loc.getLongitude());
 		} else {
 			Log.i("GM", "Loc == null, using default value");
 			curLoc = new GeoPoint(49.903038, 10.869427);
-		}
-
-		mapController.setZoom(15);
-		if (intentPoint != null) {
-			mapController.setCenter(intentPoint);
-		} else {
-			mapController.setCenter(curLoc);
 		}
 
 		guessPoints = Game.getUniqueInstance().getLocationsToBeGuessed(new GeoLocation(curLoc));
@@ -172,7 +142,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		mapView.getOverlays().add(itemizedOverlay);
 		mapView.invalidate();
 
-		started = true;
+		alreadyRunning = true;
 	}
 
 	@Override
@@ -188,8 +158,8 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		if (item.getTitle().toString().contains(getString(R.string.enter_guesstimate))) {
 			Criteria crit = new Criteria();
 			crit.setAccuracy(Criteria.ACCURACY_FINE);
-			String provider = lm.getBestProvider(crit, true);
-			Location loc = lm.getLastKnownLocation(provider);
+			String provider = locationManager.getBestProvider(crit, true);
+			Location loc = locationManager.getLastKnownLocation(provider);
 			drawRouteOnMap(new Route(new GeoLocation(49.90337, 10.894733), new GeoLocation(loc.getLatitude(),
 					loc.getLongitude())));
 			//inputDialog();
@@ -209,27 +179,47 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		mapView.invalidate();
 	}
 
-	public void goToLoc(View view) {
+	public void goToCurrentLocation(View view) {
 		mapController.animateTo(new GeoPoint(curLoc));
 		mapView.invalidate();
 	}
 
-	@Override
-	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
+	public void showAllPointsAndCurrentLocationOnMap() {
+		int tmpLongitude = 0;
+		int tmpLatitude = 0;
+		int maxLat = Integer.MIN_VALUE;
+		int maxLng = Integer.MIN_VALUE;
+		int minLat = Integer.MAX_VALUE;
+		int minLng = Integer.MAX_VALUE;
+		for (GuessPoint gp : guessPoints) {
+			if (maxLat < gp.getLocation_().toGeoPoint().getLatitudeE6())
+				maxLat = gp.getLocation_().toGeoPoint().getLatitudeE6();
+			else if (minLat > gp.getLocation_().toGeoPoint().getLatitudeE6())
+				minLat = gp.getLocation_().toGeoPoint().getLatitudeE6();
+			if (maxLng < gp.getLocation_().toGeoPoint().getLongitudeE6())
+				maxLng = gp.getLocation_().toGeoPoint().getLongitudeE6();
+			else if (minLng > gp.getLocation_().toGeoPoint().getLongitudeE6())
+				minLng = gp.getLocation_().toGeoPoint().getLongitudeE6();
+			tmpLongitude += gp.getLocation_().toGeoPoint().getLongitudeE6();
+			tmpLatitude += gp.getLocation_().toGeoPoint().getLatitudeE6();
+		}
 
-	}
+		if (maxLat < curLoc.getLatitudeE6())
+			maxLat = curLoc.getLatitudeE6();
+		else if (minLat > curLoc.getLatitudeE6())
+			minLat = curLoc.getLatitudeE6();
+		if (maxLng < curLoc.getLongitudeE6())
+			maxLng = curLoc.getLongitudeE6();
+		else if (minLng < curLoc.getLongitudeE6())
+			minLng = curLoc.getLongitudeE6();
 
-	@Override
-	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
+		tmpLatitude += curLoc.getLatitudeE6();
+		tmpLongitude += curLoc.getLongitudeE6();
 
-	}
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-
+		double spanLat = (maxLat - minLat) * 1.2;
+		double spanLng = (maxLng - minLng) * 1.2;
+		mapController.zoomToSpan((int) spanLat, (int) spanLng);
+		mapController.animateTo(new GeoPoint(tmpLatitude / 5, tmpLongitude / 5));
 	}
 
 	protected void onPause() {
@@ -249,8 +239,15 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		super.onResume();
 	}
 
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+
+		showAllPointsAndCurrentLocationOnMap();
+	}
+
 	public LocationManager getLocationManager() {
-		return lm;
+		return locationManager;
 	}
 
 	public MapView getMapView() {
@@ -299,13 +296,10 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	}
 
 	public void drawRouteOnMap(Route route) {
-
 		new RetrieveRouteTask().execute(route);
-
 	}
 
 	private class RetrieveRouteTask extends AsyncTask<Route, Void, List<GeoLocation>> {
-
 		@Override
 		protected List<GeoLocation> doInBackground(Route... params) {
 			Route route = params[0];
@@ -313,7 +307,6 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		}
 
 		protected void onPostExecute(List<GeoLocation> route) {
-
 			List<GeoLocation> glList = new LinkedList<GeoLocation>();
 			glList = route;
 
@@ -323,8 +316,29 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			}
 			MapActivity.this.mapView.getOverlays().add(routePath);
 			MapActivity.this.mapView.invalidate();
-
 		}
+	}
+
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		return this;
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
 
 	}
 }
