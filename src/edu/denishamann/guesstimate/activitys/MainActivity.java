@@ -55,6 +55,12 @@ public class MainActivity extends Activity {
 		this.startActivity(i);
 		overridePendingTransition(0, 0);
 	}
+	
+	public void startHighScore(View view) {
+		Intent i = new Intent(this, HighScoreActivity.class);
+		this.startActivity(i);
+		overridePendingTransition(0, 0);
+	}
 
 	public void startHowTo(View view) {
 		Intent i = new Intent(this, HowToActivity.class);

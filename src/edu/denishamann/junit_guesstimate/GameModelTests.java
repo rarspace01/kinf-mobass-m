@@ -76,6 +76,8 @@ public class GameModelTests extends
 		
 		game.guessedLocationApproached(getActivity());
 		
+		game.guessedLocationApproached(getActivity());
+		
 		//lower the time left for testing purposes
 		
 		game.setTimeLeft_(0);
