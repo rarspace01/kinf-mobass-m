@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 import edu.denishamann.guesstimate.R;
 
 public class GuessActivity extends Activity {
@@ -11,6 +12,9 @@ public class GuessActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		//hier müssen die Guess Locations geladen werden
+		
 		setContentView(R.layout.activity_guess);
 	}
 
@@ -21,7 +25,9 @@ public class GuessActivity extends Activity {
 		return true;
 	}
 
-	public void startGame() {
+	public void startGame(View view) {
+		
+		//hier muss per data die geratenen guesslocations übergeben werden
 		Intent i = new Intent(this, MapActivity.class);
 
 		this.startActivity(i);
