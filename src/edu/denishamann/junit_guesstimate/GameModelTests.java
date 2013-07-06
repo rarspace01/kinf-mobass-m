@@ -61,11 +61,11 @@ public class GameModelTests extends
 		// evlaute guess
 		game.evaluateGuesses();
 
-		if (game.getGuessedLocation_() != null) {
+		if (game.getGuessedLocation() != null) {
 			System.out.println("Your guess: Lat: "
-					+ game.getGuessedLocation_().getLatitude() + " Lng "
-					+ game.getGuessedLocation_().getLongitude());
-			System.out.println("You are off by "+LocationUtil.distance(currentLocation, game.getGuessedLocation_())+" meters");
+					+ game.getGuessedLocation().getLatitude() + " Lng "
+					+ game.getGuessedLocation().getLongitude());
+			System.out.println("You are off by "+LocationUtil.distance(currentLocation, game.getGuessedLocation())+" meters");
 		}else{
 			System.out.println("error on eval");
 		}

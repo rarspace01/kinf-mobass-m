@@ -56,6 +56,13 @@ public class Game {
 		this.difficulty_ = difficulty;
 		gamestate_ = 1;
 		timeLeft_ = System.currentTimeMillis() + 1000 * 60 * PLAYTIME;
+		
+		//clear guessed values
+		guessedRanges_.clear();
+		
+		//clear highscore
+		this.successfullRounds_=0;
+		
 	}
 
 	public List<GuessPoint> getLocationsToBeGuessed(GeoLocation currentLocation) {
@@ -71,7 +78,7 @@ public class Game {
 
 		if (guessedRanges_.size() < 4) {
 			result = 1;
-			Log.i("GM", "not enogh guesses");
+			Log.i("GM", "not enough guesses");
 		} else {
 			if (USE_CIRCULARLATERATION) {
 				System.out.println("using circular");
@@ -96,15 +103,20 @@ public class Game {
 			SQLiteDatamanager dbManager = new SQLiteDatamanager(context);
 			dbConn = dbManager.getWritableDatabase();
 			
+			//sql qry
 			dbConn.execSQL("INSERT INTO highscore (name, score, difficulty) VALUES ('"+this.playerName_+"','"+this.successfullRounds_+"','"+this.difficulty_+"');");
 			
-			this.gamestate_=0;
+			//clear guessed values
+			guessedRanges_.clear();
+			
+			//clear highscore
+			this.successfullRounds_=0;
 			
 		}
 		return hasRoundsLeft;
 	}
 
-	public GeoLocation getGuessedLocation_() {
+	public GeoLocation getGuessedLocation() {
 
 		if (guessedLocation_ == null) {
 			evaluateGuesses();
@@ -113,7 +125,7 @@ public class Game {
 		return guessedLocation_;
 	}
 
-	public int getDifficulty_() {
+	public int getDifficulty() {
 		return difficulty_;
 	}
 

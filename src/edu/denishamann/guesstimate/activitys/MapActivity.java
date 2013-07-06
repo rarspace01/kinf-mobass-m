@@ -154,7 +154,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 					}
 				}, mResourceProxy);
 
-		if (Game.getUniqueInstance().getDifficulty_() == 0) {
+		if (Game.getUniqueInstance().getDifficulty() == 0) {
 			for (GuessPoint gp : guessPoints) {
 				OverlayItem guessItem = new OverlayItem(gp.getDescription_(), gp.getDescription_(), gp.getLocation_()
 						.toGeoPoint());
@@ -274,7 +274,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 				Game.getUniqueInstance().addGuess(gp);
 
 				if (Game.getUniqueInstance().evaluateGuesses() == 0) {
-					GeoLocation loc = Game.getUniqueInstance().getGuessedLocation_();
+					GeoLocation loc = Game.getUniqueInstance().getGuessedLocation();
 					proximityAlert.setProximityPoint(loc.toGeoPoint());
 					Log.i("GM", "proxpoint: " + loc + "|" + loc);
 
