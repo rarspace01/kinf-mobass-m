@@ -1,9 +1,5 @@
 package edu.denishamann.guesstimate.activitys;
 
-import edu.denishamann.guesstimate.R;
-import edu.denishamann.guesstimate.R.id;
-import edu.denishamann.guesstimate.R.layout;
-import edu.denishamann.guesstimate.R.menu;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import edu.denishamann.guesstimate.R;
 
 /**
  * 
@@ -55,7 +52,7 @@ public class MainActivity extends Activity {
 		this.startActivity(i);
 		overridePendingTransition(0, 0);
 	}
-	
+
 	public void startHighScore(View view) {
 		Intent i = new Intent(this, HighScoreActivity.class);
 		this.startActivity(i);

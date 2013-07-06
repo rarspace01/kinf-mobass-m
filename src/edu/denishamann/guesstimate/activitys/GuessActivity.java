@@ -13,7 +13,7 @@ public class GuessActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		//hier müssen die Guess Locations geladen werden
+		//hier mÃ¼ssen die Guess Locations geladen werden
 		
 		setContentView(R.layout.activity_guess);
 	}
@@ -27,7 +27,7 @@ public class GuessActivity extends Activity {
 
 	public void startGame(View view) {
 		
-		//hier muss per data die geratenen guesslocations übergeben werden
+		//hier muss per data die geratenen guesslocations Ã¼bergeben werden
 		Intent i = new Intent(this, MapActivity.class);
 
 		this.startActivity(i);

@@ -20,15 +20,15 @@ import edu.denishamann.guesstimate.database.SQLiteDatamanager;
  */
 public class BackgroundService extends Service implements LocationListener {
 
-	private int ticker = 0;
-	private int trackid = 0;
-	private SQLiteDatabase dbConn;
-	private String sSQL = "";
-	private Location lastKnownLocation;
-	private LocationManager lm;
-	private String locationProvider;
+	private int				ticker	= 0;
+	private int				trackid	= 0;
+	private SQLiteDatabase	dbConn;
+	private String			sSQL	= "";
+	private Location		lastKnownLocation;
+	private LocationManager	lm;
+	private String			locationProvider;
 
-	private final IBinder mBinder = new BackgroundServiceBinder();
+	private final IBinder	mBinder	= new BackgroundServiceBinder();
 
 	public void onCreate() {
 		super.onCreate();
@@ -43,8 +43,7 @@ public class BackgroundService extends Service implements LocationListener {
 		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		lastKnownLocation = lm.getLastKnownLocation(locationProvider);
 
-		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0,
-				this);
+		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, this);
 
 	}
 
@@ -73,9 +72,8 @@ public class BackgroundService extends Service implements LocationListener {
 	public void onLocationChanged(Location location) {
 
 		lastKnownLocation = lm.getLastKnownLocation(locationProvider);
-		sSQL = "INSERT INTO logging (trackid,timestamp, lat, long) VALUES ('"
-				+ trackid + "','" + ((int) (System.currentTimeMillis() / 1000))
-				+ "','" + lastKnownLocation.getLatitude() + "','"
+		sSQL = "INSERT INTO logging (trackid,timestamp, lat, long) VALUES ('" + trackid + "','"
+				+ ((int) (System.currentTimeMillis() / 1000)) + "','" + lastKnownLocation.getLatitude() + "','"
 				+ lastKnownLocation.getLongitude() + "')";
 		dbConn.execSQL(sSQL);
 
