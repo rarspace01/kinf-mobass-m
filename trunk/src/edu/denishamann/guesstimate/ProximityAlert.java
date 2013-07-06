@@ -10,22 +10,24 @@ import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.util.Log;
 import android.widget.Toast;
+
 import edu.denishamann.guesstimate.activitys.MapActivity;
+import edu.denishamann.guesstimate.model.Game;
 
 public class ProximityAlert extends BroadcastReceiver {
 
-	private static final String			PROXIMITY_ALERT	= "edu.denishamann.guesstimate.PROXIMITYALERT";
-	private static final IntentFilter	iFilter			= new IntentFilter(PROXIMITY_ALERT);
+	private static final String       PROXIMITY_ALERT = "edu.denishamann.guesstimate.PROXIMITYALERT";
+	private static final IntentFilter iFilter         = new IntentFilter(PROXIMITY_ALERT);
 
-	private PendingIntent				pIntent;
-	private MapActivity					mapActivity;
-	private GeoPoint					proximityPoint;
+	private PendingIntent pIntent;
+	private MapActivity   mapActivity;
+	private GeoPoint      proximityPoint;
 
-	public boolean						isRegistered	= false;
-	public boolean						isFired			= false;
+	public boolean isRegistered = false;
+	public boolean isFired      = false;
 
-	private CircleOverlay				circleOverlay;
-	private int							radius			= 50;
+	private CircleOverlay circleOverlay;
+	private int radius = 50;
 
 	public ProximityAlert() {
 	}
@@ -92,15 +94,13 @@ public class ProximityAlert extends BroadcastReceiver {
 		if (!isFired) {
 			isFired = true;
 
-			String info = "ProximityAlert: ";
 			if (intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false)) {
+				Game.getInstance().guessedLocationApproached(mapActivity.getApplicationContext());
+				mapActivity.getNewGuessPoints();
 				Toast.makeText(context, "You are here!", Toast.LENGTH_LONG).show();
-				info += "incoming";
 			} else {
 				Toast.makeText(context, "Where are you going?", Toast.LENGTH_LONG).show();
-				info += "outgoing";
 			}
-			Log.i("GM", info);
 		}
 	}
 }

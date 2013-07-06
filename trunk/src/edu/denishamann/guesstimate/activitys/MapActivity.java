@@ -20,7 +20,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.Configuration;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
@@ -50,26 +50,18 @@ import edu.denishamann.ors_api.Route;
  */
 public class MapActivity extends Activity implements LocationListener, MapViewConstants {
 
-	private MapController mapController;
-	private MapView mapView;
+	private MapController      mapController;
+	private MapView            mapView;
 	private OsmItemizedOverlay itemizedOverlay;
-	private LocationManager locationManager;
-	private GeoPoint curLoc;
+	private LocationManager    locationManager;
+	private GeoPoint           curLoc;
 	private ProximityAlert proximityAlert = new ProximityAlert(this);
 	private List<GuessPoint> guessPoints;
-	private ResourceProxy mResourceProxy;
+	private ResourceProxy    mResourceProxy;
 	public boolean alreadyRunning = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Object obj = getLastNonConfigurationInstance();
-		if (obj != null) {
-			MapActivity lastInstance = (MapActivity) obj;
-			if (lastInstance.alreadyRunning) {
-				super.onCreate(savedInstanceState);
-				return;
-			}
-		}
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 
@@ -79,6 +71,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		mapView.setBuiltInZoomControls(true);
 
 		mapController = mapView.getController();
+		mapController.setZoom(15);
 
 		// start location updates
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -102,7 +95,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			curLoc = new GeoPoint(49.903038, 10.869427);
 		}
 
-		guessPoints = Game.getUniqueInstance().getLocationsToBeGuessed(new GeoLocation(curLoc));
+		guessPoints = Game.getInstance().getLocationsToBeGuessed();
 
 		mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
 		itemizedOverlay = new OsmItemizedOverlay(new ArrayList<OverlayItem>(),
@@ -124,12 +117,14 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 					}
 				}, mResourceProxy);
 
-		if (Game.getUniqueInstance().getDifficulty() == 0) {
+		if (Game.getInstance().getDifficulty() == 0) {
 			for (GuessPoint gp : guessPoints) {
 				OverlayItem guessItem = new OverlayItem(gp.getDescription_(), gp.getDescription_(), gp.getLocation_()
 						.toGeoPoint());
 				itemizedOverlay.addItem(guessItem);
 			}
+		} else if (Game.getInstance().getDifficulty() == 1) {
+			proximityAlert.setProximityPoint(Game.getInstance().getCalculatedLocation().toGeoPoint());
 		}
 
 		Drawable newMarker = getResources().getDrawable(R.drawable.curloc);
@@ -143,6 +138,24 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		mapView.invalidate();
 
 		alreadyRunning = true;
+	}
+
+	public void getNewGuessPoints() {
+		guessPoints = Game.getInstance().getLocationsToBeGuessed();
+
+		if (Game.getInstance().getDifficulty() == 0) {
+			mapView.getOverlays().remove(itemizedOverlay);
+
+			for (GuessPoint gp : guessPoints) {
+				OverlayItem guessItem = new OverlayItem(gp.getDescription_(), gp.getDescription_(), gp.getLocation_()
+						.toGeoPoint());
+				itemizedOverlay.addItem(guessItem);
+			}
+
+			mapView.getOverlays().add(itemizedOverlay);
+		} else {
+			startActivity(new Intent(this, StartActivity.class));
+		}
 	}
 
 	@Override
@@ -216,10 +229,10 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		tmpLatitude += curLoc.getLatitudeE6();
 		tmpLongitude += curLoc.getLongitudeE6();
 
-		double spanLat = (maxLat - minLat) * 1.2;
-		double spanLng = (maxLng - minLng) * 1.2;
+		double spanLat = (maxLat - minLat) * 1.0;
+		double spanLng = (maxLng - minLng) * 1.0;
+		mapController.setCenter(new GeoPoint(tmpLatitude / 5, tmpLongitude / 5));
 		mapController.zoomToSpan((int) spanLat, (int) spanLng);
-		mapController.animateTo(new GeoPoint(tmpLatitude / 5, tmpLongitude / 5));
 	}
 
 	protected void onPause() {
@@ -266,12 +279,13 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				if (input.getText().toString().isEmpty())
+					gp.setGuessDistance_(0);
+
 				gp.setGuessDistance_(Double.valueOf(input.getText().toString()));
 
-				Game.getUniqueInstance().addGuess(gp);
-
-				if (Game.getUniqueInstance().evaluateGuesses() == 0) {
-					GeoLocation loc = Game.getUniqueInstance().getGuessedLocation();
+				if (Game.getInstance().evaluateGuesses()) {
+					GeoLocation loc = Game.getInstance().getCalculatedLocation();
 					proximityAlert.setProximityPoint(loc.toGeoPoint());
 					Log.i("GM", "proxpoint: " + loc + "|" + loc);
 
@@ -317,11 +331,6 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			MapActivity.this.mapView.getOverlays().add(routePath);
 			MapActivity.this.mapView.invalidate();
 		}
-	}
-
-	@Override
-	public Object onRetainNonConfigurationInstance() {
-		return this;
 	}
 
 	@Override

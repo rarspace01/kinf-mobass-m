@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Spinner;
+
 import edu.denishamann.guesstimate.R;
 import edu.denishamann.guesstimate.model.Game;
 
@@ -39,11 +40,12 @@ public class StartActivity extends Activity {
 		Intent i = null;
 		switch (diffSpinner.getSelectedItemPosition()) {
 			case 0:
-				Game.getUniqueInstance().startGame(0, "playername");
+				Game.getInstance().startGame(0, "playername");
 				i = new Intent(this, MapActivity.class);
 				break;
 
 			case 1:
+				Game.getInstance().startGame(1, "playername");
 				i = new Intent(this, GuessActivity.class);
 				break;
 

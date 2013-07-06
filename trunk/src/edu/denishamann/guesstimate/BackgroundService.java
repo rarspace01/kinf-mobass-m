@@ -44,7 +44,6 @@ public class BackgroundService extends Service implements LocationListener {
 		lastKnownLocation = lm.getLastKnownLocation(locationProvider);
 
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, this);
-
 	}
 
 	public void onDestroy() {
