@@ -14,30 +14,32 @@ import android.view.MotionEvent;
 import android.widget.Toast;
 
 public class CircleOverlay extends Overlay {
-	private GeoPoint	geoPosition	= new GeoPoint(0, 0);
+	private GeoPoint geoPosition = new GeoPoint(0, 0);
 
-	private Paint		borderPaint	= new Paint(Paint.ANTI_ALIAS_FLAG);
-	private Paint		innerPaint	= new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint innerPaint  = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-	private int			radius;
-	float				scale;
+	private int     radius;
+	private float   scale;
+	private boolean tappable;
 
-	public CircleOverlay(Context ctx, GeoPoint pos, MapView mv) {
+	public CircleOverlay(Context ctx, MapView mv, GeoPoint pos, int radius, int alpha, boolean tappable) {
 		super(ctx);
 
 		borderPaint.setAntiAlias(true);
 		borderPaint.setStyle(Style.STROKE);
 		borderPaint.setStrokeWidth(2);
-		borderPaint.setARGB(50, 0, 0, 155);
+		borderPaint.setARGB(50, 0, 0, alpha);
 
 		innerPaint.setAntiAlias(true);
-		innerPaint.setARGB(50, 0, 0, 155);
+		innerPaint.setARGB(50, 0, 0, alpha);
 
 		geoPosition = pos;
 
 		scale = ctx.getResources().getDisplayMetrics().density;
 
-		radius = 0;
+		this.radius = radius;
+		this.tappable = tappable;
 	}
 
 	@Override
@@ -48,12 +50,14 @@ public class CircleOverlay extends Overlay {
 		float actualRadius = projection.metersToEquatorPixels(radius) * scale;
 
 		c.drawCircle(p.x, p.y, actualRadius, borderPaint);
-		c.drawCircle(p.x, p.y, actualRadius, innerPaint);
-		c.drawCircle(p.x, p.y, actualRadius * 2 / 3, borderPaint);
-		c.drawCircle(p.x, p.y, actualRadius / 3, borderPaint);
 
-		c.drawLine(p.x - actualRadius, p.y, p.x + actualRadius, p.y, borderPaint);
-		c.drawLine(p.x, p.y - actualRadius, p.x, p.y + actualRadius, borderPaint);
+		if (tappable) {
+			c.drawCircle(p.x, p.y, actualRadius, innerPaint);
+			c.drawCircle(p.x, p.y, actualRadius * 2 / 3, borderPaint);
+			c.drawCircle(p.x, p.y, actualRadius / 3, borderPaint);
+			c.drawLine(p.x - actualRadius, p.y, p.x + actualRadius, p.y, borderPaint);
+			c.drawLine(p.x, p.y - actualRadius, p.x, p.y + actualRadius, borderPaint);
+		}
 	}
 
 	public void setRadius(int r) {
@@ -62,9 +66,11 @@ public class CircleOverlay extends Overlay {
 
 	@Override
 	public boolean onSingleTapUp(final MotionEvent event, final MapView mapView) {
-		if (tapIsInCircle(event, mapView)) {
-			Toast.makeText(mapView.getContext(), "Go Here!", Toast.LENGTH_LONG).show();
-			return true;
+		if (tappable) {
+			if (tapIsInCircle(event, mapView)) {
+				Toast.makeText(mapView.getContext(), "Go Here!", Toast.LENGTH_LONG).show();
+				return true;
+			}
 		}
 		return false;
 	}

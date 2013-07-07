@@ -80,21 +80,21 @@ public class Game {
 			successfulLocations++;
 			pointsToGuess = currentGuessCollection.getRandom(4);
 			return true;
+		} else {
+			System.out.println("HS: " + successfulLocations);
+			//save highscore
+			SQLiteDatamanager dbManager = new SQLiteDatamanager(context);
+			dbConn = dbManager.getWritableDatabase();
+
+			//sql qry
+			dbConn.execSQL("INSERT INTO highscore (name, score, difficulty) VALUES ('" + this.playerName_ + "','"
+					+ this.successfulLocations + "','" + this.difficulty_ + "');");
+
+			dbManager.close();
+			dbConn.close();
+
+			return false;
 		}
-
-		System.out.println("HS: " + successfulLocations);
-		//save highscore
-		SQLiteDatamanager dbManager = new SQLiteDatamanager(context);
-		dbConn = dbManager.getWritableDatabase();
-
-		//sql qry
-		dbConn.execSQL("INSERT INTO highscore (name, score, difficulty) VALUES ('" + this.playerName_ + "','"
-				+ this.successfulLocations + "','" + this.difficulty_ + "');");
-
-		dbConn.close();
-		dbManager.close();
-
-		return false;
 	}
 
 	public GeoLocation getCalculatedLocation() {
