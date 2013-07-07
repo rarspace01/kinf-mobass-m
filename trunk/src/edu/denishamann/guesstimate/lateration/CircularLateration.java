@@ -124,11 +124,16 @@ public class CircularLateration implements ILateration {
 	 * @return                - Pythagoras distance
 	 */
 	private double pseudoRange(Cartesian baseStation, Cartesian terminal) {
-		return Math.sqrt(
+		/*return Math.sqrt(
 				Math.pow((baseStation.getX() - terminal.getX()), 2) +
 						Math.pow((baseStation.getY() - terminal.getY()), 2) +
 						Math.pow((baseStation.getZ() - terminal.getZ()), 2)
-		);
+		);*/
+		
+		return LocationUtil.distance(
+				LocationUtil.convertCartesianToLocation(baseStation),
+				LocationUtil.convertCartesianToLocation(terminal)
+			);
 	}
 
 	/**
