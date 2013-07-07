@@ -22,6 +22,7 @@ public class GameModelTests extends
 	}
 
 	public void testStart() {
+		MainActivity mActivity = getActivity();
 		// start game
 		Game.getInstance().startGame(0, "Denis");
 

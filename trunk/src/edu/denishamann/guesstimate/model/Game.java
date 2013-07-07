@@ -39,19 +39,23 @@ public class Game {
 	public void startGame(int difficulty, String playerName) {
 		this.playerName_ = playerName;
 		this.currentGuessCollection = new GuessCollection();
-		this.pointsToGuess = currentGuessCollection.getRandom(4);
 		this.difficulty_ = difficulty;
 		this.endTime = System.currentTimeMillis() + 1000 * 60 * PLAYTIME;
 		this.successfulLocations = 0;
 	}
 
 	public List<GuessPoint> getLocationsToBeGuessed() {
+		if (pointsToGuess == null) {
+			pointsToGuess = currentGuessCollection.getRandom(4);
+		}
 		return pointsToGuess;
 	}
-	
+
 	public List<GuessPoint> getLocationsToBeGuessed(GeoLocation currentLocation) {
-		
-		return this.currentGuessCollection.getNearest(currentLocation, 4, 0);
+		if (pointsToGuess == null) {
+			pointsToGuess = currentGuessCollection.getNearest(currentLocation, 4, 0);
+		}
+		return pointsToGuess;
 	}
 
 	public boolean evaluateGuesses() {
@@ -83,7 +87,7 @@ public class Game {
 	public boolean guessedLocationApproached(Context context) {
 		if (System.currentTimeMillis() < endTime) {
 			successfulLocations++;
-			pointsToGuess = currentGuessCollection.getRandom(4);
+			pointsToGuess = null;
 			return true;
 		} else {
 			System.out.println("HS: " + successfulLocations);
