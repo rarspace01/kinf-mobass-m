@@ -22,49 +22,49 @@ public class GameModelTests extends
 	}
 
 	public void testStart() {
-//		// start game
-//		Game.getInstance().startGame(0, "Denis");
-//
-//		// current location
-//		GeoLocation currentLocation = new GeoLocation(49.904448, 10.859274);
-//
-//		// get 4 guesspoints
-//		List<GuessPoint> gpl = Game.getInstance().getLocationsToBeGuessed(currentLocation);
-//
-//		//print out the places we are going to set
-//		for (int i = 0; i < gpl.size(); i++) {
-//			System.out.println(gpl.get(i).getDescription_());
-//		}
-//
-//		gpl.get(0).setGuessDistance_(500); //erba
-//		gpl.get(1).setGuessDistance_(500); //dom
-//		gpl.get(2).setGuessDistance_(500); //altes rathaus
-//		gpl.get(3).setGuessDistance_(500); //gabelmo
-//
-//		// evaluate guess
-//		Game.getInstance().evaluateGuesses();
-//
-//		if (Game.getInstance().getCalculatedLocation() != null) {
-//			System.out.println("Your guess: Lat: "
-//					+ Game.getInstance().getCalculatedLocation().getLatitude() + " Lng "
-//					+ Game.getInstance().getCalculatedLocation().getLongitude());
-//			System.out.println("You are off by " + LocationUtil.distance(currentLocation, Game.getInstance().getCalculatedLocation()) + " meters");
-//		} else {
-//			System.out.println("error on eval");
-//		}
-//
-//		// get 2 locations
-//		Game.getInstance().guessedLocationApproached(getActivity());
-//
-//		Game.getInstance().guessedLocationApproached(getActivity());
-//
-//		Game.getInstance().guessedLocationApproached(getActivity());
-//
-//		//lower the time left for testing purposes
-//		Game.getInstance().setEndTime(0);
-//
-//		//trigger the sql save action
-//		Game.getInstance().guessedLocationApproached(getActivity());
+		// start game
+		Game.getInstance().startGame(0, "Denis");
+
+		// current location
+		GeoLocation currentLocation = new GeoLocation(49.904448, 10.859274);
+
+		// get 4 guesspoints
+		List<GuessPoint> gpl = Game.getInstance().getLocationsToBeGuessed(currentLocation);
+
+		//print out the places we are going to set
+		for (int i = 0; i < gpl.size(); i++) {
+			System.out.println(gpl.get(i).getDescription_());
+		}
+
+		gpl.get(0).setGuessDistance_(500); //erba
+		gpl.get(1).setGuessDistance_(500); //dom
+		gpl.get(2).setGuessDistance_(500); //altes rathaus
+		gpl.get(3).setGuessDistance_(500); //gabelmo
+
+		// evaluate guess
+		Game.getInstance().evaluateGuesses();
+
+		if (Game.getInstance().getCalculatedLocation() != null) {
+			System.out.println("Your guess: Lat: "
+					+ Game.getInstance().getCalculatedLocation().getLatitude() + " Lng "
+					+ Game.getInstance().getCalculatedLocation().getLongitude());
+			System.out.println("You are off by " + LocationUtil.distance(currentLocation, Game.getInstance().getCalculatedLocation()) + " meters");
+		} else {
+			System.out.println("error on eval");
+		}
+
+		// get 2 locations
+		Game.getInstance().guessedLocationApproached(getActivity());
+
+		Game.getInstance().guessedLocationApproached(getActivity());
+
+		Game.getInstance().guessedLocationApproached(getActivity());
+
+		//lower the time left for testing purposes
+		Game.getInstance().setEndTime(0);
+
+		//trigger the sql save action
+		Game.getInstance().guessedLocationApproached(getActivity());
 	}
 
 }

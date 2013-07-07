@@ -48,6 +48,11 @@ public class Game {
 	public List<GuessPoint> getLocationsToBeGuessed() {
 		return pointsToGuess;
 	}
+	
+	public List<GuessPoint> getLocationsToBeGuessed(GeoLocation currentLocation) {
+		
+		return this.currentGuessCollection.getNearest(currentLocation, 4, 0);
+	}
 
 	public boolean evaluateGuesses() {
 		if (!everyPointHasGuess()) {
