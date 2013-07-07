@@ -47,9 +47,6 @@ public class HighScoreActivity extends Activity {
 		Cursor currentCursor = dbConn_.rawQuery("SELECT name, score, difficulty FROM highscore ORDER BY score DESC;",
 				null);
 
-		dbManager.close();
-		dbConn_.close();
-
 		//1. pos on cursor
 		currentCursor.moveToFirst();
 
@@ -74,6 +71,11 @@ public class HighScoreActivity extends Activity {
 
 		}
 
+		currentCursor.close();
+		dbConn_.close();
+		dbManager.close();
+		
+		
 		lv_ = (ListView) findViewById(R.id.listHighscore);
 		// Instanciating an array list (you don't need to do this, you already have yours)
 		// This is the array adapter, it takes the context of the activity as a first // parameter, the type of list view as a second parameter and your array as a third parameter

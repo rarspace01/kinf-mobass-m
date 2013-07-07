@@ -91,8 +91,8 @@ public class Game {
 		dbConn.execSQL("INSERT INTO highscore (name, score, difficulty) VALUES ('" + this.playerName_ + "','"
 				+ this.successfulLocations + "','" + this.difficulty_ + "');");
 
-		dbManager.close();
 		dbConn.close();
+		dbManager.close();
 
 		return false;
 	}
