@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import edu.denishamann.guesstimate.activitys.HighScoreActivity;
 import edu.denishamann.guesstimate.activitys.MapActivity;
 import edu.denishamann.guesstimate.model.Game;
 
@@ -42,8 +43,7 @@ public class ProximityAlert extends BroadcastReceiver {
 
 		registerReceiver();
 
-		circleOverlay = new CircleOverlay(mapActivity, proximityPoint, mapActivity.getMapView());
-		circleOverlay.setRadius(radius);
+		circleOverlay = new CircleOverlay(mapActivity, mapActivity.getMapView(), proximityPoint, radius, 155, true);
 		mapActivity.getMapView().getOverlays().add(circleOverlay);
 
 		Log.i("GM", "Set up ProximityAlert");
@@ -56,8 +56,7 @@ public class ProximityAlert extends BroadcastReceiver {
 			mapActivity.getMapView().getOverlays().remove(circleOverlay);
 		}
 
-		circleOverlay = new CircleOverlay(mapActivity, proximityPoint, mapActivity.getMapView());
-		circleOverlay.setRadius(radius);
+		circleOverlay = new CircleOverlay(mapActivity, mapActivity.getMapView(), proximityPoint, radius, 155, true);
 		mapActivity.getMapView().getOverlays().add(circleOverlay);
 
 		if (!isRegistered) {
@@ -95,9 +94,12 @@ public class ProximityAlert extends BroadcastReceiver {
 			isFired = true;
 
 			if (intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false)) {
-				Game.getInstance().guessedLocationApproached(mapActivity.getApplicationContext());
-				mapActivity.getNewGuessPoints();
 				Toast.makeText(context, "You are here!", Toast.LENGTH_LONG).show();
+				if (Game.getInstance().guessedLocationApproached(mapActivity.getApplicationContext())) {
+					mapActivity.getNewGuessPoints();
+				} else {
+					mapActivity.startActivity(new Intent(mapActivity, HighScoreActivity.class));
+				}
 			} else {
 				Toast.makeText(context, "Where are you going?", Toast.LENGTH_LONG).show();
 			}

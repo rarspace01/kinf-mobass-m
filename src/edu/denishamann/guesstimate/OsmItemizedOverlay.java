@@ -8,10 +8,9 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
 public class OsmItemizedOverlay extends ItemizedIconOverlay<OverlayItem> {
-	private ArrayList<OverlayItem>	mItemList	= new ArrayList<OverlayItem>();
+	private ArrayList<OverlayItem> mItemList = new ArrayList<OverlayItem>();
 
-	public OsmItemizedOverlay(ArrayList<OverlayItem> pList,
-			ItemizedIconOverlay.OnItemGestureListener<OverlayItem> pOnItemGestureListener, ResourceProxy pResourceProxy) {
+	public OsmItemizedOverlay(ArrayList<OverlayItem> pList, ItemizedIconOverlay.OnItemGestureListener<OverlayItem> pOnItemGestureListener, ResourceProxy pResourceProxy) {
 		super(pList, pOnItemGestureListener, pResourceProxy);
 		mItemList = pList;
 	}
