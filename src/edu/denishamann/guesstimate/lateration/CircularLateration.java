@@ -16,7 +16,7 @@ import edu.denishamann.guesstimate.model.GuessPoint;
  */
 public class CircularLateration implements ILateration {
 
-	private double DELTA         = 0.09;	/* delta value to stop calculations */
+	private double DELTA         = 0.01;	/* delta value to stop calculations */
 	private int    MAXITERATIONS = 500;
 
 	private List<GuessPoint> locations;			/* locations of the objects */
@@ -56,6 +56,8 @@ public class CircularLateration implements ILateration {
 	private void calulcateCircularLateration() {
 		int i = 0;
 		double delta = 0.0;
+		double lastDelta = 0.0;
+		
 		while (i < MAXITERATIONS) {
 			i++;
 			Cartesian newDelta = calculateDeltaVector();
@@ -68,10 +70,11 @@ public class CircularLateration implements ILateration {
 				System.out.println(currentEstimation.toString() + " - " + LocationUtil.convertCartesianToLocation(currentEstimation));
 			}
 			delta = newDelta.delta();
-			if (delta <= DELTA) {
+			if (Math.abs((delta-lastDelta)) <= DELTA) {
 				break;
 			} else {
 				System.out.println("Delta @" + delta);
+				lastDelta=delta;
 			}
 
 		}
