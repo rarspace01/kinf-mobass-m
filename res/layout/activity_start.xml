@@ -1,33 +1,51 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    tools:context=".StartActivity" >
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                tools:context=".StartActivity">
+
 
     <Spinner
-        android:id="@+id/difficulty_spinner"
-        android:layout_width="100dp"
-        android:layout_height="60dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:entries="@array/difficulty" />
+            android:id="@+id/difficulty_spinner"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:entries="@array/difficulty"/>
 
     <TextView
-        android:id="@+id/choose_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/difficulty_spinner"
-        android:layout_centerHorizontal="true"
-        android:text="@string/choosediff"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:id="@+id/choose_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/difficulty_spinner"
+            android:layout_centerHorizontal="true"
+            android:text="@string/choosediff"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
 
     <Button
-        android:id="@+id/startgame_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/difficulty_spinner"
-        android:layout_centerHorizontal="true"
-        android:onClick="startGame"
-        android:text="@string/start" />
+            android:id="@+id/startgame_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/difficulty_spinner"
+            android:layout_centerHorizontal="true"
+            android:onClick="startGame"
+            android:text="@string/start"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/playername"
+            android:layout_centerHorizontal="true"
+            android:text="Your name:"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <EditText
+            android:id="@+id/playername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/choose_text"
+            android:layout_centerHorizontal="true"
+            android:inputType="text"
+            android:imeOptions="actionDone"/>
 
 </RelativeLayout>

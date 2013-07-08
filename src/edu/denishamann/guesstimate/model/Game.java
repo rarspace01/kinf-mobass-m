@@ -25,7 +25,7 @@ public class Game {
 	private SQLiteDatabase   dbConn;
 
 	private boolean USE_CIRCULARLATERATION = true;
-	private int     PLAYTIME               = 30;                            //Rundenzeit in Min
+	private int     PLAYTIME               = 1;                            //Rundenzeit in Min
 
 	private static Game instance;
 
@@ -37,7 +37,7 @@ public class Game {
 	}
 
 	public void startGame(int difficulty, String playerName, boolean useRealLateration) {
-		this.playerName_ = playerName;
+		this.playerName_ = playerName.trim();
 		this.currentGuessCollection = new GuessCollection();
 		this.difficulty_ = difficulty;
 		this.endTime = System.currentTimeMillis() + 1000 * 60 * PLAYTIME;
@@ -127,5 +127,13 @@ public class Game {
 
 		dbManager.close();
 		dbConn.close();
+	}
+
+	public int getSuccessfulLocations() {
+		return successfulLocations;
+	}
+
+	public String getPlayerName_() {
+		return playerName_;
 	}
 }

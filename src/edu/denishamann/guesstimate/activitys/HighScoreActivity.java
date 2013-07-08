@@ -12,8 +12,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import edu.denishamann.guesstimate.R;
 import edu.denishamann.guesstimate.database.SQLiteDatamanager;
+import edu.denishamann.guesstimate.model.Game;
 
 public class HighScoreActivity extends Activity {
 
@@ -23,13 +26,19 @@ public class HighScoreActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		Log.i("GM","starting HS activity");
-
 		setContentView(R.layout.activity_high_score);
 
+		TextView congrats = (TextView) findViewById(R.id.congrats);
+		Intent intent = getIntent();
+		if (intent.hasExtra("gameEnded")) {
+			congrats.setText("Congratulations");
+			getHighscores(Game.getInstance().getPlayerName_(), Game.getInstance().getSuccessfulLocations(), Game.getInstance().getDifficulty());
+		} else {
+			congrats.setText("");
+			getHighscores("", -1, -1);
+		}
+
 		//retrieve highscores
-		getHighscores();
 
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
@@ -48,8 +57,8 @@ public class HighScoreActivity extends Activity {
 		return true;
 	}
 
-	public void getHighscores() {
-
+	public void getHighscores(String playername, int successfulLocations, int difficulty) {
+		int selector = -1;
 		SQLiteDatamanager dbManager = new SQLiteDatamanager(this);
 		dbConn_ = dbManager.getReadableDatabase();
 		ArrayList<String> highScoreList = new ArrayList<String>();
@@ -59,45 +68,48 @@ public class HighScoreActivity extends Activity {
 		//dbConn_.rawQuery(""
 
 		//create cursor based on qry
-		Cursor currentCursor = dbConn_.rawQuery("SELECT name, score, difficulty FROM highscore ORDER BY score DESC;",
+		Cursor currentCursor = dbConn_.rawQuery("SELECT name, score, difficulty FROM highscore ORDER BY score DESC, difficulty DESC;",
 				null);
 
 		//1. pos on cursor
 		currentCursor.moveToFirst();
 
 		//über alle cursor inhalte
-		while (!currentCursor.isAfterLast()) {
-			currentCursor.getString(0);
-			currentCursor.getInt(1);
-			currentCursor.getInt(2);
+		int i = 0;
+		while (!currentCursor.isAfterLast() && i < 9) {
 			tmpHighscore = currentCursor.getString(0) + " - " + currentCursor.getInt(1);
-
 			if (currentCursor.getInt(2) == 0) {
 				tmpHighscore = tmpHighscore + " - Easy";
 			} else {
 				tmpHighscore = tmpHighscore + " - Hard";
 			}
 
-			Log.i("GM",tmpHighscore);
-
+			Log.i("GM", tmpHighscore);
 			highScoreList.add(tmpHighscore);
+
+			if (currentCursor.getString(0).equals(playername) && currentCursor.getInt(1) == successfulLocations
+					&& currentCursor.getInt(2) == difficulty && selector == -1) {
+				selector = i;
+			}
 
 			currentCursor.moveToNext();
 
+			i++;
 		}
 
 		currentCursor.close();
 		dbConn_.close();
 		dbManager.close();
 
-
 		lv_ = (ListView) findViewById(R.id.listHighscore);
+		lv_.setSelector(R.drawable.item_background);
 		// Instanciating an array list (you don't need to do this, you already have yours)
-		// This is the array adapter, it takes the context of the activity as a first // parameter, the type of list view as a second parameter and your array as a third parameter
-		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
-				highScoreList);
+		// This is the array adapter, it takes the context of the activity as a first
+		// parameter, the type of list view as a second parameter and your array as a third parameter
+		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.listview, highScoreList);
 		lv_.setAdapter(arrayAdapter);
 
+		lv_.setItemChecked(selector, true);
 	}
 
 
