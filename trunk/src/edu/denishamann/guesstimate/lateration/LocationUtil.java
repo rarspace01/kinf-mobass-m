@@ -44,7 +44,7 @@ public class LocationUtil
 	    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 	    double dist = EARTH_RADIUS * c;
 
-	    return dist;
+	    return Math.abs(dist);
 	    }
 	
 	public static class Cartesian
