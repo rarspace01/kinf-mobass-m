@@ -34,6 +34,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import edu.denishamann.guesstimate.CircleOverlay;
 import edu.denishamann.guesstimate.OsmItemizedOverlay;
 import edu.denishamann.guesstimate.ProximityAlert;
@@ -57,6 +58,8 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	private List<GuessPoint>    guessPoints;
 	private List<CircleOverlay> circleOverlays;
 	private ResourceProxy       mResourceProxy;
+	private PathOverlay         routePath;
+
 	public boolean alreadyRunning = false;
 
 	@Override
@@ -147,9 +150,9 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			mapView.getOverlays().addAll(circleOverlays);
 
 			proximityAlert.setProximityPoint(Game.getInstance().getCalculatedLocation().toGeoPoint());
-			
+
 			drawRouteOnMap(new Route(new GeoLocation(curLoc), Game.getInstance().getCalculatedLocation()));
-			
+
 		}
 
 		Drawable newMarker = getResources().getDrawable(R.drawable.curloc);
@@ -293,9 +296,9 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 				if (Game.getInstance().evaluateGuesses()) {
 					GeoLocation loc = Game.getInstance().getCalculatedLocation();
 					proximityAlert.setProximityPoint(loc.toGeoPoint());
-					
+
 					drawRouteOnMap(new Route(new GeoLocation(curLoc), loc));
-					
+
 					Log.i("GM", "proxpoint: " + loc + "|" + loc);
 
 					for (GuessPoint gp : guessPoints) {
@@ -323,7 +326,6 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	}
 
 	private class RetrieveRouteTask extends AsyncTask<Route, Void, List<GeoLocation>> {
-		private PathOverlay routePath;
 
 		@Override
 		protected List<GeoLocation> doInBackground(Route... params) {
@@ -335,7 +337,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			List<GeoLocation> glList = new LinkedList<GeoLocation>();
 			glList = route;
 
-			if(routePath!=null){
+			if (routePath != null) {
 				MapActivity.this.mapView.getOverlays().remove(routePath);
 			}
 
@@ -364,5 +366,9 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onBackPressed() {
 	}
 }
