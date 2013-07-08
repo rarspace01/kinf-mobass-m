@@ -8,12 +8,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+
 import edu.denishamann.guesstimate.R;
 
 /**
- * 
  * @author denis
- * 
  */
 public class MainActivity extends Activity {
 
@@ -23,28 +22,6 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		Log.i("GM", "MainActivity created");
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main, menu);
-
-		menu.findItem(R.id.real_lateration).setChecked(true);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.real_lateration:
-				item.setChecked(!item.isChecked());
-				break;
-
-			default:
-				break;
-		}
-		return true;
 	}
 
 	public void startGame(View view) {

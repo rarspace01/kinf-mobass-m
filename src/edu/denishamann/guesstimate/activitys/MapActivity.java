@@ -371,4 +371,10 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	@Override
 	public void onBackPressed() {
 	}
+
+	@Override
+	protected void onDestroy() {
+		proximityAlert.unregisterReceiver();
+		super.onDestroy();
+	}
 }
