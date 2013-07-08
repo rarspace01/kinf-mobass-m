@@ -82,10 +82,12 @@ public class ProximityAlert extends BroadcastReceiver {
 	}
 
 	public void unregisterReceiver() {
-		Log.i("GM", "ProxAlert unregistered");
-		mapActivity.unregisterReceiver(this);
-		mapActivity.getLocationManager().removeProximityAlert(pIntent);
-		isRegistered = false;
+		if (isRegistered) {
+			Log.i("GM", "ProxAlert unregistered");
+			mapActivity.unregisterReceiver(this);
+			mapActivity.getLocationManager().removeProximityAlert(pIntent);
+			isRegistered = false;
+		}
 	}
 
 	@Override
