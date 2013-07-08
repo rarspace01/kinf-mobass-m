@@ -8,11 +8,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 import edu.denishamann.guesstimate.R;
 import edu.denishamann.guesstimate.database.SQLiteDatamanager;
 
@@ -25,7 +24,7 @@ public class HighScoreActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		System.out.println("starting HS activity");
+		Log.i("GM","starting HS activity");
 
 		setContentView(R.layout.activity_high_score);
 
@@ -79,7 +78,7 @@ public class HighScoreActivity extends Activity {
 				tmpHighscore = tmpHighscore + " - Hard";
 			}
 
-			System.out.println(tmpHighscore);
+			Log.i("GM",tmpHighscore);
 
 			highScoreList.add(tmpHighscore);
 

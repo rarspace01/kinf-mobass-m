@@ -2,7 +2,7 @@ package edu.denishamann.guesstimate.lateration;
 
 import java.util.List;
 
-
+import android.util.Log;
 import edu.denishamann.guesstimate.lateration.LocationUtil.Cartesian;
 import edu.denishamann.guesstimate.model.GeoLocation;
 import edu.denishamann.guesstimate.model.GuessPoint;
@@ -62,18 +62,18 @@ public class CircularLateration implements ILateration {
 			i++;
 			Cartesian newDelta = calculateDeltaVector();
 
-			//System.out.println("Delta: " + newDelta);
+			//Log.i("GM","Delta: " + newDelta);
 			currentEstimation.addDelta(newDelta);
 
 			if (i % 10 == 0) {
-				System.out.println("Iteration " + i);
-				System.out.println(currentEstimation.toString() + " - " + LocationUtil.convertCartesianToLocation(currentEstimation));
+				Log.i("GM","Iteration " + i);
+				Log.i("GM",currentEstimation.toString() + " - " + LocationUtil.convertCartesianToLocation(currentEstimation));
 			}
 			delta = newDelta.delta();
 			if (Math.abs((delta-lastDelta)) <= DELTA) {
 				break;
 			} else {
-				System.out.println("Delta @" + delta);
+				Log.i("GM","Delta @" + delta);
 				lastDelta=delta;
 			}
 
