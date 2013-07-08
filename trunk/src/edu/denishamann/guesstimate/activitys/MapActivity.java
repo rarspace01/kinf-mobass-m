@@ -32,6 +32,9 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -61,8 +64,10 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	private List<CircleOverlay> circleOverlays;
 	private ResourceProxy       mResourceProxy;
 	private PathOverlay         routePath;
+	private CountDownTimer      countDownTimer;
 
-	public boolean alreadyRunning = false;
+	public  boolean alreadyRunning = false;
+	private boolean optionsVisible = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +171,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		mapView.getOverlays().add(itemizedOverlay);
 		mapView.invalidate();
 
-		new CountDownTimer(Game.getInstance().getTimeLeft(), 1000) {
+		countDownTimer = new CountDownTimer(Game.getInstance().getTimeLeft(), 1000) {
 
 			public void onTick(long millisUntilFinished) {
 				TextView timer = (TextView) findViewById(R.id.timer);
@@ -181,9 +186,12 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 				timer.setText("00:00");
 
 				Game.getInstance().gameEnded(getApplicationContext());
-				startActivity(new Intent(MapActivity.this, HighScoreActivity.class));
+				Intent intent = new Intent(MapActivity.this, HighScoreActivity.class);
+				intent.putExtra("gameEnded", true);
+				startActivity(intent);
 			}
-		}.start();
+		};
+		countDownTimer.start();
 
 		alreadyRunning = true;
 	}
@@ -281,7 +289,8 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 
-		showAllPointsAndCurrentLocationOnMap();
+		if (hasFocus && !optionsVisible)
+			showAllPointsAndCurrentLocationOnMap();
 	}
 
 	public LocationManager getLocationManager() {
@@ -396,5 +405,33 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	protected void onDestroy() {
 		proximityAlert.unregisterReceiver();
 		super.onDestroy();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.map, menu);
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.showAll:
+				showAllPointsAndCurrentLocationOnMap();
+				break;
+			case R.id.giveUp:
+				countDownTimer.cancel();
+				startActivity(new Intent(this, MainActivity.class));
+				break;
+
+			default:
+				break;
+		}
+
+		optionsVisible = true;
+
+		return super.onOptionsItemSelected(item);
 	}
 }

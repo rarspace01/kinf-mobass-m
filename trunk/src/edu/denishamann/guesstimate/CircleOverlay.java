@@ -37,8 +37,6 @@ public class CircleOverlay extends Overlay {
 
 		geoPosition = pos;
 
-		Log.d("GM", "Displaydebug: Density: " + ctx.getResources().getDisplayMetrics().density + " X/Y: " + ctx.getResources().getDisplayMetrics().xdpi + "/" + ctx.getResources().getDisplayMetrics().ydpi);
-
 		this.radius = radius;
 		this.tappable = tappable;
 	}

@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import edu.denishamann.guesstimate.R;
@@ -54,16 +55,21 @@ public class StartActivity extends Activity {
 
 	public void startGame(View view) {
 		Spinner diffSpinner = (Spinner) findViewById(R.id.difficulty_spinner);
+		EditText player = (EditText) findViewById(R.id.playername);
+		String playername = player.getText().toString();
+		if (playername.isEmpty()) {
+			playername = "Player 1";
+		}
 
 		Intent i = null;
 		switch (diffSpinner.getSelectedItemPosition()) {
 			case 0:
-				Game.getInstance().startGame(0, "playername", useRealLateration);
+				Game.getInstance().startGame(0, playername, useRealLateration);
 				i = new Intent(this, MapActivity.class);
 				break;
 
 			case 1:
-				Game.getInstance().startGame(1, "playername", useRealLateration);
+				Game.getInstance().startGame(1, playername, useRealLateration);
 				i = new Intent(this, GuessActivity.class);
 				break;
 
