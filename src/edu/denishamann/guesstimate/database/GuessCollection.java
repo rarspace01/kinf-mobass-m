@@ -38,7 +38,7 @@ public class GuessCollection implements IGuessCollection {
 		addGuessPoint(new GuessPoint(new GeoLocation(49.90782, 10.905083),
 				"Feki21"));
 		addGuessPoint(new GuessPoint(new GeoLocation(49.897109, 10.892739),
-				"Brauerei F‰ﬂla"));
+				"Brauerei F√§√üla"));
 
 		guessPointList.addAll(getAll());
 	}

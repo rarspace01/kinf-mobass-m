@@ -2,6 +2,7 @@ package edu.denishamann.guesstimate.activitys;
 
 import java.util.ArrayList;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,19 +12,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
 import edu.denishamann.guesstimate.R;
 import edu.denishamann.guesstimate.database.SQLiteDatamanager;
 
 public class HighScoreActivity extends Activity {
 
-	private SQLiteDatabase	dbConn_;
-	private ListView		lv_;
+	private SQLiteDatabase dbConn_;
+	private ListView       lv_;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		getActionBar().setHomeButtonEnabled(true);
 		System.out.println("starting HS activity");
 
 		setContentView(R.layout.activity_high_score);
@@ -31,6 +32,21 @@ public class HighScoreActivity extends Activity {
 		//retrieve highscores
 		getHighscores();
 
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+			case android.R.id.home:
+				startActivity(new Intent(HighScoreActivity.this, MainActivity.class));
+				break;
+			default:
+				break;
+		}
+
+		return true;
 	}
 
 	public void getHighscores() {
@@ -74,8 +90,8 @@ public class HighScoreActivity extends Activity {
 		currentCursor.close();
 		dbConn_.close();
 		dbManager.close();
-		
-		
+
+
 		lv_ = (ListView) findViewById(R.id.listHighscore);
 		// Instanciating an array list (you don't need to do this, you already have yours)
 		// This is the array adapter, it takes the context of the activity as a first // parameter, the type of list view as a second parameter and your array as a third parameter
@@ -85,4 +101,9 @@ public class HighScoreActivity extends Activity {
 
 	}
 
+
+	public void onPause() {
+		super.onPause();
+		overridePendingTransition(0, 0);
+	}
 }
