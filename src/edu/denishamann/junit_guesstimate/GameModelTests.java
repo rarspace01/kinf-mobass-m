@@ -3,7 +3,7 @@ package edu.denishamann.junit_guesstimate;
 import java.util.List;
 
 import android.test.ActivityInstrumentationTestCase2;
-
+import android.util.Log;
 import edu.denishamann.guesstimate.activitys.MainActivity;
 import edu.denishamann.guesstimate.lateration.LocationUtil;
 import edu.denishamann.guesstimate.model.Game;
@@ -34,7 +34,7 @@ public class GameModelTests extends
 
 		//print out the places we are going to set
 		for (int i = 0; i < gpl.size(); i++) {
-			System.out.println(gpl.get(i).getDescription_());
+			Log.i("GM",gpl.get(i).getDescription_());
 		}
 
 		gpl.get(0).setGuessDistance_(500); //erba
@@ -46,12 +46,12 @@ public class GameModelTests extends
 		Game.getInstance().evaluateGuesses();
 
 		if (Game.getInstance().getCalculatedLocation() != null) {
-			System.out.println("Your guess: Lat: "
+			Log.i("GM","Your guess: Lat: "
 					+ Game.getInstance().getCalculatedLocation().getLatitude() + " Lng "
 					+ Game.getInstance().getCalculatedLocation().getLongitude());
-			System.out.println("You are off by " + LocationUtil.distance(currentLocation, Game.getInstance().getCalculatedLocation()) + " meters");
+			Log.i("GM","You are off by " + LocationUtil.distance(currentLocation, Game.getInstance().getCalculatedLocation()) + " meters");
 		} else {
-			System.out.println("error on eval");
+			Log.i("GM","error on eval");
 		}
 
 		// get 2 locations

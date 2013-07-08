@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import edu.denishamann.guesstimate.activitys.MainActivity;
 import edu.denishamann.guesstimate.database.GuessCollection;
 import edu.denishamann.guesstimate.database.IGuessCollection;
@@ -27,39 +28,39 @@ public class GuessPointTests extends
 
 		List<GuessPoint> gpl = new LinkedList<GuessPoint>();
 
-		System.out.println("try1");
+		Log.i("GM","try1");
 
 		gpl = guessc.getNearest(new GeoLocation(49.904448, 10.859274), 4, 0);
 
 		for (int i = 0; i < gpl.size(); i++) {
-			System.out.println(gpl.get(i).getDescription_());
+			Log.i("GM",gpl.get(i).getDescription_());
 		}
 
 		// new
-		System.out.println("try2");
+		Log.i("GM","try2");
 
 		gpl = guessc.getNearest(new GeoLocation(49.904448, 10.859274), 4, 0);
 
 		for (int i = 0; i < gpl.size(); i++) {
-			System.out.println(gpl.get(i).getDescription_());
+			Log.i("GM",gpl.get(i).getDescription_());
 		}
 
 		// new
-		System.out.println("try3");
+		Log.i("GM","try3");
 
 		gpl = guessc.getNearest(new GeoLocation(49.904448, 10.859274), 4, 0);
 
 		for (int i = 0; i < gpl.size(); i++) {
-			System.out.println(gpl.get(i).getDescription_());
+			Log.i("GM",gpl.get(i).getDescription_());
 		}
 
 		// new
-		System.out.println("try4");
+		Log.i("GM","try4");
 
 		gpl = guessc.getNearest(new GeoLocation(49.904448, 10.859274), 4, 0);
 
 		for (int i = 0; i < gpl.size(); i++) {
-			System.out.println(gpl.get(i).getDescription_());
+			Log.i("GM",gpl.get(i).getDescription_());
 		}
 
 	}
