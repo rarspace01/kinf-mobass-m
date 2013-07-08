@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
@@ -38,6 +39,8 @@ public class CircleOverlay extends Overlay {
 
 		scale = ctx.getResources().getDisplayMetrics().density;
 
+		Log.d("GM", "Displaydebug: Density: "+ctx.getResources().getDisplayMetrics().density+" X/Y: "+ctx.getResources().getDisplayMetrics().xdpi+"/"+ctx.getResources().getDisplayMetrics().ydpi);
+		
 		this.radius = radius;
 		this.tappable = tappable;
 	}
