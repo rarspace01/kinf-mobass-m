@@ -86,26 +86,9 @@ public class Game {
 		return true;
 	}
 
-	public boolean guessedLocationApproached(Context context) {
-		if (System.currentTimeMillis() < endTime) {
-			successfulLocations++;
-			pointsToGuess = null;
-			return true;
-		} else {
-			Log.i("GM", "HS: " + successfulLocations);
-			//save highscore
-			SQLiteDatamanager dbManager = new SQLiteDatamanager(context);
-			dbConn = dbManager.getWritableDatabase();
-
-			//sql qry
-			dbConn.execSQL("INSERT INTO highscore (name, score, difficulty) VALUES ('" + this.playerName_ + "','"
-					+ this.successfulLocations + "','" + this.difficulty_ + "');");
-
-			dbManager.close();
-			dbConn.close();
-
-			return false;
-		}
+	public void guessedLocationApproached() {
+		successfulLocations++;
+		pointsToGuess = null;
 	}
 
 	public GeoLocation getCalculatedLocation() {
@@ -129,6 +112,20 @@ public class Game {
 	}
 
 	public long getTimeLeft() {
-		return (endTime - System.currentTimeMillis()) / 1000;
+		return (endTime - System.currentTimeMillis());
+	}
+
+	public void gameEnded(Context context) {
+		Log.i("GM", "HS: " + successfulLocations);
+		//save highscore
+		SQLiteDatamanager dbManager = new SQLiteDatamanager(context);
+		dbConn = dbManager.getWritableDatabase();
+
+		//sql qry
+		dbConn.execSQL("INSERT INTO highscore (name, score, difficulty) VALUES ('" + this.playerName_ + "','"
+				+ this.successfulLocations + "','" + this.difficulty_ + "');");
+
+		dbManager.close();
+		dbConn.close();
 	}
 }
