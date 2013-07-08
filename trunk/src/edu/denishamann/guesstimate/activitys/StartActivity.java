@@ -1,5 +1,6 @@
 package edu.denishamann.guesstimate.activitys;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +19,21 @@ public class StartActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 
-		getActionBar().setHomeButtonEnabled(true);
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+			case android.R.id.home:
+				startActivity(new Intent(StartActivity.this, MainActivity.class));
+				break;
+			default:
+				break;
+		}
+
+		return true;
 	}
 
 	public void startGame(View view) {
