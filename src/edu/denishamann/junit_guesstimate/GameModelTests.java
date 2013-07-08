@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
+
 import edu.denishamann.guesstimate.activitys.MainActivity;
 import edu.denishamann.guesstimate.lateration.LocationUtil;
 import edu.denishamann.guesstimate.model.Game;
@@ -34,7 +35,7 @@ public class GameModelTests extends
 
 		//print out the places we are going to set
 		for (int i = 0; i < gpl.size(); i++) {
-			Log.i("GM",gpl.get(i).getDescription_());
+			Log.i("GM", gpl.get(i).getDescription_());
 		}
 
 		gpl.get(0).setGuessDistance_(500); //erba
@@ -46,26 +47,26 @@ public class GameModelTests extends
 		Game.getInstance().evaluateGuesses();
 
 		if (Game.getInstance().getCalculatedLocation() != null) {
-			Log.i("GM","Your guess: Lat: "
+			Log.i("GM", "Your guess: Lat: "
 					+ Game.getInstance().getCalculatedLocation().getLatitude() + " Lng "
 					+ Game.getInstance().getCalculatedLocation().getLongitude());
-			Log.i("GM","You are off by " + LocationUtil.distance(currentLocation, Game.getInstance().getCalculatedLocation()) + " meters");
+			Log.i("GM", "You are off by " + LocationUtil.distance(currentLocation, Game.getInstance().getCalculatedLocation()) + " meters");
 		} else {
-			Log.i("GM","error on eval");
+			Log.i("GM", "error on eval");
 		}
 
 		// get 2 locations
-		Game.getInstance().guessedLocationApproached(getActivity());
+		Game.getInstance().guessedLocationApproached();
 
-		Game.getInstance().guessedLocationApproached(getActivity());
+		Game.getInstance().guessedLocationApproached();
 
-		Game.getInstance().guessedLocationApproached(getActivity());
+		Game.getInstance().guessedLocationApproached();
 
 		//lower the time left for testing purposes
 		Game.getInstance().setEndTime(0);
 
 		//trigger the sql save action
-		Game.getInstance().guessedLocationApproached(getActivity());
+		Game.getInstance().guessedLocationApproached();
 	}
 
 }

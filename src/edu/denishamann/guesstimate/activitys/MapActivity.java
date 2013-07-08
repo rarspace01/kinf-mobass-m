@@ -154,7 +154,6 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			proximityAlert.setProximityPoint(Game.getInstance().getCalculatedLocation().toGeoPoint());
 
 			drawRouteOnMap(new Route(new GeoLocation(curLoc), Game.getInstance().getCalculatedLocation()));
-
 		}
 
 		Drawable newMarker = getResources().getDrawable(R.drawable.curloc);
@@ -167,19 +166,22 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		mapView.getOverlays().add(itemizedOverlay);
 		mapView.invalidate();
 
-		new CountDownTimer(Game.getInstance().getPLAYTIME() * 60 * 1000, 1000) {
+		new CountDownTimer(Game.getInstance().getTimeLeft(), 1000) {
 
 			public void onTick(long millisUntilFinished) {
 				TextView timer = (TextView) findViewById(R.id.timer);
-				String time = String.format("%02d", (int) (Game.getInstance().getTimeLeft() / 60));
+				String time = String.format("%02d", (int) (Game.getInstance().getTimeLeft() / (1000 * 60)));
 				time += ":";
-				time += String.format("%02d", Game.getInstance().getTimeLeft() % 60);
+				time += String.format("%02d", (Game.getInstance().getTimeLeft() / 1000) % 60);
 				timer.setText("" + time);
 			}
 
 			public void onFinish() {
 				TextView timer = (TextView) findViewById(R.id.timer);
 				timer.setText("00:00");
+
+				Game.getInstance().gameEnded(getApplicationContext());
+				startActivity(new Intent(MapActivity.this, HighScoreActivity.class));
 			}
 		}.start();
 
