@@ -1,13 +1,2 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <item
-        android:id="@+id/action_settings"
-        android:showAsAction="always"
-        android:title="@string/action_settings">
-	    <menu>
-		    <item android:id="@+id/real_lateration" 
-		        android:checkable="true" 
-         		android:title="@string/real_lateration" />
-		</menu>
-	</item>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 </menu>

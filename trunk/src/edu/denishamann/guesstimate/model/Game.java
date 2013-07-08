@@ -36,12 +36,14 @@ public class Game {
 		return instance;
 	}
 
-	public void startGame(int difficulty, String playerName) {
+	public void startGame(int difficulty, String playerName, boolean useRealLateration) {
 		this.playerName_ = playerName;
 		this.currentGuessCollection = new GuessCollection();
 		this.difficulty_ = difficulty;
 		this.endTime = System.currentTimeMillis() + 1000 * 60 * PLAYTIME;
 		this.successfulLocations = 0;
+
+		USE_CIRCULARLATERATION = useRealLateration;
 	}
 
 	public List<GuessPoint> getLocationsToBeGuessed() {

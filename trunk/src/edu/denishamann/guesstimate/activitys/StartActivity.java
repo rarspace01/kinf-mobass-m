@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Spinner;
@@ -13,6 +14,8 @@ import edu.denishamann.guesstimate.R;
 import edu.denishamann.guesstimate.model.Game;
 
 public class StartActivity extends Activity {
+
+	private boolean useRealLateration = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,15 +27,28 @@ public class StartActivity extends Activity {
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.start, menu);
+
+		menu.findItem(R.id.real_lateration).setChecked(true);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 			case android.R.id.home:
 				startActivity(new Intent(StartActivity.this, MainActivity.class));
 				break;
+			case R.id.real_lateration:
+				menuItem.setChecked(!menuItem.isChecked());
+				useRealLateration = menuItem.isChecked();
+				break;
+
 			default:
 				break;
 		}
-
 		return true;
 	}
 
@@ -42,12 +58,12 @@ public class StartActivity extends Activity {
 		Intent i = null;
 		switch (diffSpinner.getSelectedItemPosition()) {
 			case 0:
-				Game.getInstance().startGame(0, "playername");
+				Game.getInstance().startGame(0, "playername", useRealLateration);
 				i = new Intent(this, MapActivity.class);
 				break;
 
 			case 1:
-				Game.getInstance().startGame(1, "playername");
+				Game.getInstance().startGame(1, "playername", useRealLateration);
 				i = new Intent(this, GuessActivity.class);
 				break;
 

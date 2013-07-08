@@ -24,7 +24,7 @@ public class GameModelTests extends
 	public void testStart() {
 		MainActivity mActivity = getActivity();
 		// start game
-		Game.getInstance().startGame(0, "Denis");
+		Game.getInstance().startGame(0, "Denis", true);
 
 		// current location
 		GeoLocation currentLocation = new GeoLocation(49.904448, 10.859274);
