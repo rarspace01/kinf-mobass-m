@@ -16,5 +16,17 @@
             android:layout_alignParentTop="true"
             android:onClick="goToCurrentLocation"
             android:scaleType="centerCrop"
-            android:src="@drawable/target"/>
+            android:src="@drawable/target"
+            android:id="@+id/imageButton"/>
+
+    <TextView
+            android:id="@+id/timer"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:background="#77a8a8a8"/>
+
 </RelativeLayout>
