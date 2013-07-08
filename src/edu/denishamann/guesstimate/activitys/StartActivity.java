@@ -21,19 +21,6 @@ public class StartActivity extends Activity {
 		getActionBar().setHomeButtonEnabled(true);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.start, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem menuItem) {
-		startActivity(new Intent(StartActivity.this, MainActivity.class));
-		return true;
-	}
-
 	public void startGame(View view) {
 		Spinner diffSpinner = (Spinner) findViewById(R.id.difficulty_spinner);
 

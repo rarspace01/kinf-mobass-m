@@ -17,19 +17,6 @@ public class AboutActivity extends Activity {
 		getActionBar().setHomeButtonEnabled(true);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.about, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem menuItem) {
-		startActivity(new Intent(AboutActivity.this, MainActivity.class));
-		return true;
-	}
-
 	public void onPause() {
 		super.onPause();
 		overridePendingTransition(0, 0);

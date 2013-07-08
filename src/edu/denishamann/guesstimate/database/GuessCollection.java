@@ -11,7 +11,7 @@ import edu.denishamann.guesstimate.model.GuessPoint;
 
 public class GuessCollection implements IGuessCollection {
 
-	private List<GuessPoint> guessPointList     = new LinkedList<GuessPoint>();
+	private List<GuessPoint> guessPointList = new LinkedList<GuessPoint>();
 	private List<GuessPoint> guessPointListBase = new LinkedList<GuessPoint>();
 
 	Random generator;
@@ -19,14 +19,26 @@ public class GuessCollection implements IGuessCollection {
 	public GuessCollection() {
 		generator = new Random(System.currentTimeMillis());
 
-		addGuessPoint(new GuessPoint(new GeoLocation(49.903549, 10.869554), "ERBA Campus"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.900523, 10.898606), "Bamberg Bahnhof"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.891082, 10.882707), "Bamberg Dom"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.892734, 10.888330), "Gabelmo"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.891631, 10.886887), "Altes Rathhaus"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.891303, 10.897361), "Wilhelmlspost"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.893446, 10.891505), "Bamberg ZOB"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.884100, 10.886698), "Wilde Rose Keller"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.903549, 10.869554),
+				"ERBA Campus"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.900523, 10.898606),
+				"Bamberg Bahnhof"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.891082, 10.882707),
+				"Bamberg Dom"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.892734, 10.888330),
+				"Gabelmo"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.891631, 10.886887),
+				"Altes Rathhaus"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.891303, 10.897361),
+				"Wilhelmspost"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.893446, 10.891505),
+				"Bamberg ZOB"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.884100, 10.886698),
+				"Wilde Rose Keller"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.90782, 10.905083),
+				"Feki21"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.897109, 10.892739),
+				"Brauerei F‰ﬂla"));
 
 		guessPointList.addAll(getAll());
 	}
@@ -46,7 +58,8 @@ public class GuessCollection implements IGuessCollection {
 	}
 
 	@Override
-	public List<GuessPoint> getNearest(GeoLocation searchLocation, int numberOfPoints, int offset) {
+	public List<GuessPoint> getNearest(GeoLocation searchLocation,
+			int numberOfPoints, int offset) {
 
 		if (guessPointList.size() < numberOfPoints) {
 			guessPointList.clear();
@@ -66,7 +79,8 @@ public class GuessCollection implements IGuessCollection {
 
 		for (int i = 0; i < guessPointList.size(); i++) {
 
-			distance = LocationUtil.distance(searchLocation, guessPointList.get(i).getLocation_());
+			distance = LocationUtil.distance(searchLocation, guessPointList
+					.get(i).getLocation_());
 			if (distance > maxDistance) {
 				maxDistance = distance;
 			}
@@ -83,7 +97,8 @@ public class GuessCollection implements IGuessCollection {
 			// getMin Distance
 			for (int i = 0; i < guessPointList.size(); i++) {
 				if (guessPointList.get(i).getGuessCalcedDistance_() < minDistance) {
-					minDistance = guessPointList.get(i).getGuessCalcedDistance_();
+					minDistance = guessPointList.get(i)
+							.getGuessCalcedDistance_();
 				}
 			}
 			// retrieve Guesspoint with min Distance
