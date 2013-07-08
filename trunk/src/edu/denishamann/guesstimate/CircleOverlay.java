@@ -95,7 +95,7 @@ public class CircleOverlay extends Overlay {
 		Point tapPoint = new Point();
 		projection.fromMapPixels((int) event.getX(), (int) event.getY(), tapPoint);
 
-		float actualRadius = projection.metersToEquatorPixels(radius) * scale;
+		float actualRadius = projection.metersToEquatorPixels(radius) * (1 / FloatMath.cos((float) Math.toRadians(geoPosition.getLatitudeE6() / 1e6)));
 
 		if ((tapPoint.x < geoPoint.x + actualRadius && tapPoint.x > geoPoint.x - actualRadius)
 				&& (tapPoint.y < geoPoint.y + actualRadius && tapPoint.y > geoPoint.y - actualRadius)) {
