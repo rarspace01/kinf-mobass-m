@@ -22,7 +22,6 @@ public class CircleOverlay extends Overlay {
 	private Paint innerPaint  = new Paint(Paint.ANTI_ALIAS_FLAG);
 
 	private int     radius;
-	private float   scale;
 	private boolean tappable;
 
 	public CircleOverlay(Context ctx, MapView mv, GeoPoint pos, int radius, int alpha, boolean tappable) {
@@ -37,8 +36,6 @@ public class CircleOverlay extends Overlay {
 		innerPaint.setARGB(50, 0, 0, alpha);
 
 		geoPosition = pos;
-
-		scale = ctx.getResources().getDisplayMetrics().density;
 
 		Log.d("GM", "Displaydebug: Density: " + ctx.getResources().getDisplayMetrics().density + " X/Y: " + ctx.getResources().getDisplayMetrics().xdpi + "/" + ctx.getResources().getDisplayMetrics().ydpi);
 
