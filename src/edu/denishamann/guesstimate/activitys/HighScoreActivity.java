@@ -117,4 +117,9 @@ public class HighScoreActivity extends Activity {
 		super.onPause();
 		overridePendingTransition(0, 0);
 	}
+
+	@Override
+	public void onBackPressed() {
+		startActivity(new Intent(this, MainActivity.class));
+	}
 }
