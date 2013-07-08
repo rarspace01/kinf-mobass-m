@@ -46,7 +46,7 @@ public class Route {
 		Log.i("GM",sURL);
 		sPuffer=HttpHelper.getPage(sURL);
 		
-		Log.v("GM",sPuffer);
+		//Log.v("GM",sPuffer);
 		
 		XMLParser parser = new XMLParser();
 		

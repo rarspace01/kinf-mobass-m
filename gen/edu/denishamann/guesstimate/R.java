@@ -32,16 +32,17 @@ public final class R {
     }
     public static final class id {
         public static final int about_button=0x7f090011;
-        public static final int action_settings=0x7f090019;
-        public static final int choose_text=0x7f090017;
-        public static final int difficulty_spinner=0x7f090016;
-        public static final int enter_guesstimate=0x7f09001b;
+        public static final int action_settings=0x7f09001b;
+        public static final int choose_text=0x7f090019;
+        public static final int difficulty_spinner=0x7f090018;
+        public static final int enter_guesstimate=0x7f09001c;
         public static final int guess1=0x7f090007;
         public static final int guess2=0x7f090009;
         public static final int guess3=0x7f09000b;
         public static final int guess4=0x7f09000d;
         public static final int high_score=0x7f090012;
         public static final int howto_button=0x7f090014;
+        public static final int imageButton=0x7f090016;
         public static final int lblCourse=0x7f090001;
         public static final int lblDennis=0x7f090004;
         public static final int lblDescription=0x7f090010;
@@ -54,11 +55,12 @@ public final class R {
         public static final int lblPaul=0x7f090003;
         public static final int listHighscore=0x7f09000f;
         public static final int mapview=0x7f090015;
-        public static final int real_lateration=0x7f09001a;
+        public static final int real_lateration=0x7f09001d;
         public static final int startGame=0x7f09000e;
         public static final int start_button=0x7f090013;
-        public static final int startgame_button=0x7f090018;
+        public static final int startgame_button=0x7f09001a;
         public static final int textView6=0x7f090002;
+        public static final int timer=0x7f090017;
     }
     public static final class layout {
         public static final int activity_about=0x7f030000;
