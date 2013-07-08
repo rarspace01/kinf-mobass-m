@@ -67,10 +67,10 @@ public class Game {
 		}
 
 		if (USE_CIRCULARLATERATION) {
-			Log.i("GM","using circular");
+			Log.i("GM", "using circular");
 			calculatedLocation = new CircularLateration().getLateration(pointsToGuess);
 		} else {
-			Log.i("GM","using pseudo lateration");
+			Log.i("GM", "using pseudo lateration");
 			calculatedLocation = new PseudoLateration().getLateration(pointsToGuess);
 		}
 
@@ -92,7 +92,7 @@ public class Game {
 			pointsToGuess = null;
 			return true;
 		} else {
-			Log.i("GM","HS: " + successfulLocations);
+			Log.i("GM", "HS: " + successfulLocations);
 			//save highscore
 			SQLiteDatamanager dbManager = new SQLiteDatamanager(context);
 			dbConn = dbManager.getWritableDatabase();
@@ -118,5 +118,17 @@ public class Game {
 
 	public void setEndTime(int i) {
 		endTime = i;
+	}
+
+	public long getEndTime() {
+		return endTime;
+	}
+
+	public int getPLAYTIME() {
+		return PLAYTIME;
+	}
+
+	public long getTimeLeft() {
+		return (endTime - System.currentTimeMillis()) / 1000;
 	}
 }

@@ -29,10 +29,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import edu.denishamann.guesstimate.CircleOverlay;
@@ -164,6 +166,22 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 
 		mapView.getOverlays().add(itemizedOverlay);
 		mapView.invalidate();
+
+		new CountDownTimer(Game.getInstance().getPLAYTIME() * 60 * 1000, 1000) {
+
+			public void onTick(long millisUntilFinished) {
+				TextView timer = (TextView) findViewById(R.id.timer);
+				String time = String.format("%02d", (int) (Game.getInstance().getTimeLeft() / 60));
+				time += ":";
+				time += String.format("%02d", Game.getInstance().getTimeLeft() % 60);
+				timer.setText("" + time);
+			}
+
+			public void onFinish() {
+				TextView timer = (TextView) findViewById(R.id.timer);
+				timer.setText("00:00");
+			}
+		}.start();
 
 		alreadyRunning = true;
 	}
