@@ -31,12 +31,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import edu.denishamann.guesstimate.CircleOverlay;
 import edu.denishamann.guesstimate.OsmItemizedOverlay;
 import edu.denishamann.guesstimate.ProximityAlert;
@@ -150,6 +147,9 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			mapView.getOverlays().addAll(circleOverlays);
 
 			proximityAlert.setProximityPoint(Game.getInstance().getCalculatedLocation().toGeoPoint());
+			
+			drawRouteOnMap(new Route(new GeoLocation(curLoc), Game.getInstance().getCalculatedLocation()));
+			
 		}
 
 		Drawable newMarker = getResources().getDrawable(R.drawable.curloc);
@@ -181,29 +181,6 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		} else {
 			startActivity(new Intent(this, GuessActivity.class));
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.map, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Log.i("GM", "Menu item: " + item.getTitle());
-
-		if (item.getTitle().toString().contains(getString(R.string.enter_guesstimate))) {
-			Criteria crit = new Criteria();
-			crit.setAccuracy(Criteria.ACCURACY_FINE);
-			String provider = locationManager.getBestProvider(crit, true);
-			Location loc = locationManager.getLastKnownLocation(provider);
-			drawRouteOnMap(new Route(new GeoLocation(49.90337, 10.894733), new GeoLocation(loc.getLatitude(),
-					loc.getLongitude())));
-			//inputDialog();
-		}
-
-		return true;
 	}
 
 	@Override
@@ -316,6 +293,9 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 				if (Game.getInstance().evaluateGuesses()) {
 					GeoLocation loc = Game.getInstance().getCalculatedLocation();
 					proximityAlert.setProximityPoint(loc.toGeoPoint());
+					
+					drawRouteOnMap(new Route(new GeoLocation(curLoc), loc));
+					
 					Log.i("GM", "proxpoint: " + loc + "|" + loc);
 
 					for (GuessPoint gp : guessPoints) {
@@ -343,6 +323,8 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	}
 
 	private class RetrieveRouteTask extends AsyncTask<Route, Void, List<GeoLocation>> {
+		private PathOverlay routePath;
+
 		@Override
 		protected List<GeoLocation> doInBackground(Route... params) {
 			Route route = params[0];
@@ -353,7 +335,11 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			List<GeoLocation> glList = new LinkedList<GeoLocation>();
 			glList = route;
 
-			PathOverlay routePath = new PathOverlay(Color.RED, MapActivity.this);
+			if(routePath!=null){
+				MapActivity.this.mapView.getOverlays().remove(routePath);
+			}
+
+			routePath = new PathOverlay(Color.RED, MapActivity.this);
 			for (int i = 0; i < glList.size(); i++) {
 				routePath.addPoint(new GeoPoint(glList.get(i).getLatitude(), glList.get(i).getLongitude()));
 			}

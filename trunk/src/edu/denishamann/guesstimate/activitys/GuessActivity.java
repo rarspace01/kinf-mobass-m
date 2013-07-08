@@ -36,13 +36,6 @@ public class GuessActivity extends Activity {
 		lblGuess4.setText(guessPoints.get(3).getDescription_());
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.guess, menu);
-		return true;
-	}
-
 	public void startGame(View view) {
 		EditText guess1 = (EditText) findViewById(R.id.guess1);
 		EditText guess2 = (EditText) findViewById(R.id.guess2);
