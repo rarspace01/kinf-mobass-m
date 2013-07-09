@@ -98,7 +98,11 @@ public class ProximityAlert extends BroadcastReceiver {
 			if (intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false)) {
 				Toast.makeText(context, "You are here!", Toast.LENGTH_LONG).show();
 				Game.getInstance().guessedLocationApproached();
-				mapActivity.getNewGuessPoints();
+				if(mapActivity==null){
+					Log.e("GM", "Map Activity is null");	
+				}else{
+					mapActivity.getNewGuessPoints();
+				}
 			} else {
 				Toast.makeText(context, "Where are you going?", Toast.LENGTH_LONG).show();
 			}

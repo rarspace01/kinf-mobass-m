@@ -56,7 +56,7 @@ public class CircularLateration implements ILateration {
 	private void calulcateCircularLateration() {
 		int i = 0;
 		double delta = 0.0;
-		double lastDelta = Double.MAX_VALUE;
+		double lastDelta = 0.0;
 		
 		while (i < MAXITERATIONS) {
 			i++;
@@ -70,7 +70,8 @@ public class CircularLateration implements ILateration {
 				Log.i("GM",currentEstimation.toString() + " - " + LocationUtil.convertCartesianToLocation(currentEstimation));
 			}
 			delta = newDelta.delta();
-			if (Math.abs((delta-lastDelta)) <= DELTA || delta>lastDelta) {
+			if (Math.abs((delta-lastDelta)) <= DELTA || (delta>lastDelta && (lastDelta != 0.0))) {
+				Log.d("GM", "End on: Delta,lastDelta:"+delta+","+lastDelta);
 				break;
 			} else {
 				Log.i("GM","Delta @" + delta);
