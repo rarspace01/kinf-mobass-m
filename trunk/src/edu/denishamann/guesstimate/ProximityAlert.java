@@ -38,7 +38,7 @@ public class ProximityAlert extends BroadcastReceiver {
 
 		registerReceiver();
 
-		circleOverlay = new CircleOverlay(mapActivity, mapActivity.getMapView(), proximityPoint, radius, 155, true);
+		circleOverlay = new CircleOverlay(mapActivity, proximityPoint, radius, 155, true);
 		mapActivity.getMapView().getOverlays().add(circleOverlay);
 
 		Log.i("GM", "Set up ProximityAlert");
@@ -51,7 +51,7 @@ public class ProximityAlert extends BroadcastReceiver {
 			mapActivity.getMapView().getOverlays().remove(circleOverlay);
 		}
 
-		circleOverlay = new CircleOverlay(mapActivity, mapActivity.getMapView(), proximityPoint, radius, 155, true);
+		circleOverlay = new CircleOverlay(mapActivity, proximityPoint, radius, 155, true);
 		mapActivity.getMapView().getOverlays().add(circleOverlay);
 
 		if (!isRegistered) {

@@ -63,18 +63,18 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	private ProximityAlert      proximityAlert;
 	private List<GuessPoint>    guessPoints;
 	private List<CircleOverlay> circleOverlays;
-	private ResourceProxy       mResourceProxy;
 	private PathOverlay         routePath;
 	private CountDownTimer      countDownTimer;
 
-	public  boolean alreadyRunning = false;
-	private boolean optionsVisible = false;
+	private boolean hasStarted = false;
+
 	private OverlayItem curLocItem;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
+
 
 		circleOverlays = new ArrayList<CircleOverlay>();
 		proximityAlert = new ProximityAlert(this);
@@ -111,7 +111,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 
 		guessPoints = Game.getInstance().getLocationsToBeGuessed();
 
-		mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
+		ResourceProxy mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
 
 		itemizedOverlay = new OsmItemizedOverlay(new ArrayList<OverlayItem>(),
 				new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
@@ -153,7 +153,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 				OverlayItem guessItem = new OverlayItem("", gp.getDescription_(), gp.getLocation_()
 						.toGeoPoint());
 				itemizedOverlay.addItem(guessItem);
-				CircleOverlay circleOverlay = new CircleOverlay(this, mapView, gp.getLocation_().toGeoPoint(), (int) gp.getGuessDistance_(), 55, false);
+				CircleOverlay circleOverlay = new CircleOverlay(this, gp.getLocation_().toGeoPoint(), (int) gp.getGuessDistance_(), 55, false);
 				circleOverlays.add(circleOverlay);
 			}
 			mapView.getOverlays().addAll(circleOverlays);
@@ -196,8 +196,6 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		countDownTimer.start();
 
 		registerReceiver(proximityAlert, new IntentFilter("edu.denishamann.guesstimate.PROXIMITYALERT"));
-
-		alreadyRunning = true;
 	}
 
 	public void getNewGuessPoints() {
@@ -243,7 +241,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		mapView.invalidate();
 	}
 
-	public void showAllPointsAndCurrentLocationOnMap() {
+	private void showAllPointsAndCurrentLocationOnMap() {
 		int tmpLongitude = 0;
 		int tmpLatitude = 0;
 		int maxLat = Integer.MIN_VALUE;
@@ -281,29 +279,14 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		mapController.zoomToSpan((int) spanLat, (int) spanLng);
 	}
 
-	protected void onPause() {
-		Log.i("GM", "GM paused");
-
-		// proximityAlert.unregisterReceiver();
-
-		super.onPause();
-	}
-
-	protected void onResume() {
-		Log.i("GM", "GM resumed");
-
-		//		if (!proximityAlert.isRegistered)
-		//			proximityAlert.registerReceiver();
-
-		super.onResume();
-	}
-
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 
-		if (hasFocus && !optionsVisible)
+		if (hasFocus && !hasStarted) {
 			showAllPointsAndCurrentLocationOnMap();
+			hasStarted = true;
+		}
 	}
 
 	public LocationManager getLocationManager() {
@@ -351,7 +334,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 					Log.i("GM", "proxpoint: " + loc + "|" + loc);
 
 					for (GuessPoint gp : guessPoints) {
-						CircleOverlay circleOverlay = new CircleOverlay(MapActivity.this, mapView, gp.getLocation_().toGeoPoint(), (int) gp.getGuessDistance_(), 55, false);
+						CircleOverlay circleOverlay = new CircleOverlay(MapActivity.this, gp.getLocation_().toGeoPoint(), (int) gp.getGuessDistance_(), 55, false);
 						circleOverlays.add(circleOverlay);
 					}
 					mapView.getOverlays().addAll(circleOverlays);
@@ -383,8 +366,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 		}
 
 		protected void onPostExecute(List<GeoLocation> route) {
-			List<GeoLocation> glList = new LinkedList<GeoLocation>();
-			glList = route;
+			List<GeoLocation> glList = route;
 
 			if (routePath != null) {
 				MapActivity.this.mapView.getOverlays().remove(routePath);
@@ -458,8 +440,6 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			default:
 				break;
 		}
-
-		optionsVisible = true;
 
 		return super.onOptionsItemSelected(item);
 	}
