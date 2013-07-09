@@ -102,4 +102,8 @@ public class ProximityAlert extends BroadcastReceiver {
 			}
 		}
 	}
+
+	public void hideProximityPoint() {
+		mapActivity.getMapView().getOverlays().remove(circleOverlay);
+	}
 }

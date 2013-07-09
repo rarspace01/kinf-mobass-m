@@ -11,7 +11,7 @@ import edu.denishamann.guesstimate.model.GuessPoint;
 
 public class GuessCollection implements IGuessCollection {
 
-	private List<GuessPoint> guessPointList = new LinkedList<GuessPoint>();
+	private List<GuessPoint> guessPointList     = new LinkedList<GuessPoint>();
 	private List<GuessPoint> guessPointListBase = new LinkedList<GuessPoint>();
 
 	Random generator;
@@ -36,7 +36,7 @@ public class GuessCollection implements IGuessCollection {
 		addGuessPoint(new GuessPoint(new GeoLocation(49.884100, 10.886698),
 				"Wilde Rose Keller"));
 		addGuessPoint(new GuessPoint(new GeoLocation(49.90782, 10.905083),
-				"Feki21"));
+				"Feki"));
 		addGuessPoint(new GuessPoint(new GeoLocation(49.897109, 10.892739),
 				"Brauerei Fäßla"));
 
@@ -59,7 +59,7 @@ public class GuessCollection implements IGuessCollection {
 
 	@Override
 	public List<GuessPoint> getNearest(GeoLocation searchLocation,
-			int numberOfPoints, int offset) {
+									   int numberOfPoints, int offset) {
 
 		if (guessPointList.size() < numberOfPoints) {
 			guessPointList.clear();
