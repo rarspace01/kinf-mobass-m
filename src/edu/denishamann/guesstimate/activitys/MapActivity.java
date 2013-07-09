@@ -213,6 +213,8 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			itemizedOverlay.addItem(curLocItem);
 
 			proximityAlert.hideProximityPoint();
+
+			mapView.invalidate();
 		} else {
 			startActivity(new Intent(this, GuessActivity.class));
 		}
@@ -328,6 +330,13 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 
 				if (Game.getInstance().evaluateGuesses()) {
 					GeoLocation loc = Game.getInstance().getCalculatedLocation();
+					if (curLoc.distanceTo(loc.toGeoPoint()) < 50) {
+						Toast.makeText(MapActivity.this, "Great guess!", Toast.LENGTH_LONG).show();
+						Game.getInstance().guessedLocationApproached();
+						getNewGuessPoints();
+						return;
+					}
+
 					proximityAlert.setProximityPoint(loc.toGeoPoint());
 
 					drawRouteOnMap(new Route(new GeoLocation(curLoc), loc));
