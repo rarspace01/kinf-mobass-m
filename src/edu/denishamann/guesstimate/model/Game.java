@@ -87,11 +87,11 @@ public class Game {
 	}
 
 	public void guessedLocationApproached() {
-		Log.i("GM","Guessed Lcoation approached");
-		if(getTimeLeft()>0){
-			Log.i("GM","Still timeleft: "+(int)(getTimeLeft()/1000));
+		Log.i("GM", "Guessed Lcoation approached");
+		if (getTimeLeft() > 0) {
+			Log.i("GM", "Still timeleft: " + (int) (getTimeLeft() / 1000));
 			successfulLocations++;
-		}else{
+		} else {
 			Log.e("GM", "undefined State");
 		}
 		pointsToGuess = null;
@@ -133,10 +133,24 @@ public class Game {
 
 		dbManager.close();
 		dbConn.close();
-		
-		this.successfulLocations=0;
-		this.calculatedLocation = null;
-		this.currentGuessCollection = null;
+
+		playerName_ = "";
+		difficulty_ = -1;
+		endTime = -1;
+		successfulLocations = 0;
+		pointsToGuess = null;
+
+		USE_CIRCULARLATERATION = true;
+	}
+
+	public void giveUp() {
+		playerName_ = "";
+		difficulty_ = -1;
+		endTime = -1;
+		successfulLocations = 0;
+		pointsToGuess = null;
+
+		USE_CIRCULARLATERATION = true;
 	}
 
 	public int getSuccessfulLocations() {
