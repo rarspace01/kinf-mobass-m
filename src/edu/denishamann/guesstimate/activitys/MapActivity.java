@@ -214,6 +214,10 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 
 			proximityAlert.hideProximityPoint();
 
+			if (routePath != null) {
+				MapActivity.this.mapView.getOverlays().remove(routePath);
+			}
+
 			mapView.invalidate();
 		} else {
 			startActivity(new Intent(this, GuessActivity.class));
