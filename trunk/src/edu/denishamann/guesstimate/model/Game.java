@@ -25,7 +25,7 @@ public class Game {
 	private SQLiteDatabase   dbConn;
 
 	private boolean USE_CIRCULARLATERATION = true;
-	private int     PLAYTIME               = 30;                            //Rundenzeit in Min
+	private int     PLAYTIME               = 10;                            //Rundenzeit in Min
 
 	private static Game instance;
 

@@ -387,11 +387,18 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 				MapActivity.this.mapView.getOverlays().remove(routePath);
 			}
 
-			routePath = new PathOverlay(Color.RED, MapActivity.this);
-			for (int i = 0; i < glList.size(); i++) {
-				routePath.addPoint(new GeoPoint(glList.get(i).getLatitude(), glList.get(i).getLongitude()));
+			if(glList == null){
+				
+			}else{
+			
+				routePath = new PathOverlay(Color.RED, MapActivity.this);
+				for (int i = 0; i < glList.size(); i++) {
+					routePath.addPoint(new GeoPoint(
+							glList.get(i).getLatitude(), glList.get(i)
+									.getLongitude()));
+				}
+				MapActivity.this.mapView.getOverlays().add(routePath);
 			}
-			MapActivity.this.mapView.getOverlays().add(routePath);
 			MapActivity.this.mapView.invalidate();
 		}
 	}
@@ -418,12 +425,12 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 	public void onBackPressed() {
 	}
 
-	@Override
-	protected void onDestroy() {
-		Log.d("GM", "unregistered Proximity alert");
-		proximityAlert.unregisterReceiver();
-		super.onDestroy();
-	}
+//	@Override
+//	protected void onDestroy() {
+//		Log.d("GM", "unregistered Proximity alert");
+//		proximityAlert.unregisterReceiver();
+//		super.onDestroy();
+//	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
