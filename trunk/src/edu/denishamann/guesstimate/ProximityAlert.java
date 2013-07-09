@@ -24,7 +24,6 @@ public class ProximityAlert extends BroadcastReceiver {
 	private GeoPoint      proximityPoint;
 
 	public boolean isRegistered = false;
-	public boolean isFired      = false;
 
 	private CircleOverlay circleOverlay;
 	private int radius = 50;
@@ -65,8 +64,6 @@ public class ProximityAlert extends BroadcastReceiver {
 			mapActivity.getLocationManager().addProximityAlert(proximityPoint.getLatitudeE6() / 1e6,
 					proximityPoint.getLongitudeE6() / 1e6, radius, -1, pIntent);
 		}
-
-		isFired = false;
 	}
 
 	public void registerReceiver() {
@@ -91,9 +88,7 @@ public class ProximityAlert extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (!isFired) {
-			isFired = true;
-
+		if (context instanceof MapActivity) {
 			if (intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false)) {
 				Toast.makeText(context, "You are here!", Toast.LENGTH_LONG).show();
 				Game.getInstance().guessedLocationApproached();

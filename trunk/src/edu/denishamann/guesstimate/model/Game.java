@@ -88,12 +88,7 @@ public class Game {
 
 	public void guessedLocationApproached() {
 		Log.i("GM", "Guessed Lcoation approached");
-		if (getTimeLeft() > 0) {
-			Log.i("GM", "Still timeleft: " + (int) (getTimeLeft() / 1000));
-			successfulLocations++;
-		} else {
-			Log.e("GM", "undefined State");
-		}
+		successfulLocations++;
 		pointsToGuess = null;
 	}
 
