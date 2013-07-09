@@ -11,7 +11,6 @@ import android.location.LocationManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import edu.denishamann.guesstimate.activitys.HighScoreActivity;
 import edu.denishamann.guesstimate.activitys.MapActivity;
 import edu.denishamann.guesstimate.model.Game;
 
@@ -98,9 +97,9 @@ public class ProximityAlert extends BroadcastReceiver {
 			if (intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false)) {
 				Toast.makeText(context, "You are here!", Toast.LENGTH_LONG).show();
 				Game.getInstance().guessedLocationApproached();
-				if(mapActivity==null){
-					Log.e("GM", "Map Activity is null");	
-				}else{
+				if (mapActivity == null) {
+					Log.e("GM", "Map Activity is null");
+				} else {
 					mapActivity.getNewGuessPoints();
 				}
 			} else {

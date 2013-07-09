@@ -424,7 +424,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 				break;
 			case R.id.giveUp:
 				countDownTimer.cancel();
-				Game.getInstance().gameEnded(this);
+				Game.getInstance().giveUp();
 				startActivity(new Intent(this, MainActivity.class));
 				break;
 
