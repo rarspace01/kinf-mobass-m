@@ -403,6 +403,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 
 	@Override
 	protected void onDestroy() {
+		Log.d("GM", "unregistered Proximity alert");
 		proximityAlert.unregisterReceiver();
 		super.onDestroy();
 	}
@@ -423,6 +424,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 				break;
 			case R.id.giveUp:
 				countDownTimer.cancel();
+				Game.getInstance().gameEnded(this);
 				startActivity(new Intent(this, MainActivity.class));
 				break;
 

@@ -87,7 +87,13 @@ public class Game {
 	}
 
 	public void guessedLocationApproached() {
-		successfulLocations++;
+		Log.i("GM","Guessed Lcoation approached");
+		if(getTimeLeft()>0){
+			Log.i("GM","Still timeleft: "+(int)(getTimeLeft()/1000));
+			successfulLocations++;
+		}else{
+			Log.e("GM", "undefined State");
+		}
 		pointsToGuess = null;
 	}
 
@@ -127,6 +133,10 @@ public class Game {
 
 		dbManager.close();
 		dbConn.close();
+		
+		this.successfulLocations=0;
+		this.calculatedLocation = null;
+		this.currentGuessCollection = null;
 	}
 
 	public int getSuccessfulLocations() {
