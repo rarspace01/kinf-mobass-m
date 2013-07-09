@@ -2,12 +2,14 @@ package edu.denishamann.guesstimate.activitys;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -23,6 +25,13 @@ public class StartActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 
+		EditText playername = (EditText) findViewById(R.id.playername);
+		if (Game.getInstance().getPlayerName_().isEmpty() || Game.getInstance().getPlayerName_().equals("Player 1")) {
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+		} else {
+			playername.setText(Game.getInstance().getPlayerName_());
+		}
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 	}

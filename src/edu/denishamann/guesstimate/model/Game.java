@@ -20,7 +20,7 @@ public class Game {
 	private long             endTime;
 	private int              successfulLocations;
 	private int              difficulty_;
-	private String           playerName_;
+	private String playerName_ = "";
 	private IGuessCollection currentGuessCollection;
 	private SQLiteDatabase   dbConn;
 
@@ -129,7 +129,6 @@ public class Game {
 		dbManager.close();
 		dbConn.close();
 
-		playerName_ = "";
 		difficulty_ = -1;
 		endTime = -1;
 		successfulLocations = 0;
@@ -139,7 +138,6 @@ public class Game {
 	}
 
 	public void giveUp() {
-		playerName_ = "";
 		difficulty_ = -1;
 		endTime = -1;
 		successfulLocations = 0;
