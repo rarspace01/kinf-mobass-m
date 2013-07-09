@@ -16,9 +16,6 @@ import edu.denishamann.guesstimate.model.Game;
 
 public class ProximityAlert extends BroadcastReceiver {
 
-	private static final String       PROXIMITY_ALERT = "edu.denishamann.guesstimate.PROXIMITYALERT";
-	private static final IntentFilter iFilter         = new IntentFilter(PROXIMITY_ALERT);
-
 	private PendingIntent pIntent;
 	private MapActivity   mapActivity;
 	private GeoPoint      proximityPoint;
@@ -69,8 +66,7 @@ public class ProximityAlert extends BroadcastReceiver {
 	public void registerReceiver() {
 		Log.i("GM", "ProxAlert registered");
 
-		pIntent = PendingIntent.getBroadcast(mapActivity, 0, new Intent(PROXIMITY_ALERT), PendingIntent.FLAG_ONE_SHOT);
-		mapActivity.registerReceiver(this, iFilter);
+		pIntent = PendingIntent.getBroadcast(mapActivity, 0, new Intent("edu.denishamann.guesstimate.PROXIMITYALERT"), PendingIntent.FLAG_CANCEL_CURRENT);
 		mapActivity.getLocationManager().addProximityAlert(proximityPoint.getLatitudeE6() / 1e6,
 				proximityPoint.getLongitudeE6() / 1e6, radius, -1, pIntent);
 
@@ -80,7 +76,6 @@ public class ProximityAlert extends BroadcastReceiver {
 	public void unregisterReceiver() {
 		if (isRegistered) {
 			Log.i("GM", "ProxAlert unregistered");
-			mapActivity.unregisterReceiver(this);
 			mapActivity.getLocationManager().removeProximityAlert(pIntent);
 			isRegistered = false;
 		}

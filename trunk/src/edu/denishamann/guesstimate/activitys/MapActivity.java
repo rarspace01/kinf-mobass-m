@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
@@ -193,6 +194,8 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 			}
 		};
 		countDownTimer.start();
+
+		registerReceiver(proximityAlert, new IntentFilter("edu.denishamann.guesstimate.PROXIMITYALERT"));
 
 		alreadyRunning = true;
 	}
@@ -387,15 +390,15 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 				MapActivity.this.mapView.getOverlays().remove(routePath);
 			}
 
-			if(glList == null){
-				
-			}else{
-			
+			if (glList == null) {
+
+			} else {
+
 				routePath = new PathOverlay(Color.RED, MapActivity.this);
 				for (int i = 0; i < glList.size(); i++) {
 					routePath.addPoint(new GeoPoint(
 							glList.get(i).getLatitude(), glList.get(i)
-									.getLongitude()));
+							.getLongitude()));
 				}
 				MapActivity.this.mapView.getOverlays().add(routePath);
 			}
