@@ -68,6 +68,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 
 	public  boolean alreadyRunning = false;
 	private boolean optionsVisible = false;
+	private OverlayItem curLocItem;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +164,7 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 
 		Drawable newMarker = getResources().getDrawable(R.drawable.curloc);
 		newMarker.setAlpha(155);
-		OverlayItem curLocItem = new OverlayItem("Your current location", "Current Location", curLoc);
+		curLocItem = new OverlayItem("Your current location", "Current Location", curLoc);
 		curLocItem.setMarker(newMarker);
 		curLocItem.setMarkerHotspot(HotspotPlace.CENTER);
 		itemizedOverlay.addItem(curLocItem);
@@ -209,6 +210,9 @@ public class MapActivity extends Activity implements LocationListener, MapViewCo
 				OverlayItem guessItem = new OverlayItem(gp.getDescription_(), "", gp.getLocation_().toGeoPoint());
 				itemizedOverlay.addItem(guessItem);
 			}
+			itemizedOverlay.addItem(curLocItem);
+
+			proximityAlert.hideProximityPoint();
 		} else {
 			startActivity(new Intent(this, GuessActivity.class));
 		}
