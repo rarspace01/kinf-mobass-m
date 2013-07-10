@@ -238,7 +238,7 @@ public class MapActivity extends Activity implements LocationListener,
 			}
 			itemizedOverlay.addItem(curLocItem);
 
-			proximityAlert.hideProximityPoint();
+			proximityAlert.removeProximityPoint();
 
 			if (routePath != null) {
 				MapActivity.this.mapView.getOverlays().remove(routePath);

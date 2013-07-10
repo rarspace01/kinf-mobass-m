@@ -7,6 +7,7 @@ import org.osmdroid.util.GeoPoint;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
 import edu.denishamann.guesstimate.database.GuessCollection;
 import edu.denishamann.guesstimate.database.IGuessCollection;
 import edu.denishamann.guesstimate.database.SQLiteDatamanager;
@@ -18,19 +19,19 @@ public class Game {
 
 	private static final String TAG = "Game";
 
-	private GeoLocation calculatedLocation;
+	private GeoLocation      calculatedLocation;
 	private List<GuessPoint> pointsToGuess;
-	private long endTime;
-	private int successfulLocations;
-	private int difficulty_;
+	private long             endTime;
+	private int              successfulLocations;
+	private int              difficulty_;
 	private String playerName_ = "";
 	private IGuessCollection currentGuessCollection;
-	private SQLiteDatabase dbConn;
+	private SQLiteDatabase   dbConn;
 	private float alertRadius_ = 50; // Distance when location was
-										// successfully approached
+	// successfully approached
 
 	private boolean USE_CIRCULARLATERATION = true;
-	private int PLAYTIME = 10; // Rundenzeit in Min
+	private int     PLAYTIME               = 10; // Rundenzeit in Min
 
 	private static Game instance;
 
@@ -42,7 +43,7 @@ public class Game {
 	}
 
 	public void startGame(int difficulty, String playerName,
-			boolean useRealLateration) {
+						  boolean useRealLateration) {
 		this.playerName_ = playerName.trim();
 		this.currentGuessCollection = new GuessCollection();
 		this.difficulty_ = difficulty;
@@ -98,7 +99,7 @@ public class Game {
 	public boolean isNearGuessedLocation(GeoLocation currentLocation) {
 		boolean isNear = false;
 
-		if (LocationUtil.distance(currentLocation, this.calculatedLocation) < this.alertRadius_) {
+		if (LocationUtil.distance(currentLocation, this.calculatedLocation) < alertRadius_) {
 			isNear = true;
 		}
 
