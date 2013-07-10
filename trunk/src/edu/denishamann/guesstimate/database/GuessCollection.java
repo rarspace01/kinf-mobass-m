@@ -142,6 +142,7 @@ public class GuessCollection implements IGuessCollection {
 			for (GuessPoint gpl : gplTop) {
 				if (gp.getDescription_().equals(gpl.getDescription_())) {
 					i--;
+					break;
 				}
 			}
 			if (tmp == i) {
