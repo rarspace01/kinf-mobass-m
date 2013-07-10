@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="edu.denishamann.guesstimate"
           android:versionCode="8"
-          android:versionName="1.0.8 rev81"
+          android:versionName="1.0.8 rev96"
           android:installLocation="auto">
 
     <uses-sdk

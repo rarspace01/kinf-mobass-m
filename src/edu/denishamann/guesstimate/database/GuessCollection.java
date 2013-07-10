@@ -11,7 +11,7 @@ import edu.denishamann.guesstimate.model.GuessPoint;
 
 public class GuessCollection implements IGuessCollection {
 
-	private List<GuessPoint> guessPointList     = new LinkedList<GuessPoint>();
+	private List<GuessPoint> guessPointList = new LinkedList<GuessPoint>();
 	private List<GuessPoint> guessPointListBase = new LinkedList<GuessPoint>();
 
 	Random generator;
@@ -19,27 +19,40 @@ public class GuessCollection implements IGuessCollection {
 	public GuessCollection() {
 		generator = new Random(System.currentTimeMillis());
 
-		addGuessPoint(new GuessPoint(new GeoLocation(49.903549, 10.869554),
-				"ERBA Campus"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.900523, 10.898606),
-				"Bamberg Bahnhof"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.891082, 10.882707),
-				"Bamberg Dom"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.892734, 10.888330),
-				"Gabelmo"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.891631, 10.886887),
-				"Altes Rathaus"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.891303, 10.897361),
-				"Wilhelmspost"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.893446, 10.891505),
-				"Bamberg ZOB"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.884100, 10.886698),
-				"Wilde Rose Keller"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.90782, 10.905083),
-				"Feki"));
-		addGuessPoint(new GuessPoint(new GeoLocation(49.897109, 10.892739),
-				"Brauerei Fäßla"));
-
+//		addGuessPoint(new GuessPoint(new GeoLocation(49.903549, 10.869554),
+//				"ERBA Campus"));
+//		addGuessPoint(new GuessPoint(new GeoLocation(49.900523, 10.898606),
+//				"Bamberg Bahnhof"));
+//		addGuessPoint(new GuessPoint(new GeoLocation(49.891082, 10.882707),
+//				"Bamberg Dom"));
+//		addGuessPoint(new GuessPoint(new GeoLocation(49.892734, 10.888330),
+//				"Gabelmo"));
+//		addGuessPoint(new GuessPoint(new GeoLocation(49.891631, 10.886887),
+//				"Altes Rathaus"));
+//		addGuessPoint(new GuessPoint(new GeoLocation(49.891303, 10.897361),
+//				"Wilhelmspost"));
+//		addGuessPoint(new GuessPoint(new GeoLocation(49.893446, 10.891505),
+//				"Bamberg ZOB"));
+//		addGuessPoint(new GuessPoint(new GeoLocation(49.884100, 10.886698),
+//				"Wilde Rose Keller"));
+//		addGuessPoint(new GuessPoint(new GeoLocation(49.90782, 10.905083),
+//				"Feki"));
+//		addGuessPoint(new GuessPoint(new GeoLocation(49.897109, 10.892739),
+//				"Brauerei Fäßla"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.902235,10.871117),
+				"ERBA Springbrunnen"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.901867,10.869345),
+				"ERBA Kraftwerk"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.903823,10.871969),
+				"ERBA Schleußenhaus"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.902719,10.871779),
+				"ERBA Kreuzplattform"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.904987,10.866522),
+				"ERBA Stein der Religionen"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.903532,10.871169),
+				"ERBA Spielplatz"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.901938,10.870049),
+				"fewclicks"));
 		guessPointList.addAll(getAll());
 	}
 
@@ -59,7 +72,7 @@ public class GuessCollection implements IGuessCollection {
 
 	@Override
 	public List<GuessPoint> getNearest(GeoLocation searchLocation,
-									   int numberOfPoints, int offset) {
+			int numberOfPoints, int offset) {
 
 		if (guessPointList.size() < numberOfPoints) {
 			guessPointList.clear();
