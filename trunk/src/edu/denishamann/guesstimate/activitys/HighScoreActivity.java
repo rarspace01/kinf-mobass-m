@@ -20,6 +20,8 @@ import edu.denishamann.guesstimate.model.Game;
 
 public class HighScoreActivity extends Activity {
 
+	private static final String TAG = "Highscore";
+	
 	private SQLiteDatabase dbConn_;
 	private ListView lv_;
 
@@ -90,7 +92,7 @@ public class HighScoreActivity extends Activity {
 				tmpHighscore = tmpHighscore + " - Hard";
 			}
 
-			Log.i("HighScore", "TMP Highscore"+tmpHighscore);
+			Log.i(TAG, "TMP Highscore"+tmpHighscore);
 			highScoreList.add(tmpHighscore);
 
 			if (currentCursor.getString(0).equals(playername)

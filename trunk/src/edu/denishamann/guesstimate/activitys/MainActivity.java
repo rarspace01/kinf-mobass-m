@@ -12,12 +12,14 @@ import edu.denishamann.guesstimate.R;
  */
 public class MainActivity extends Activity {
 
+	private static final String TAG = "Main";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Log.i("MainActivity", "MainActivity created");
+		Log.i(TAG, "MainActivity created");
 	}
 
 	public void startGame(View view) {

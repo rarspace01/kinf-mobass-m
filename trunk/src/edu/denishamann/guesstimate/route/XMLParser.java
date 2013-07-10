@@ -18,6 +18,8 @@ import android.util.Log;
 
 public class XMLParser {
 	
+	private static final String TAG="XMLParser";
+	
 	public Document getDomElement(String xml){
         Document doc = null;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -30,13 +32,13 @@ public class XMLParser {
                 doc = db.parse(is); 
  
             } catch (ParserConfigurationException e) {
-                Log.e("Error: ", e.getMessage());
+                Log.e(TAG, e.getMessage());
                 return null;
             } catch (SAXException e) {
-                Log.e("Error: ", e.getMessage());
+                Log.e(TAG, e.getMessage());
                 return null;
             } catch (IOException e) {
-                Log.e("Error: ", e.getMessage());
+                Log.e(TAG, e.getMessage());
                 return null;
             }
                 // return DOM

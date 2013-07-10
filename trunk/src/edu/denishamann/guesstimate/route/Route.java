@@ -20,6 +20,8 @@ import edu.denishamann.io.HttpHelper;
  */
 public class Route implements IRoute {
 
+	private static final String TAG = "Route";
+
 	private GeoLocation start_;
 	private GeoLocation stop_;
 
@@ -54,7 +56,7 @@ public class Route implements IRoute {
 				+ ","
 				+ stop_.getLongitude()
 				+ "&callback=renderNarrative&outFormat=xml&routeType=pedestrian&unit=k&locale=de_DE";
-		Log.i("Route", "Access URL: " + sURL);
+		Log.i(TAG, "Access URL: " + sURL);
 		sPuffer = HttpHelper.getPage(sURL);
 
 		if (!sPuffer.isEmpty()) {
@@ -71,7 +73,7 @@ public class Route implements IRoute {
 			if (nl.getLength() > 0) {
 				nlm = nl.item(0).getChildNodes();
 
-				Log.i("Route", "Found Maneuvers: " + nlm.getLength());
+				Log.i(TAG, "Found Maneuvers: " + nlm.getLength());
 				// looping through all item nodes <item>
 				for (int i = 0; i < nlm.getLength(); i++) {
 					Element e = (Element) nlm.item(i);
@@ -86,21 +88,21 @@ public class Route implements IRoute {
 						Log.i("Route", "Added Routepoint: " + lat + "/" + lng);
 						gl.add(new GeoLocation(lat, lng));
 					} else {
-						Log.i("Route",
+						Log.i(TAG,
 								"ignored Input : " + parser.getValue(e, "lat")
 										+ " - " + parser.getValue(e, "lng"));
 					}
 					// add new
 				}
 			} else {
-				Log.e("Route", "couldn't retrieve path");
+				Log.e(TAG, "couldn't retrieve path");
 			}
 
 			gl.add(stop_);
 
 			return gl;
 		} else {
-			Log.e("Route", "no route, when offline");
+			Log.e(TAG, "no route, when offline");
 			return null;
 		}
 
