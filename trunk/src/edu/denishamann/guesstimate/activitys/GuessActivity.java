@@ -40,11 +40,18 @@ public class GuessActivity extends Activity {
 		EditText guess3 = (EditText) findViewById(R.id.guess3);
 		EditText guess4 = (EditText) findViewById(R.id.guess4);
 
-		if (!guess1.getText().toString().isEmpty() && !guess2.getText().toString().isEmpty() && !guess3.getText().toString().isEmpty() && !guess4.getText().toString().isEmpty()) {
-			guessPoints.get(0).setGuessDistance_(Integer.valueOf(guess1.getText().toString()));
-			guessPoints.get(1).setGuessDistance_(Integer.valueOf(guess2.getText().toString()));
-			guessPoints.get(2).setGuessDistance_(Integer.valueOf(guess3.getText().toString()));
-			guessPoints.get(3).setGuessDistance_(Integer.valueOf(guess4.getText().toString()));
+		if (!guess1.getText().toString().isEmpty()
+				&& !guess2.getText().toString().isEmpty()
+				&& !guess3.getText().toString().isEmpty()
+				&& !guess4.getText().toString().isEmpty()) {
+			guessPoints.get(0).setGuessDistance_(
+					Integer.valueOf(guess1.getText().toString()));
+			guessPoints.get(1).setGuessDistance_(
+					Integer.valueOf(guess2.getText().toString()));
+			guessPoints.get(2).setGuessDistance_(
+					Integer.valueOf(guess3.getText().toString()));
+			guessPoints.get(3).setGuessDistance_(
+					Integer.valueOf(guess4.getText().toString()));
 			if (Game.getInstance().evaluateGuesses()) {
 				Intent i = new Intent(this, MapActivity.class);
 				startActivity(i);
