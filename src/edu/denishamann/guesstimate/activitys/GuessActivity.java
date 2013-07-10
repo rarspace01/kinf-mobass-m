@@ -1,15 +1,13 @@
 package edu.denishamann.guesstimate.activitys;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import java.util.List;
-
 import edu.denishamann.guesstimate.R;
 import edu.denishamann.guesstimate.model.Game;
 import edu.denishamann.guesstimate.model.GuessPoint;
