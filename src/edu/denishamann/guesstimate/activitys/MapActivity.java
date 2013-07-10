@@ -48,7 +48,7 @@ import edu.denishamann.guesstimate.R;
 import edu.denishamann.guesstimate.model.Game;
 import edu.denishamann.guesstimate.model.GeoLocation;
 import edu.denishamann.guesstimate.model.GuessPoint;
-import edu.denishamann.ors_api.Route;
+import edu.denishamann.guesstimate.route.Route;
 
 /**
  * @author denis

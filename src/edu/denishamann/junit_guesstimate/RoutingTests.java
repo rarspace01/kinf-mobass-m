@@ -4,7 +4,7 @@ import android.test.ActivityUnitTestCase;
 import android.util.Log;
 import edu.denishamann.guesstimate.activitys.MainActivity;
 import edu.denishamann.guesstimate.model.GeoLocation;
-import edu.denishamann.ors_api.Route;
+import edu.denishamann.guesstimate.route.Route;
 import junit.framework.TestCase;
 
 public class RoutingTests extends ActivityUnitTestCase<MainActivity>  {

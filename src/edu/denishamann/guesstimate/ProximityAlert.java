@@ -6,11 +6,9 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.location.LocationManager;
 import android.util.Log;
 import android.widget.Toast;
-
 import edu.denishamann.guesstimate.activitys.MapActivity;
 import edu.denishamann.guesstimate.model.Game;
 
@@ -84,6 +82,7 @@ public class ProximityAlert extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (context instanceof MapActivity) {
+			Log.i("GM", "Proximity Alert: cought application context");
 			if (intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false)) {
 				Toast.makeText(context, "You are here!", Toast.LENGTH_LONG).show();
 				Game.getInstance().guessedLocationApproached();
@@ -92,6 +91,9 @@ public class ProximityAlert extends BroadcastReceiver {
 				Toast.makeText(context, "Where are you going?", Toast.LENGTH_LONG).show();
 			}
 			isRegistered = false;
+		}else{
+			Log.i("GM", "Proximity Alert: other context than application context");
+			
 		}
 	}
 
