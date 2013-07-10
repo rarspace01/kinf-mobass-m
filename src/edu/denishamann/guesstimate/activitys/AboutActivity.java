@@ -4,9 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-
 import edu.denishamann.guesstimate.R;
 
 public class AboutActivity extends Activity {
@@ -23,11 +21,11 @@ public class AboutActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
-			case android.R.id.home:
-				startActivity(new Intent(AboutActivity.this, MainActivity.class));
-				break;
-			default:
-				break;
+		case android.R.id.home:
+			startActivity(new Intent(AboutActivity.this, MainActivity.class));
+			break;
+		default:
+			break;
 		}
 
 		return true;

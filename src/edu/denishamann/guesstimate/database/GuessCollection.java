@@ -53,7 +53,10 @@ public class GuessCollection implements IGuessCollection {
 				"ERBA Spielplatz"));
 		addGuessPoint(new GuessPoint(new GeoLocation(49.901938,10.870049),
 				"fewclicks"));
+		addGuessPoint(new GuessPoint(new GeoLocation(49.901235,10.872229),
+				"Das Sams am Wasser"));
 		guessPointList.addAll(getAll());
+		//49.901235,10.872229
 	}
 
 	@Override
