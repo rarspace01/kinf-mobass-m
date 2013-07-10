@@ -13,16 +13,15 @@ public class OsmItemizedOverlay extends ItemizedIconOverlay<OverlayItem> {
 	public OsmItemizedOverlay(ArrayList<OverlayItem> pList, ItemizedIconOverlay.OnItemGestureListener<OverlayItem> pOnItemGestureListener, ResourceProxy pResourceProxy) {
 		super(pList, pOnItemGestureListener, pResourceProxy);
 		mItemList = pList;
+		populateAll();
 	}
 
 	public void addOverlay(OverlayItem aOverlayItem) {
 		mItemList.add(aOverlayItem);
-		populate();
 	}
 
 	public void removeOverlay(OverlayItem aOverlayItem) {
 		mItemList.remove(aOverlayItem);
-		populate();
 	}
 
 	public void removeOverlayByTitle(String title) {
@@ -34,6 +33,10 @@ public class OsmItemizedOverlay extends ItemizedIconOverlay<OverlayItem> {
 				break;
 			}
 		}
+		populateAll();
+	}
+
+	public void populateAll() {
 		populate();
 	}
 }

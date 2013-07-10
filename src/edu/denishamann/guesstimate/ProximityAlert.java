@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.util.Log;
 import android.widget.Toast;
+
 import edu.denishamann.guesstimate.activitys.MapActivity;
 import edu.denishamann.guesstimate.model.Game;
 
@@ -18,15 +19,17 @@ public class ProximityAlert extends BroadcastReceiver {
 	private MapActivity   mapActivity;
 	private GeoPoint      proximityPoint;
 
-	public boolean isRegistered = false;
-
 	private CircleOverlay circleOverlay;
+
+	private float radius = Game.getInstance().getAlertRadius();
 
 	public ProximityAlert() {
 	}
 
 	public ProximityAlert(MapActivity mActivity) {
 		mapActivity = mActivity;
+
+		pIntent = PendingIntent.getBroadcast(mapActivity.getApplicationContext(), 0, new Intent("edu.denishamann.guesstimate.PROXIMITYALERT"), PendingIntent.FLAG_ONE_SHOT);
 	}
 
 	public ProximityAlert(MapActivity mActivity, GeoPoint pPoint) {
@@ -35,7 +38,7 @@ public class ProximityAlert extends BroadcastReceiver {
 
 		registerReceiver();
 
-		circleOverlay = new CircleOverlay(mapActivity, proximityPoint, Game.getInstance().getAlertRadius(), 155, true);
+		circleOverlay = new CircleOverlay(mapActivity.getApplicationContext(), proximityPoint, radius, 155, true);
 		mapActivity.getMapView().getOverlays().add(circleOverlay);
 
 		Log.i("Proximity Alert", "Set up ProximityAlert");
@@ -48,34 +51,25 @@ public class ProximityAlert extends BroadcastReceiver {
 			mapActivity.getMapView().getOverlays().remove(circleOverlay);
 		}
 
-		circleOverlay = new CircleOverlay(mapActivity, proximityPoint, Game.getInstance().getAlertRadius(), 155, true);
+		circleOverlay = new CircleOverlay(mapActivity, proximityPoint, radius, 155, true);
 		mapActivity.getMapView().getOverlays().add(circleOverlay);
 
-		if (!isRegistered) {
-			registerReceiver();
-		} else {
-			mapActivity.getLocationManager().removeProximityAlert(pIntent);
-			mapActivity.getLocationManager().addProximityAlert(proximityPoint.getLatitudeE6() / 1e6,
-					proximityPoint.getLongitudeE6() / 1e6, Game.getInstance().getAlertRadius(), -1, pIntent);
-		}
+		mapActivity.getLocationManager().removeProximityAlert(pIntent);
+		mapActivity.getLocationManager().addProximityAlert(proximityPoint.getLatitudeE6() / 1e6,
+				proximityPoint.getLongitudeE6() / 1e6, radius, -1, pIntent);
 	}
 
 	public void registerReceiver() {
 		Log.i("Proximity Alert", "ProxAlert registered");
 
-		pIntent = PendingIntent.getBroadcast(mapActivity, 0, new Intent("edu.denishamann.guesstimate.PROXIMITYALERT"), PendingIntent.FLAG_CANCEL_CURRENT);
+		mapActivity.getLocationManager().removeProximityAlert(pIntent);
 		mapActivity.getLocationManager().addProximityAlert(proximityPoint.getLatitudeE6() / 1e6,
-				proximityPoint.getLongitudeE6() / 1e6, Game.getInstance().getAlertRadius(), -1, pIntent);
-
-		isRegistered = true;
+				proximityPoint.getLongitudeE6() / 1e6, radius, -1, pIntent);
 	}
 
 	public void unregisterReceiver() {
-		if (isRegistered) {
-			Log.i("Proximity Alert", "ProxAlert unregistered");
-			mapActivity.getLocationManager().removeProximityAlert(pIntent);
-			isRegistered = false;
-		}
+		Log.i("Proximity Alert", "ProxAlert unregistered");
+		mapActivity.getLocationManager().removeProximityAlert(pIntent);
 	}
 
 	@Override
@@ -83,20 +77,21 @@ public class ProximityAlert extends BroadcastReceiver {
 		if (context instanceof MapActivity) {
 			Log.i("Proximity Alert", "cought application context");
 			if (intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false)) {
+				mapActivity.getLocationManager().removeProximityAlert(pIntent);
 				Toast.makeText(context, "You are here!", Toast.LENGTH_LONG).show();
 				Game.getInstance().guessedLocationApproached();
 				mapActivity.getNewGuessPoints();
 			} else {
 				Toast.makeText(context, "Where are you going?", Toast.LENGTH_LONG).show();
 			}
-			isRegistered = false;
-		}else{
+		} else {
 			Log.i("Proximity Alert", "other context than application context");
-			
+
 		}
 	}
 
-	public void hideProximityPoint() {
+	public void removeProximityPoint() {
+		mapActivity.getLocationManager().removeProximityAlert(pIntent);
 		mapActivity.getMapView().getOverlays().remove(circleOverlay);
 	}
 }
