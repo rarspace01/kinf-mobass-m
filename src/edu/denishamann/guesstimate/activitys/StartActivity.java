@@ -67,7 +67,7 @@ public class StartActivity extends Activity {
 		EditText player = (EditText) findViewById(R.id.playername);
 		String playername = player.getText().toString();
 		if (playername.isEmpty()) {
-			playername = "Player 1";
+			playername = "Unnamed Player";
 		}
 
 		Intent i = null;

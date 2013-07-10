@@ -90,7 +90,7 @@ public class HighScoreActivity extends Activity {
 				tmpHighscore = tmpHighscore + " - Hard";
 			}
 
-			Log.i("GM", tmpHighscore);
+			Log.i("HighScore", "TMP Highscore"+tmpHighscore);
 			highScoreList.add(tmpHighscore);
 
 			if (currentCursor.getString(0).equals(playername)

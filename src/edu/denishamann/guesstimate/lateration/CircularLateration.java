@@ -66,15 +66,15 @@ public class CircularLateration implements ILateration {
 			currentEstimation.addDelta(newDelta);
 
 			if (i % 10 == 0) {
-				Log.i("GM","Iteration " + i);
-				Log.i("GM",currentEstimation.toString() + " - " + LocationUtil.convertCartesianToLocation(currentEstimation));
+				Log.i("Lateration","Iteration " + i);
+				Log.i("Lateration",currentEstimation.toString() + " - " + LocationUtil.convertCartesianToLocation(currentEstimation));
 			}
 			delta = newDelta.delta();
 			if (Math.abs((delta-lastDelta)) <= DELTA || (delta>lastDelta && (lastDelta != 0.0))) {
-				Log.d("GM", "End on: Delta,lastDelta:"+delta+","+lastDelta);
+				Log.d("Lateration", "End on: Delta,lastDelta:"+delta+","+lastDelta);
 				break;
 			} else {
-				Log.i("GM","Delta @" + delta);
+				Log.i("Lateration","Delta @" + delta);
 				lastDelta=delta;
 			}
 
