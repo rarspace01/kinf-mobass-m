@@ -16,6 +16,8 @@ import edu.denishamann.guesstimate.lateration.PseudoLateration;
 
 public class Game {
 
+	private static final String TAG = "Game";
+
 	private GeoLocation calculatedLocation;
 	private List<GuessPoint> pointsToGuess;
 	private long endTime;
@@ -67,16 +69,16 @@ public class Game {
 
 	public boolean evaluateGuesses() {
 		if (!everyPointHasGuess()) {
-			Log.i("Game", "not enough guesses");
+			Log.i(TAG, "not enough guesses");
 			return false;
 		}
 
 		if (USE_CIRCULARLATERATION) {
-			Log.i("Game", "using circular");
+			Log.i(TAG, "using circular");
 			calculatedLocation = new CircularLateration()
 					.getLateration(pointsToGuess);
 		} else {
-			Log.i("Game", "using pseudo lateration");
+			Log.i(TAG, "using pseudo lateration");
 			calculatedLocation = new PseudoLateration()
 					.getLateration(pointsToGuess);
 		}
@@ -95,21 +97,20 @@ public class Game {
 
 	public boolean isNearGuessedLocation(GeoLocation currentLocation) {
 		boolean isNear = false;
-		
-		if(LocationUtil.distance(currentLocation, this.calculatedLocation)<this.alertRadius_){
-			isNear=true;
+
+		if (LocationUtil.distance(currentLocation, this.calculatedLocation) < this.alertRadius_) {
+			isNear = true;
 		}
-		
+
 		return isNear;
 	}
-	
+
 	public boolean isNearGuessedLocation(GeoPoint curLoc) {
 		return isNearGuessedLocation(new GeoLocation(curLoc));
 	}
-	
 
 	public void guessedLocationApproached() {
-		Log.i("Game", "Guessed Lcoation approached");
+		Log.i(TAG, "Guessed Lcoation approached");
 		successfulLocations++;
 		pointsToGuess = null;
 	}
@@ -139,7 +140,7 @@ public class Game {
 	}
 
 	public void gameEnded(Context context) {
-		Log.i("Game", "HighScores: " + successfulLocations);
+		Log.i(TAG, "HighScores: " + successfulLocations);
 		// save highscore
 		SQLiteDatamanager dbManager = new SQLiteDatamanager(context);
 		dbConn = dbManager.getWritableDatabase();
@@ -152,7 +153,7 @@ public class Game {
 				+ "','"
 				+ this.difficulty_ + "');");
 
-		//close connection and manager properly
+		// close connection and manager properly
 		dbConn.close();
 		dbManager.close();
 
@@ -185,6 +186,4 @@ public class Game {
 		return alertRadius_;
 	}
 
-	
-	
 }

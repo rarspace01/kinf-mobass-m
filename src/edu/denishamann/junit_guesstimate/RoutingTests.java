@@ -21,7 +21,7 @@ public class RoutingTests extends ActivityUnitTestCase<MainActivity>  {
 	public void testRoute(){
 		Route pr=new Route(new GeoLocation(49.904005,10.859725), new GeoLocation(49.902637,10.870646));
 		pr.getPath();
-		Log.i("GM", "testcase1");
+		Log.i("JUNIT", "testcase1");
 		assertEquals("bla","bla");
 	}
 	
