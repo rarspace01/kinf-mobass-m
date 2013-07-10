@@ -17,7 +17,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Log.i("GM", "MainActivity created");
+		Log.i("MainActivity", "MainActivity created");
 	}
 
 	public void startGame(View view) {

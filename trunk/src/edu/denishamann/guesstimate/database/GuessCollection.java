@@ -86,8 +86,6 @@ public class GuessCollection implements IGuessCollection {
 
 		List<GuessPoint> gplTop = new LinkedList<GuessPoint>();
 
-		double dx = 0.0;
-		double dy = 0.0;
 		double distance = 0.0;
 		double maxDistance = 0.0;
 

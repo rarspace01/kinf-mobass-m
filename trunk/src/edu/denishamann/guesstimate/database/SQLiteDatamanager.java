@@ -14,7 +14,7 @@ public class SQLiteDatamanager extends SQLiteOpenHelper{
 	} 
 	 
 	public void onCreate(SQLiteDatabase db) { 
-		Log.i("GM","onCreate SQLite");
+		Log.i("SQLLite","onCreate SQLite");
 	      db.execSQL("CREATE TABLE logging (trackid NUMERIC, timestamp NUMERIC, lat NUMERIC, long NUMERIC);"); 
 	      db.execSQL("CREATE TABLE guesstimate (id INTEGER PRIMARY KEY, lat NUMERIC, long NUMERIC, descr TEXT);");
 	      db.execSQL("CREATE TABLE highscore (name TEXT, score NUMERIC, difficulty NUMERIC);");
@@ -22,7 +22,7 @@ public class SQLiteDatamanager extends SQLiteOpenHelper{
 	 
 	public void onUpgrade(SQLiteDatabase db,  
 	              int oldVersion, int newVersion) { 
-		Log.i("GM","onUpgrade");
+		Log.i("SQLLite","onUpgrade");
 	      db.execSQL("DROP TABLE IF EXISTS logging"); 
 	      db.execSQL("DROP TABLE IF EXISTS guesstimate"); 
 	      db.execSQL("DROP TABLE IF EXISTS highscore"); 

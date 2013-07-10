@@ -1,31 +1,34 @@
 package edu.denishamann.guesstimate.model;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import org.osmdroid.util.GeoPoint;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
 import edu.denishamann.guesstimate.database.GuessCollection;
 import edu.denishamann.guesstimate.database.IGuessCollection;
 import edu.denishamann.guesstimate.database.SQLiteDatamanager;
 import edu.denishamann.guesstimate.lateration.CircularLateration;
+import edu.denishamann.guesstimate.lateration.LocationUtil;
 import edu.denishamann.guesstimate.lateration.PseudoLateration;
 
 public class Game {
 
-	private GeoLocation      calculatedLocation;
+	private GeoLocation calculatedLocation;
 	private List<GuessPoint> pointsToGuess;
-	private long             endTime;
-	private int              successfulLocations;
-	private int              difficulty_;
+	private long endTime;
+	private int successfulLocations;
+	private int difficulty_;
 	private String playerName_ = "";
 	private IGuessCollection currentGuessCollection;
-	private SQLiteDatabase   dbConn;
+	private SQLiteDatabase dbConn;
+	private float alertRadius_ = 50; // Distance when location was
+										// successfully approached
 
 	private boolean USE_CIRCULARLATERATION = true;
-	private int     PLAYTIME               = 10;                            //Rundenzeit in Min
+	private int PLAYTIME = 10; // Rundenzeit in Min
 
 	private static Game instance;
 
@@ -36,7 +39,8 @@ public class Game {
 		return instance;
 	}
 
-	public void startGame(int difficulty, String playerName, boolean useRealLateration) {
+	public void startGame(int difficulty, String playerName,
+			boolean useRealLateration) {
 		this.playerName_ = playerName.trim();
 		this.currentGuessCollection = new GuessCollection();
 		this.difficulty_ = difficulty;
@@ -55,23 +59,26 @@ public class Game {
 
 	public List<GuessPoint> getLocationsToBeGuessed(GeoLocation currentLocation) {
 		if (pointsToGuess == null) {
-			pointsToGuess = currentGuessCollection.getNearest(currentLocation, 4, 0);
+			pointsToGuess = currentGuessCollection.getNearest(currentLocation,
+					4, 0);
 		}
 		return pointsToGuess;
 	}
 
 	public boolean evaluateGuesses() {
 		if (!everyPointHasGuess()) {
-			Log.i("GM", "not enough guesses");
+			Log.i("Game", "not enough guesses");
 			return false;
 		}
 
 		if (USE_CIRCULARLATERATION) {
-			Log.i("GM", "using circular");
-			calculatedLocation = new CircularLateration().getLateration(pointsToGuess);
+			Log.i("Game", "using circular");
+			calculatedLocation = new CircularLateration()
+					.getLateration(pointsToGuess);
 		} else {
-			Log.i("GM", "using pseudo lateration");
-			calculatedLocation = new PseudoLateration().getLateration(pointsToGuess);
+			Log.i("Game", "using pseudo lateration");
+			calculatedLocation = new PseudoLateration()
+					.getLateration(pointsToGuess);
 		}
 
 		return true;
@@ -86,8 +93,23 @@ public class Game {
 		return true;
 	}
 
+	public boolean isNearGuessedLocation(GeoLocation currentLocation) {
+		boolean isNear = false;
+		
+		if(LocationUtil.distance(currentLocation, this.calculatedLocation)<this.alertRadius_){
+			isNear=true;
+		}
+		
+		return isNear;
+	}
+	
+	public boolean isNearGuessedLocation(GeoPoint curLoc) {
+		return isNearGuessedLocation(new GeoLocation(curLoc));
+	}
+	
+
 	public void guessedLocationApproached() {
-		Log.i("GM", "Guessed Lcoation approached");
+		Log.i("Game", "Guessed Lcoation approached");
 		successfulLocations++;
 		pointsToGuess = null;
 	}
@@ -117,17 +139,22 @@ public class Game {
 	}
 
 	public void gameEnded(Context context) {
-		Log.i("GM", "HS: " + successfulLocations);
-		//save highscore
+		Log.i("Game", "HighScores: " + successfulLocations);
+		// save highscore
 		SQLiteDatamanager dbManager = new SQLiteDatamanager(context);
 		dbConn = dbManager.getWritableDatabase();
 
-		//sql qry
-		dbConn.execSQL("INSERT INTO highscore (name, score, difficulty) VALUES ('" + this.playerName_ + "','"
-				+ this.successfulLocations + "','" + this.difficulty_ + "');");
+		// sql qry
+		dbConn.execSQL("INSERT INTO highscore (name, score, difficulty) VALUES ('"
+				+ this.playerName_
+				+ "','"
+				+ this.successfulLocations
+				+ "','"
+				+ this.difficulty_ + "');");
 
-		dbManager.close();
+		//close connection and manager properly
 		dbConn.close();
+		dbManager.close();
 
 		difficulty_ = -1;
 		endTime = -1;
@@ -153,4 +180,11 @@ public class Game {
 	public String getPlayerName_() {
 		return playerName_;
 	}
+
+	public float getAlertRadius() {
+		return alertRadius_;
+	}
+
+	
+	
 }

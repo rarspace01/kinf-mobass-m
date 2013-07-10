@@ -6,15 +6,11 @@ import org.osmdroid.views.MapView.Projection;
 import org.osmdroid.views.overlay.Overlay;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Point;
 import android.util.FloatMath;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
@@ -24,11 +20,11 @@ public class CircleOverlay extends Overlay {
 	private Paint borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	private Paint innerPaint  = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-	private int     radius;
+	private float     radius;
 	private boolean tappable;
 //	private boolean mustDraw = true;
 
-	public CircleOverlay(Context ctx, GeoPoint pos, int radius, int alpha, boolean tappable) {
+	public CircleOverlay(Context ctx, GeoPoint pos, float radius, int alpha, boolean tappable) {
 		super(ctx);
 
 		borderPaint.setAntiAlias(true);
@@ -119,7 +115,7 @@ public class CircleOverlay extends Overlay {
 		Point tapPoint = new Point();
 		projection.fromMapPixels((int) event.getX(), (int) event.getY(), tapPoint);
 
-		float actualRadius = projection.metersToEquatorPixels(radius) * (1 / FloatMath.cos((float) Math.toRadians(geoPosition.getLatitudeE6() / 1e6)));
+		float actualRadius = (float) (projection.metersToEquatorPixels(radius) * (1 / Math.cos(Math.toRadians(geoPosition.getLatitudeE6() / 1e6))));
 
 		if ((tapPoint.x < geoPoint.x + actualRadius && tapPoint.x > geoPoint.x - actualRadius)
 				&& (tapPoint.y < geoPoint.y + actualRadius && tapPoint.y > geoPoint.y - actualRadius)) {

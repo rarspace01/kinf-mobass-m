@@ -91,11 +91,11 @@ public class MapActivity extends Activity implements LocationListener,
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 			locationManager.requestLocationUpdates(
-					LocationManager.NETWORK_PROVIDER, 1000, 0, this);
+					LocationManager.NETWORK_PROVIDER, 1500, 0, this);
 		}
 		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 			locationManager.requestLocationUpdates(
-					LocationManager.GPS_PROVIDER, 1000, 0, this);
+					LocationManager.GPS_PROVIDER, 1500, 0, this);
 		}
 
 		Criteria crit = new Criteria();
@@ -104,12 +104,12 @@ public class MapActivity extends Activity implements LocationListener,
 
 		Location loc = locationManager.getLastKnownLocation(provider);
 		if (loc != null) {
-			Log.i("GM",
+			Log.i("MapActivity",
 					"Current Location: " + loc.getLatitude() + " - "
 							+ loc.getLongitude());
 			curLoc = new GeoPoint(loc.getLatitude(), loc.getLongitude());
 		} else {
-			Log.i("GM", "Loc == null, using default value");
+			Log.i("MapActivity", "Loc == null, using default value");
 			curLoc = new GeoPoint(49.903038, 10.869427);
 		}
 
@@ -251,11 +251,18 @@ public class MapActivity extends Activity implements LocationListener,
 	public void onLocationChanged(Location location) {
 		int lat = (int) (location.getLatitude() * 1E6);
 		int lng = (int) (location.getLongitude() * 1E6);
-		Log.i("GM", "Location updated & redraw to " + lat + ":" + lng
+		Log.i("MapActivity", "Location updated & redraw to " + lat + ":" + lng
 				+ " | zoom: " + mapView.getZoomLevel());
 
 		curLoc.setCoordsE6(lat, lng);
 
+		if(location != null && Game.getInstance().getCalculatedLocation() != null){
+			if(Game.getInstance().isNearGuessedLocation(new GeoLocation(location.getLatitude(), location.getLongitude()))){
+				Game.getInstance().guessedLocationApproached();
+				this.getNewGuessPoints();
+			}
+		}
+		
 		mapView.invalidate();
 	}
 
@@ -348,7 +355,7 @@ public class MapActivity extends Activity implements LocationListener,
 				if (Game.getInstance().evaluateGuesses()) {
 					GeoLocation loc = Game.getInstance()
 							.getCalculatedLocation();
-					if (curLoc.distanceTo(loc.toGeoPoint()) < 60) {
+					if (Game.getInstance().isNearGuessedLocation(curLoc)) {
 						Toast.makeText(MapActivity.this, "Great guess!",
 								Toast.LENGTH_LONG).show();
 						Game.getInstance().guessedLocationApproached();
@@ -360,7 +367,7 @@ public class MapActivity extends Activity implements LocationListener,
 
 					drawRouteOnMap(new Route(new GeoLocation(curLoc), loc));
 
-					Log.i("GM", "proxpoint: " + loc + "|" + loc);
+					Log.i("MapActivity", "proxpoint: " + loc + "|" + loc);
 
 					for (GuessPoint gp : guessPoints) {
 						CircleOverlay circleOverlay = new CircleOverlay(
@@ -390,10 +397,21 @@ public class MapActivity extends Activity implements LocationListener,
 		alert.show();
 	}
 
+	/**
+	 * 
+	 * draws the route on the current map. uses a background task to offload heavy task from mainui thread
+	 * @author denis
+	 * @param route  {@link Route} - Route to be drawn
+	 */
 	public void drawRouteOnMap(Route route) {
 		new RetrieveRouteTask().execute(route);
 	}
 
+	/**
+	 * uinner class for handdling the route retrieval task which takes to long to handle in the main ui thread
+	 * @author denis
+	 *
+	 */
 	private class RetrieveRouteTask extends
 			AsyncTask<Route, Void, List<GeoLocation>> {
 
