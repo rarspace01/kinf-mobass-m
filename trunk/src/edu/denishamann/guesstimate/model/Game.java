@@ -96,6 +96,11 @@ public class Game {
 		return true;
 	}
 
+	/**
+	 * evaluates if a given Location is near the calculate Location
+	 * @param currentLocation - as {@link GeoLocation}
+	 * @return {@link boolean} - {@linkplain true} or {@link false} if the givne location is near the calced location
+	 */
 	public boolean isNearGuessedLocation(GeoLocation currentLocation) {
 		boolean isNear = false;
 
@@ -106,6 +111,11 @@ public class Game {
 		return isNear;
 	}
 
+	/**
+	 * evaluates if a given Location is near the calculate Location
+	 * @param currentLocation - as {@link GeoPoint}
+	 * @return {@link boolean} - {@linkplain true} or {@link false} if the givne location is near the calced location
+	 */
 	public boolean isNearGuessedLocation(GeoPoint curLoc) {
 		return isNearGuessedLocation(new GeoLocation(curLoc));
 	}
@@ -114,6 +124,7 @@ public class Game {
 		Log.i(TAG, "Guessed Lcoation approached");
 		successfulLocations++;
 		pointsToGuess = null;
+		calculatedLocation = null;
 	}
 
 	public GeoLocation getCalculatedLocation() {
