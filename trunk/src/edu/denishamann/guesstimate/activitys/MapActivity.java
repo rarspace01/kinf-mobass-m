@@ -42,7 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import edu.denishamann.guesstimate.CircleOverlay;
-import edu.denishamann.guesstimate.OsmItemizedOverlay;
+import edu.denishamann.guesstimate.MyItemizedOverlay;
 import edu.denishamann.guesstimate.ProximityAlert;
 import edu.denishamann.guesstimate.R;
 import edu.denishamann.guesstimate.model.Game;
@@ -67,7 +67,7 @@ public class MapActivity extends Activity implements LocationListener,
 
 	private ProximityAlert proximityAlert;
 
-	private OsmItemizedOverlay  itemizedOverlay;
+	private MyItemizedOverlay   itemizedOverlay;
 	private OverlayItem         curLocItem;
 	private List<CircleOverlay> circleOverlays;
 	private PathOverlay         routePath;
@@ -123,7 +123,7 @@ public class MapActivity extends Activity implements LocationListener,
 
 		ResourceProxy mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
 
-		itemizedOverlay = new OsmItemizedOverlay(new ArrayList<OverlayItem>(),
+		itemizedOverlay = new MyItemizedOverlay(new ArrayList<OverlayItem>(),
 				new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
 					@Override
 					public boolean onItemSingleTapUp(final int index,
