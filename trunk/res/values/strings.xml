@@ -40,7 +40,19 @@
     <string name="lukas">Lukas Schwöbel</string>
     <string name="mobile_ass">Mobile Assistance Systems</string>
     <string name="c2013">(c) 2013</string>
-    <string name="descprition">Easy Difficulty:\nWhen you started the game, tap on the markers on the map and guess the distance to this point. Based on your guessed distances to four map markers, a point will be calculated where you should be if your estimates would be correct. You then have to go with a certain radius of this point before you can take a guess for the next four points. The goal of this game is to go to as many points as possible in a fixed time.</string>
+    <string name="easydescprition">Easy Difficulty:\nWhen you start the game, the map with four
+        markers will show up. If you tap on a markers on the map you can guess the distance to this
+        point. Based on your guessed distances to four map markers, a point will be calculated where
+        you should be if your estimates would be correct. You then have to go within a certain
+        radius of this point before you can take a guess for the next four points. The goal of this
+        game is to go to as many points as possible in a 30 minutes.
+    </string>
+    <string name="normaldescprition">Normal Difficulty:\nWhen you started the game you have to guess
+        four distances to four well known points. Based on your guessed distances a point will be
+        calculated where you should be if your estimates would be correct. You then have to go
+        within a certain radius of this point before you can take a guess for the next four points.
+        The goal of this game is to go to as many points as possible in a 30 minutes.
+    </string>
     <string name="real_lateration">Use Real Lateration</string>
     <string name="title_activity_guess">Guesstimate</string>
     <string name="title_activity_high_score">Guesstimate - High Score</string>

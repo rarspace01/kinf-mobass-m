@@ -86,7 +86,7 @@ public class HighScoreActivity extends Activity {
 			if (currentCursor.getInt(2) == 0) {
 				tmpHighscore = tmpHighscore + " - Easy";
 			} else {
-				tmpHighscore = tmpHighscore + " - Hard";
+				tmpHighscore = tmpHighscore + " - Normal";
 			}
 
 			Log.i(TAG, "TMP Highscore" + tmpHighscore);
