@@ -7,6 +7,9 @@ import org.osmdroid.ResourceProxy;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
+/**
+ * @author PaulB
+ */
 public class OsmItemizedOverlay extends ItemizedIconOverlay<OverlayItem> {
 	private ArrayList<OverlayItem> mItemList = new ArrayList<OverlayItem>();
 
