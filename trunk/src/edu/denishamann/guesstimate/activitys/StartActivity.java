@@ -22,19 +22,24 @@ import edu.denishamann.guesstimate.model.Game;
 public class StartActivity extends Activity {
 
 	private boolean useRealLateration = true;
+	private String  defaultPlayerName = "Player 1";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 
-		EditText playername = (EditText) findViewById(R.id.playername);
-		if (Game.getInstance().getPlayerName_().isEmpty() || Game.getInstance().getPlayerName_().equals("Player 1")) {
+		// if the player has not already played (in this session) or has not filled in a name
+		// the first time she played (default name "Player 1" was used): ask for a name
+		// else put in name that she used in the last game
+		if (Game.getInstance().getPlayerName_().isEmpty() || Game.getInstance().getPlayerName_().equals(defaultPlayerName)) {
 			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 		} else {
+			EditText playername = (EditText) findViewById(R.id.playername);
 			playername.setText(Game.getInstance().getPlayerName_());
 		}
+
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 	}
@@ -70,7 +75,7 @@ public class StartActivity extends Activity {
 		EditText player = (EditText) findViewById(R.id.playername);
 		String playername = player.getText().toString();
 		if (playername.isEmpty()) {
-			playername = "Unnamed Player";
+			playername = defaultPlayerName;
 		}
 
 		Intent i = null;
