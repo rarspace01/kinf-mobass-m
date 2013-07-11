@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import edu.denishamann.guesstimate.R;
 import edu.denishamann.guesstimate.model.Game;
 import edu.denishamann.guesstimate.model.GuessPoint;
@@ -40,23 +41,29 @@ public class GuessActivity extends Activity {
 		EditText guess3 = (EditText) findViewById(R.id.guess3);
 		EditText guess4 = (EditText) findViewById(R.id.guess4);
 
-		if (!guess1.getText().toString().isEmpty()
-				&& !guess2.getText().toString().isEmpty()
-				&& !guess3.getText().toString().isEmpty()
-				&& !guess4.getText().toString().isEmpty()) {
-			guessPoints.get(0).setGuessDistance_(
-					Integer.valueOf(guess1.getText().toString()));
-			guessPoints.get(1).setGuessDistance_(
-					Integer.valueOf(guess2.getText().toString()));
-			guessPoints.get(2).setGuessDistance_(
-					Integer.valueOf(guess3.getText().toString()));
-			guessPoints.get(3).setGuessDistance_(
-					Integer.valueOf(guess4.getText().toString()));
-			if (Game.getInstance().evaluateGuesses()) {
-				Intent i = new Intent(this, MapActivity.class);
-				startActivity(i);
-				overridePendingTransition(0, 0);
-			}
+		// if one line was not filled by the user do nothing
+		if (guess1.getText().toString().isEmpty()
+				&& guess2.getText().toString().isEmpty()
+				&& guess3.getText().toString().isEmpty()
+				&& guess4.getText().toString().isEmpty()) {
+			return;
+		}
+
+		guessPoints.get(0).setGuessDistance_(
+				Integer.valueOf(guess1.getText().toString()));
+		guessPoints.get(1).setGuessDistance_(
+				Integer.valueOf(guess2.getText().toString()));
+		guessPoints.get(2).setGuessDistance_(
+				Integer.valueOf(guess3.getText().toString()));
+		guessPoints.get(3).setGuessDistance_(
+				Integer.valueOf(guess4.getText().toString()));
+
+		//let the game calculate the point the user has to go
+		// to before opening the map
+		if (Game.getInstance().evaluateGuesses()) {
+			Intent i = new Intent(this, MapActivity.class);
+			startActivity(i);
+			overridePendingTransition(0, 0);
 		}
 	}
 
