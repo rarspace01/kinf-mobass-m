@@ -16,6 +16,9 @@ import android.widget.Spinner;
 import edu.denishamann.guesstimate.R;
 import edu.denishamann.guesstimate.model.Game;
 
+/**
+ * @author PaulB
+ */
 public class StartActivity extends Activity {
 
 	private boolean useRealLateration = true;

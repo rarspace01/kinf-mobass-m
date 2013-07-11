@@ -5,8 +5,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+
 import edu.denishamann.guesstimate.R;
 
+/**
+ * @author PaulB
+ */
 public class HowToActivity extends Activity {
 
 	@Override
@@ -21,11 +25,11 @@ public class HowToActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
-		case android.R.id.home:
-			startActivity(new Intent(HowToActivity.this, MainActivity.class));
-			break;
-		default:
-			break;
+			case android.R.id.home:
+				startActivity(new Intent(HowToActivity.this, MainActivity.class));
+				break;
+			default:
+				break;
 		}
 
 		return true;
