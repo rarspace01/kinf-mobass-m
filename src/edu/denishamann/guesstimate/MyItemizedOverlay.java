@@ -10,10 +10,10 @@ import org.osmdroid.views.overlay.OverlayItem;
 /**
  * @author PaulB
  */
-public class OsmItemizedOverlay extends ItemizedIconOverlay<OverlayItem> {
+public class MyItemizedOverlay extends ItemizedIconOverlay<OverlayItem> {
 	private ArrayList<OverlayItem> mItemList = new ArrayList<OverlayItem>();
 
-	public OsmItemizedOverlay(ArrayList<OverlayItem> pList, ItemizedIconOverlay.OnItemGestureListener<OverlayItem> pOnItemGestureListener, ResourceProxy pResourceProxy) {
+	public MyItemizedOverlay(ArrayList<OverlayItem> pList, ItemizedIconOverlay.OnItemGestureListener<OverlayItem> pOnItemGestureListener, ResourceProxy pResourceProxy) {
 		super(pList, pOnItemGestureListener, pResourceProxy);
 		mItemList = pList;
 		populateAll();
@@ -27,6 +27,8 @@ public class OsmItemizedOverlay extends ItemizedIconOverlay<OverlayItem> {
 		mItemList.remove(aOverlayItem);
 	}
 
+	// only really used and new method here
+	// removes a overlay by its title
 	public void removeOverlayByTitle(String title) {
 		Iterator<OverlayItem> iterator = mItemList.iterator();
 		while (iterator.hasNext()) {
