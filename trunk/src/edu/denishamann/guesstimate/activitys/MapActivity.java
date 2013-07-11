@@ -223,14 +223,18 @@ public class MapActivity extends Activity implements LocationListener,
 	}
 
 	public void getNewGuessPoints() {
+		Log.i(TAG, "Getting new Locations and ressetting State");
 		if (Game.getInstance().getDifficulty() == 0) {
+			Log.i(TAG, "Easy Mode: new Locations");
 			guessPoints = Game.getInstance().getLocationsToBeGuessed();
-
+			Log.i(TAG, "Easy Mode: removing circleoverlays");
 			mapView.getOverlays().removeAll(circleOverlays);
 
+			
 			circleOverlays.clear();
 			itemizedOverlay.removeAllItems();
 
+			Log.i(TAG, "Easy Mode: adding new overlays");
 			for (GuessPoint gp : guessPoints) {
 				OverlayItem guessItem = new OverlayItem(gp.getDescription_(),
 						"", gp.getLocation_().toGeoPoint());
@@ -238,14 +242,14 @@ public class MapActivity extends Activity implements LocationListener,
 			}
 			itemizedOverlay.addItem(curLocItem);
 
+			Log.i(TAG, "Easy Mode: removing proximity point");
 			proximityAlert.removeProximityPoint();
 
-			if (routePath != null) {
-				MapActivity.this.mapView.getOverlays().remove(routePath);
-			}
+			removeRouteOnMap();
 
 			mapView.invalidate();
 		} else {
+			Log.i(TAG, "Normal Mode: OPening new Guess Activity");
 			startActivity(new Intent(this, GuessActivity.class));
 		}
 	}
@@ -264,8 +268,15 @@ public class MapActivity extends Activity implements LocationListener,
 			if (Game.getInstance().isNearGuessedLocation(
 					new GeoLocation(location.getLatitude(), location
 							.getLongitude()))) {
+				Log.i(TAG, "Location Approached via Location change");
+				proximityAlert.removeProximityPoint();
 				Game.getInstance().guessedLocationApproached();
+				//removeRouteOnMap();
 				this.getNewGuessPoints();
+			}
+		}else{
+			if(Game.getInstance().getCalculatedLocation()==null){
+				Log.i(TAG, "calced Location empty");
 			}
 		}
 
@@ -417,8 +428,20 @@ public class MapActivity extends Activity implements LocationListener,
 	}
 
 	/**
-	 * uinner class for handdling the route retrieval task which takes to long
-	 * to handle in the main ui thread
+	 * 
+	 * removes the route from the current map.
+	 * 
+	 * @author denis
+	 */
+	public void removeRouteOnMap() {
+		if (routePath != null) {
+			MapActivity.this.mapView.getOverlays().remove(routePath);
+		}
+	}
+
+	/**
+	 * inner class for handdling the route retrieval task which takes to long to
+	 * handle in the main ui thread
 	 * 
 	 * @author denis
 	 * 

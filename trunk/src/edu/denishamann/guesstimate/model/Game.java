@@ -15,6 +15,11 @@ import edu.denishamann.guesstimate.lateration.CircularLateration;
 import edu.denishamann.guesstimate.lateration.LocationUtil;
 import edu.denishamann.guesstimate.lateration.PseudoLateration;
 
+/**
+ * Class for managing the game states.
+ * @author denis
+ *
+ */
 public class Game {
 
 	private static final String TAG = "Game";
