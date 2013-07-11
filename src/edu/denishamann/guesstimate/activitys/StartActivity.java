@@ -78,7 +78,7 @@ public class StartActivity extends Activity {
 			playername = defaultPlayerName;
 		}
 
-		Intent i = null;
+		Intent i;
 		switch (diffSpinner.getSelectedItemPosition()) {
 			case 0:
 				Game.getInstance().startGame(0, playername, useRealLateration);
