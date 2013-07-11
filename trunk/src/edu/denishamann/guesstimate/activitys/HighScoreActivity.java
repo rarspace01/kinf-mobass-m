@@ -18,6 +18,9 @@ import edu.denishamann.guesstimate.R;
 import edu.denishamann.guesstimate.database.SQLiteDatamanager;
 import edu.denishamann.guesstimate.model.Game;
 
+/**
+ * @author PaulB
+ */
 public class HighScoreActivity extends Activity {
 
 	private static final String TAG = "Highscore";

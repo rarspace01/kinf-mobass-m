@@ -5,15 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
 import edu.denishamann.guesstimate.R;
 
 /**
- * @author denis
+ * @author PaulB
  */
 public class MainActivity extends Activity {
 
 	private static final String TAG = "Main";
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

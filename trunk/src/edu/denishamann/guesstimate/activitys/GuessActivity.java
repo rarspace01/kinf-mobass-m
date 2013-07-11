@@ -13,6 +13,9 @@ import edu.denishamann.guesstimate.R;
 import edu.denishamann.guesstimate.model.Game;
 import edu.denishamann.guesstimate.model.GuessPoint;
 
+/**
+ * @author PaulB
+ */
 public class GuessActivity extends Activity {
 
 	private List<GuessPoint> guessPoints;
