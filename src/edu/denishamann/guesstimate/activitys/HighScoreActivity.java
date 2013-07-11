@@ -21,9 +21,8 @@ import edu.denishamann.guesstimate.model.Game;
 public class HighScoreActivity extends Activity {
 
 	private static final String TAG = "Highscore";
-	
+
 	private SQLiteDatabase dbConn_;
-	private ListView lv_;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +31,8 @@ public class HighScoreActivity extends Activity {
 
 		TextView congrats = (TextView) findViewById(R.id.congrats);
 		Intent intent = getIntent();
+		// if you got here from the map e.g. the game has ended
+		// set a congratulations text
 		if (intent.hasExtra("gameEnded")) {
 			congrats.setText("Congratulations");
 			getHighscores(Game.getInstance().getPlayerName_(), Game
@@ -39,10 +40,8 @@ public class HighScoreActivity extends Activity {
 					.getDifficulty());
 		} else {
 			congrats.setText("");
-			getHighscores("", -1, -1);
+			getHighscores();
 		}
-
-		// retrieve highscores
 
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
@@ -51,50 +50,50 @@ public class HighScoreActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
-		case android.R.id.home:
-			startActivity(new Intent(HighScoreActivity.this, MainActivity.class));
-			break;
-		default:
-			break;
+			case android.R.id.home:
+				startActivity(new Intent(HighScoreActivity.this, MainActivity.class));
+				break;
+			default:
+				break;
 		}
 
 		return true;
 	}
 
-	public void getHighscores(String playername, int successfulLocations,
-			int difficulty) {
-		int selector = -1;
+	/**
+	 * Retrieves the highscore from the device when a player finished a game.
+	 *
+	 * @param playername          Name of the player
+	 * @param successfulLocations Scored locations
+	 * @param difficulty          Played difficulty
+	 */
+	private void getHighscores(String playername, int successfulLocations, int difficulty) {
 		SQLiteDatamanager dbManager = new SQLiteDatamanager(this);
 		dbConn_ = dbManager.getReadableDatabase();
-		ArrayList<String> highScoreList = new ArrayList<String>();
-		String tmpHighscore = "";
 
-		// sql qry
-		// dbConn_.rawQuery(""
-
-		// create cursor based on qry
-		Cursor currentCursor = dbConn_
-				.rawQuery(
-						"SELECT name, score, difficulty FROM highscore ORDER BY score DESC, difficulty DESC;",
-						null);
-
-		// 1. pos on cursor
+		Cursor currentCursor = dbConn_.rawQuery(
+				"SELECT name, score, difficulty FROM highscore ORDER BY score DESC, difficulty DESC;",
+				null);
 		currentCursor.moveToFirst();
 
-		// über alle cursor inhalte
+		ArrayList<String> highScoreList = new ArrayList<String>();
+		String tmpHighscore = "";
 		int i = 0;
+		int selector = -1;
+		// get maximum 10 highscores
 		while (!currentCursor.isAfterLast() && i < 9) {
-			tmpHighscore = currentCursor.getString(0) + " - "
-					+ currentCursor.getInt(1);
+			tmpHighscore = currentCursor.getString(0) + " - " + currentCursor.getInt(1);
 			if (currentCursor.getInt(2) == 0) {
 				tmpHighscore = tmpHighscore + " - Easy";
 			} else {
 				tmpHighscore = tmpHighscore + " - Hard";
 			}
 
-			Log.i(TAG, "TMP Highscore"+tmpHighscore);
+			Log.i(TAG, "TMP Highscore" + tmpHighscore);
 			highScoreList.add(tmpHighscore);
 
+			// check if the currentCursor is the same as the player that finished the game
+			// set the selector on this position
 			if (currentCursor.getString(0).equals(playername)
 					&& currentCursor.getInt(1) == successfulLocations
 					&& currentCursor.getInt(2) == difficulty && selector == -1) {
@@ -102,7 +101,6 @@ public class HighScoreActivity extends Activity {
 			}
 
 			currentCursor.moveToNext();
-
 			i++;
 		}
 
@@ -110,19 +108,22 @@ public class HighScoreActivity extends Activity {
 		dbConn_.close();
 		dbManager.close();
 
-		lv_ = (ListView) findViewById(R.id.listHighscore);
-		lv_.setSelector(R.drawable.item_background);
-		// Instanciating an array list (you don't need to do this, you already
-		// have yours)
-		// This is the array adapter, it takes the context of the activity as a
-		// first
-		// parameter, the type of list view as a second parameter and your array
-		// as a third parameter
+		ListView lv = (ListView) findViewById(R.id.listHighscore);
+		lv.setSelector(R.drawable.item_background);
+
+		//fill the ListView
 		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,
 				R.layout.listview, highScoreList);
-		lv_.setAdapter(arrayAdapter);
+		lv.setAdapter(arrayAdapter);
 
-		lv_.setItemChecked(selector, true);
+		lv.setItemChecked(selector, true);
+	}
+
+	/**
+	 * Retrieves the highscore from the device when called from the main menu.
+	 */
+	private void getHighscores() {
+		getHighscores("", -1, -1);
 	}
 
 	public void onPause() {
