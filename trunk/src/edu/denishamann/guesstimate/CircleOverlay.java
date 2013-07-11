@@ -14,13 +14,16 @@ import android.util.FloatMath;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
+/**
+ * @author PaulB
+ */
 public class CircleOverlay extends Overlay {
 	private GeoPoint geoPosition = new GeoPoint(0, 0);
 
 	private Paint borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 	private Paint innerPaint  = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-	private float     radius;
+	private float   radius;
 	private boolean tappable;
 //	private boolean mustDraw = true;
 
@@ -44,6 +47,8 @@ public class CircleOverlay extends Overlay {
 	@Override
 	public void draw(Canvas c, MapView mapView, boolean shadow) {
 //		if (mustDraw) {
+
+		// computation of the map projection to screen pixels
 		Projection projection = mapView.getProjection();
 		Point p = new Point();
 		projection.toMapPixels(geoPosition, p);
@@ -73,15 +78,6 @@ public class CircleOverlay extends Overlay {
 //			c.drawLine(p.x, p.y - actualRadius, p.x, p.y + actualRadius, borderPaint);
 //		}
 	}
-
-//	@Override
-//	public boolean onTouchEvent(MotionEvent event, MapView mapView) {
-//		if (event.getAction() == MotionEvent.ACTION_MOVE)
-//			mustDraw = false;
-//		else
-//			mustDraw = true;
-//		return super.onTouchEvent(event, mapView);
-//	}
 
 	public void setRadius(int r) {
 		radius = r;
