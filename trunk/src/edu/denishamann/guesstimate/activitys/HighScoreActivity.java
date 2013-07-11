@@ -22,8 +22,6 @@ public class HighScoreActivity extends Activity {
 
 	private static final String TAG = "Highscore";
 
-	private SQLiteDatabase dbConn_;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -69,7 +67,7 @@ public class HighScoreActivity extends Activity {
 	 */
 	private void getHighscores(String playername, int successfulLocations, int difficulty) {
 		SQLiteDatamanager dbManager = new SQLiteDatamanager(this);
-		dbConn_ = dbManager.getReadableDatabase();
+		SQLiteDatabase dbConn_ = dbManager.getReadableDatabase();
 
 		Cursor currentCursor = dbConn_.rawQuery(
 				"SELECT name, score, difficulty FROM highscore ORDER BY score DESC, difficulty DESC;",
@@ -77,12 +75,11 @@ public class HighScoreActivity extends Activity {
 		currentCursor.moveToFirst();
 
 		ArrayList<String> highScoreList = new ArrayList<String>();
-		String tmpHighscore = "";
 		int i = 0;
 		int selector = -1;
 		// get maximum 10 highscores
 		while (!currentCursor.isAfterLast() && i < 9) {
-			tmpHighscore = currentCursor.getString(0) + " - " + currentCursor.getInt(1);
+			String tmpHighscore = currentCursor.getString(0) + " - " + currentCursor.getInt(1);
 			if (currentCursor.getInt(2) == 0) {
 				tmpHighscore = tmpHighscore + " - Easy";
 			} else {
