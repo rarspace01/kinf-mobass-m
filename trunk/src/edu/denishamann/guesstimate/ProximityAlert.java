@@ -13,19 +13,21 @@ import android.widget.Toast;
 import edu.denishamann.guesstimate.activitys.MapActivity;
 import edu.denishamann.guesstimate.model.Game;
 
+/**
+ * @author PaulB
+ */
 public class ProximityAlert extends BroadcastReceiver {
 
 	private static final String TAG = "Proximity Alert";
-	
+
 	private PendingIntent pIntent;
 	private MapActivity   mapActivity;
 	private GeoPoint      proximityPoint;
-
 	private CircleOverlay circleOverlay;
-	
-	private long roundStartWalkTime_;
 
 	private float radius = Game.getInstance().getAlertRadius();
+
+	private long roundStartWalkTime_;
 
 	public ProximityAlert() {
 	}
@@ -33,38 +35,29 @@ public class ProximityAlert extends BroadcastReceiver {
 	public ProximityAlert(MapActivity mActivity) {
 		mapActivity = mActivity;
 
-		pIntent = PendingIntent.getBroadcast(mapActivity.getApplicationContext(), 0, new Intent("edu.denishamann.guesstimate.PROXIMITYALERT"), PendingIntent.FLAG_ONE_SHOT);
-	}
-
-	public ProximityAlert(MapActivity mActivity, GeoPoint pPoint) {
-		mapActivity = mActivity;
-		proximityPoint = pPoint;
-
-		registerReceiver();
-
-		circleOverlay = new CircleOverlay(mapActivity.getApplicationContext(), proximityPoint, radius, 155, true);
-		mapActivity.getMapView().getOverlays().add(circleOverlay);
-
-		this.roundStartWalkTime_= System.currentTimeMillis();
-		
-		Log.i(TAG, "Set up ProximityAlert");
+		pIntent = PendingIntent.getBroadcast(mapActivity.getApplicationContext(), 0,
+				new Intent("edu.denishamann.guesstimate.PROXIMITYALERT"),
+				PendingIntent.FLAG_ONE_SHOT);
 	}
 
 	public void setProximityPoint(GeoPoint pPoint) {
 		proximityPoint = pPoint;
 
+		// redrawn circle overlay
 		if (circleOverlay != null) {
 			mapActivity.getMapView().getOverlays().remove(circleOverlay);
 		}
-
 		circleOverlay = new CircleOverlay(mapActivity, proximityPoint, radius, 155, true);
 		mapActivity.getMapView().getOverlays().add(circleOverlay);
 
+		// reset proximity alert
 		mapActivity.getLocationManager().removeProximityAlert(pIntent);
 		mapActivity.getLocationManager().addProximityAlert(proximityPoint.getLatitudeE6() / 1e6,
 				proximityPoint.getLongitudeE6() / 1e6, radius, -1, pIntent);
-		
-		this.roundStartWalkTime_= System.currentTimeMillis();
+
+		roundStartWalkTime_ = System.currentTimeMillis();
+
+		Log.i(TAG, "set ProximityAlert");
 	}
 
 	public void registerReceiver() {
@@ -86,13 +79,13 @@ public class ProximityAlert extends BroadcastReceiver {
 			Log.i(TAG, "cought application context");
 			if (intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false)) {
 				Log.i(TAG, "Location Approached via Proximity Alert");
-				
-				if((Game.getInstance().getRoundStartWalkTime()+1000)>(this.roundStartWalkTime_)){
+
+				if ((Game.getInstance().getRoundStartWalkTime() + 1000) > roundStartWalkTime_) {
 					mapActivity.getLocationManager().removeProximityAlert(pIntent);
 					Toast.makeText(context, "You are here!", Toast.LENGTH_LONG).show();
 					Game.getInstance().guessedLocationApproached();
 					mapActivity.getNewGuessPoints();
-				}else{
+				} else {
 					Log.i(TAG, "Proximity Alert already handled. Cleaning up...");
 					removeProximityPoint();
 				}
