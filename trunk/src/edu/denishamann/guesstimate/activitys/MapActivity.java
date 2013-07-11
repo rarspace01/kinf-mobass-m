@@ -435,7 +435,10 @@ public class MapActivity extends Activity implements LocationListener,
 	 */
 	public void removeRouteOnMap() {
 		if (routePath != null) {
+			Log.i(TAG, "removing Route");
 			MapActivity.this.mapView.getOverlays().remove(routePath);
+		}else{
+			Log.e(TAG, "Error on removing route");
 		}
 	}
 
@@ -478,6 +481,32 @@ public class MapActivity extends Activity implements LocationListener,
 		}
 	}
 
+	private class DeleteRouteTask extends
+	AsyncTask<Void, Void, List<GeoLocation>> {
+
+		@Override
+		protected List<GeoLocation> doInBackground(Void... params) {
+			long startTastTime=System.currentTimeMillis();
+			int maxTastTime = 60; //max task time in seconds
+			
+			//wait until routePath is filled or Timeout
+			while(routePath == null && startTastTime<System.currentTimeMillis()){
+				try {
+					Thread.sleep(250);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if (routePath != null) {
+				MapActivity.this.mapView.getOverlays().remove(routePath);
+			}
+			
+			return null;
+		}
+
+	}
+	
 	@Override
 	public void onProviderDisabled(String provider) {
 		// TODO Auto-generated method stub
