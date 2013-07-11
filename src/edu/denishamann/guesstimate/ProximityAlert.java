@@ -22,6 +22,8 @@ public class ProximityAlert extends BroadcastReceiver {
 	private GeoPoint      proximityPoint;
 
 	private CircleOverlay circleOverlay;
+	
+	private long roundStartWalkTime_;
 
 	private float radius = Game.getInstance().getAlertRadius();
 
@@ -43,6 +45,8 @@ public class ProximityAlert extends BroadcastReceiver {
 		circleOverlay = new CircleOverlay(mapActivity.getApplicationContext(), proximityPoint, radius, 155, true);
 		mapActivity.getMapView().getOverlays().add(circleOverlay);
 
+		this.roundStartWalkTime_= System.currentTimeMillis();
+		
 		Log.i(TAG, "Set up ProximityAlert");
 	}
 
@@ -59,6 +63,8 @@ public class ProximityAlert extends BroadcastReceiver {
 		mapActivity.getLocationManager().removeProximityAlert(pIntent);
 		mapActivity.getLocationManager().addProximityAlert(proximityPoint.getLatitudeE6() / 1e6,
 				proximityPoint.getLongitudeE6() / 1e6, radius, -1, pIntent);
+		
+		this.roundStartWalkTime_= System.currentTimeMillis();
 	}
 
 	public void registerReceiver() {
@@ -80,10 +86,16 @@ public class ProximityAlert extends BroadcastReceiver {
 			Log.i(TAG, "cought application context");
 			if (intent.getBooleanExtra(LocationManager.KEY_PROXIMITY_ENTERING, false)) {
 				Log.i(TAG, "Location Approached via Proximity Alert");
-				mapActivity.getLocationManager().removeProximityAlert(pIntent);
-				Toast.makeText(context, "You are here!", Toast.LENGTH_LONG).show();
-				Game.getInstance().guessedLocationApproached();
-				mapActivity.getNewGuessPoints();
+				
+				if((Game.getInstance().getRoundStartWalkTime()+1000)>(this.roundStartWalkTime_)){
+					mapActivity.getLocationManager().removeProximityAlert(pIntent);
+					Toast.makeText(context, "You are here!", Toast.LENGTH_LONG).show();
+					Game.getInstance().guessedLocationApproached();
+					mapActivity.getNewGuessPoints();
+				}else{
+					Log.i(TAG, "Proximity Alert already handled. Cleaning up...");
+					removeProximityPoint();
+				}
 			} else {
 				Toast.makeText(context, "Where are you going?", Toast.LENGTH_LONG).show();
 			}

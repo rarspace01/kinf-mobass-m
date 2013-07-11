@@ -32,6 +32,7 @@ public class Game {
 	private String playerName_ = "";
 	private IGuessCollection currentGuessCollection;
 	private SQLiteDatabase   dbConn;
+	private long roundStartWalkTime;
 	private float alertRadius_ = 50; // Distance when location was
 	// successfully approached
 
@@ -77,6 +78,8 @@ public class Game {
 		if (!everyPointHasGuess()) {
 			Log.i(TAG, "not enough guesses");
 			return false;
+		}else{
+			roundStartWalkTime = System.currentTimeMillis();
 		}
 
 		if (USE_CIRCULARLATERATION) {
@@ -119,7 +122,7 @@ public class Game {
 	/**
 	 * evaluates if a given Location is near the calculate Location
 	 * @param currentLocation - as {@link GeoPoint}
-	 * @return {@link boolean} - {@linkplain true} or {@link false} if the givne location is near the calced location
+	 * @return {@link boolean} - {@linkplain true} or {@link false} if the given location is near the calced location
 	 */
 	public boolean isNearGuessedLocation(GeoPoint curLoc) {
 		return isNearGuessedLocation(new GeoLocation(curLoc));
@@ -202,5 +205,10 @@ public class Game {
 	public float getAlertRadius() {
 		return alertRadius_;
 	}
+
+	public long getRoundStartWalkTime() {
+		return roundStartWalkTime;
+	}
+	
 
 }
