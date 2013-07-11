@@ -7,6 +7,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import edu.denishamann.guesstimate.R;
 
+/**
+ * Activity for viewing the About Screen
+ * @author denis
+ *
+ */
 public class AboutActivity extends Activity {
 
 	@Override
