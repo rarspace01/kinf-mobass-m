@@ -434,12 +434,8 @@ public class MapActivity extends Activity implements LocationListener,
 	 * @author denis
 	 */
 	public void removeRouteOnMap() {
-		if (routePath != null) {
-			Log.i(TAG, "removing Route");
-			MapActivity.this.mapView.getOverlays().remove(routePath);
-		}else{
-			Log.e(TAG, "Error on removing route");
-		}
+			Log.i(TAG, "starting delayed Route removal");
+			new RemoveRouteTask().execute();
 	}
 
 	/**
@@ -481,7 +477,12 @@ public class MapActivity extends Activity implements LocationListener,
 		}
 	}
 
-	private class DeleteRouteTask extends
+	/**
+	 * class for a delayed deleting an existing route
+	 * @author denis
+	 *
+	 */
+	private class RemoveRouteTask extends
 	AsyncTask<Void, Void, List<GeoLocation>> {
 
 		@Override
@@ -499,7 +500,9 @@ public class MapActivity extends Activity implements LocationListener,
 				}
 			}
 			if (routePath != null) {
-				MapActivity.this.mapView.getOverlays().remove(routePath);
+				Log.i(TAG+" - BackgroudTask", "ROUTE: removed Route successfully");
+				mapView.getOverlays().remove(routePath);
+				MapActivity.this.mapView.invalidate();
 			}
 			
 			return null;
@@ -553,6 +556,7 @@ public class MapActivity extends Activity implements LocationListener,
 		case R.id.giveUp:
 			countDownTimer.cancel();
 			Game.getInstance().giveUp();
+			proximityAlert.removeProximityPoint();
 			startActivity(new Intent(this, MainActivity.class));
 			break;
 
