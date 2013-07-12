@@ -19,7 +19,6 @@ public class RoutingTests extends ActivityUnitTestCase<MainActivity> {
 
 	public RoutingTests() {
 		super(MainActivity.class);
-		// TODO Auto-generated constructor stub
 	}
 
 	protected void setUp() throws Exception {
