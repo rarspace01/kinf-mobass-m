@@ -6,6 +6,10 @@ public class LocationUtil
 {
 	private static double EARTH_RADIUS = 6367450;
 	
+	/**
+	 * convert a geolocation (long & lat) into a cartesian coordinate
+	 * with 3-dimensional coordinates (X, Y, Z)
+	 */
 	public static Cartesian convertLocationToCarthesian(GeoLocation location)
 	{
 		double latRad = Math.toRadians(location.getLatitude());
@@ -17,6 +21,10 @@ public class LocationUtil
 		return new LocationUtil.Cartesian(x, y, z);
 	}
 	
+	/**
+	 * convert a 3-dimensional coordinate into a geolocation
+	 * (longitude and latitude)
+	 */
 	public static GeoLocation convertCartesianToLocation(Cartesian location)
 	{
 		double lat = Math.asin((location.getZ() / EARTH_RADIUS));
@@ -47,6 +55,11 @@ public class LocationUtil
 	    return Math.abs(dist);
 	    }
 	
+	
+	/**
+	 * Cartesian
+	 * container for a 3-dimensional coordinate
+	 */
 	public static class Cartesian
 	{
 		private Double X, Y, Z;
