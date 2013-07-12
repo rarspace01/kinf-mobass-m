@@ -45,13 +45,13 @@ public class GuessPointTests extends
 
 			// retrieve the 4 nearest locations
 			gpl = guessc
-					.getNearest(new GeoLocation(49.904448, 10.859274), 4, 0);
+					.getRandom(4);
 
-			assertTrue(gpl.size() > 0);
+			assertTrue(gpl.size() == 4);
 
 			for (int j = 0; j < gpl.size(); j++) {
-				assertTrue(gpl.get(i).getDescription_().length() > 0);
-				Log.i("JUNIT", gpl.get(i).getDescription_());
+				assertTrue(gpl.get(j).getDescription_().length() > 0);
+				Log.i("JUNIT", gpl.get(j).getDescription_());
 			}
 
 		}
