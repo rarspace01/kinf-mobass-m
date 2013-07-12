@@ -59,24 +59,23 @@ public class MapActivity extends Activity implements LocationListener,
 
 	private static final String TAG = "Map";
 
-	private MapController   mapController;
-	private MapView         mapView;
+	private MapController mapController;
+	private MapView mapView;
 	private LocationManager locationManager;
 
 	private GeoPoint curLoc;
 
 	private ProximityAlert proximityAlert;
 
-	private MyItemizedOverlay   itemizedOverlay;
-	private OverlayItem         curLocItem;
+	private MyItemizedOverlay itemizedOverlay;
+	private OverlayItem curLocItem;
 	private List<CircleOverlay> circleOverlays;
-	private PathOverlay         routePath;
+	private PathOverlay routePath;
 
 	private List<GuessPoint> guessPoints;
-	private CountDownTimer   countDownTimer;
+	private CountDownTimer countDownTimer;
 
 	private boolean hasStarted = false;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,8 +110,9 @@ public class MapActivity extends Activity implements LocationListener,
 
 		Location loc = locationManager.getLastKnownLocation(provider);
 		if (loc != null) {
-			Log.i(TAG, "Current Location: " + loc.getLatitude() + " - "
-					+ loc.getLongitude());
+			Log.i(TAG,
+					"Current Location: " + loc.getLatitude() + " - "
+							+ loc.getLongitude());
 			curLoc = new GeoPoint(loc.getLatitude(), loc.getLongitude());
 		} else {
 			Log.i(TAG, "Loc == null, using default value");
@@ -121,15 +121,18 @@ public class MapActivity extends Activity implements LocationListener,
 
 		guessPoints = Game.getInstance().getLocationsToBeGuessed();
 
-		ResourceProxy mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
+		ResourceProxy mResourceProxy = new DefaultResourceProxyImpl(
+				getApplicationContext());
 
 		itemizedOverlay = new MyItemizedOverlay(new ArrayList<OverlayItem>(),
 				new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
 					@Override
 					public boolean onItemSingleTapUp(final int index,
-													 final OverlayItem item) {
-						// locations that were already guessed have a empty title so on show a Toast
-						// locations that are yet to be guessed have a empty description so open
+							final OverlayItem item) {
+						// locations that were already guessed have a empty
+						// title so on show a Toast
+						// locations that are yet to be guessed have a empty
+						// description so open
 						// a input dialog for the guess
 						if (item.mTitle.isEmpty()) {
 							Toast.makeText(MapActivity.this, item.mDescription,
@@ -146,7 +149,7 @@ public class MapActivity extends Activity implements LocationListener,
 
 					@Override
 					public boolean onItemLongPress(final int index,
-												   final OverlayItem item) {
+							final OverlayItem item) {
 						if (item.mTitle.isEmpty()) {
 							Toast.makeText(MapActivity.this, item.mDescription,
 									Toast.LENGTH_LONG).show();
@@ -162,36 +165,44 @@ public class MapActivity extends Activity implements LocationListener,
 				}, mResourceProxy);
 
 		if (Game.getInstance().getDifficulty() == 0) {
-			// if the game is played on easy (difficulty = 0) add every point that has to be guessed
+			// if the game is played on easy (difficulty = 0) add every point
+			// that has to be guessed
 			// to the map
 			for (GuessPoint gp : guessPoints) {
-				OverlayItem guessItem = new OverlayItem(gp.getDescription_(), "",
-						gp.getLocation_().toGeoPoint());
+				OverlayItem guessItem = new OverlayItem(gp.getDescription_(),
+						"", gp.getLocation_().toGeoPoint());
 				itemizedOverlay.addItem(guessItem);
 			}
 		} else if (Game.getInstance().getDifficulty() == 1) {
-			// if the game is played on easy (difficulty = 0) add every point that were guessed
-			// before to the map and also add a circle with the guessed distance to this point
+			// if the game is played on easy (difficulty = 0) add every point
+			// that were guessed
+			// before to the map and also add a circle with the guessed distance
+			// to this point
 			for (GuessPoint gp : guessPoints) {
-				OverlayItem guessItem = new OverlayItem("", gp.getDescription_(),
-						gp.getLocation_().toGeoPoint());
+				OverlayItem guessItem = new OverlayItem("",
+						gp.getDescription_(), gp.getLocation_().toGeoPoint());
 				itemizedOverlay.addItem(guessItem);
-				CircleOverlay circleOverlay = new CircleOverlay(this, gp.getLocation_().toGeoPoint(),
+				CircleOverlay circleOverlay = new CircleOverlay(this, gp
+						.getLocation_().toGeoPoint(),
 						(int) gp.getGuessDistance_(), 55, false);
 				circleOverlays.add(circleOverlay);
 			}
 			mapView.getOverlays().addAll(circleOverlays);
 
-			proximityAlert.setProximityPoint(Game.getInstance().getCalculatedLocation().toGeoPoint());
+			proximityAlert.setProximityPoint(Game.getInstance()
+					.getCalculatedLocation().toGeoPoint(), Game.getInstance()
+					.getLastHash());
 
-			drawRouteOnMap(new Route(new GeoLocation(curLoc),
-					Game.getInstance().getCalculatedLocation()));
+			drawRouteOnMap(new Route(new GeoLocation(curLoc), Game
+					.getInstance().getCalculatedLocation()));
 		}
 
-		// add a overlay for the current position of the player with a custom marker
+		// add a overlay for the current position of the player with a custom
+		// marker
 		Drawable newMarker = getResources().getDrawable(R.drawable.curloc);
 		newMarker.setAlpha(155);
-		curLocItem = new OverlayItem("Your current location", "Current Location", curLoc);
+		curLocItem = new OverlayItem("Your current location",
+				"Current Location", curLoc);
 		curLocItem.setMarker(newMarker);
 		curLocItem.setMarkerHotspot(HotspotPlace.CENTER);
 		itemizedOverlay.addItem(curLocItem);
@@ -205,17 +216,20 @@ public class MapActivity extends Activity implements LocationListener,
 
 			public void onTick(long millisUntilFinished) {
 				TextView timer = (TextView) findViewById(R.id.timer);
-				String time = String.format(Locale.GERMANY, "%02d",
-						((int) (Game.getInstance().getTimeLeft() / (1000 * 60))));
+				String time = String
+						.format(Locale.GERMANY, "%02d", ((int) (Game
+								.getInstance().getTimeLeft() / (1000 * 60))));
 				time += ":";
-				time += String.format("%02d", (Game.getInstance().getTimeLeft() / 1000) % 60);
+				time += String.format("%02d",
+						(Game.getInstance().getTimeLeft() / 1000) % 60);
 				timer.setText("" + time);
 			}
 
 			public void onFinish() {
 				// when the time is up end the game and show the highscores
 				Game.getInstance().gameEnded(getApplicationContext());
-				Intent intent = new Intent(MapActivity.this, HighScoreActivity.class);
+				Intent intent = new Intent(MapActivity.this,
+						HighScoreActivity.class);
 				intent.putExtra("gameEnded", true);
 				startActivity(intent);
 			}
@@ -223,7 +237,8 @@ public class MapActivity extends Activity implements LocationListener,
 		countDownTimer.start();
 
 		// register the proximity alert
-		registerReceiver(proximityAlert, new IntentFilter("edu.denishamann.guesstimate.PROXIMITYALERT"));
+		registerReceiver(proximityAlert, new IntentFilter(
+				"edu.denishamann.guesstimate.PROXIMITYALERT"));
 	}
 
 	public void getNewGuessPoints() {
@@ -267,8 +282,9 @@ public class MapActivity extends Activity implements LocationListener,
 		curLoc.setCoordsE6(lat, lng);
 
 		if (Game.getInstance().getCalculatedLocation() != null) {
-			if (Game.getInstance().isNearGuessedLocation(new GeoLocation(location.getLatitude(),
-					location.getLongitude()))) {
+			if (Game.getInstance().isNearGuessedLocation(
+					new GeoLocation(location.getLatitude(), location
+							.getLongitude()))) {
 				Log.i(TAG, "Location approached via onLocationChanged");
 				proximityAlert.removeProximityPoint();
 				Game.getInstance().guessedLocationApproached();
@@ -289,8 +305,8 @@ public class MapActivity extends Activity implements LocationListener,
 	}
 
 	/**
-	 * Tries to show all points that have to be guessed on the map view
-	 * (does not work 100% because the function zoomToSpan() does not work properly)
+	 * Tries to show all points that have to be guessed on the map view (does
+	 * not work 100% because the function zoomToSpan() does not work properly)
 	 */
 	private void showAllPointsAndCurrentLocationOnMap() {
 		int tmpLongitude = 0;
@@ -326,7 +342,8 @@ public class MapActivity extends Activity implements LocationListener,
 
 		int spanLat = maxLat - minLat;
 		int spanLng = maxLng - minLng;
-		mapController.setCenter(new GeoPoint(tmpLatitude / 5, tmpLongitude / 5));
+		mapController
+				.setCenter(new GeoPoint(tmpLatitude / 5, tmpLongitude / 5));
 		mapController.zoomToSpan(spanLat, spanLng);
 	}
 
@@ -336,7 +353,8 @@ public class MapActivity extends Activity implements LocationListener,
 
 		// tries to show all points when the map view is called
 		// this is only called once after the onCreate() method was finished
-		// because calling zoomToSpan() in the onCreate() method will cause the app to crash
+		// because calling zoomToSpan() in the onCreate() method will cause the
+		// app to crash
 		if (hasFocus && !hasStarted) {
 			showAllPointsAndCurrentLocationOnMap();
 			hasStarted = true;
@@ -353,12 +371,14 @@ public class MapActivity extends Activity implements LocationListener,
 
 	/**
 	 * Creates input dialog for a guess on tap on a marker.
-	 *
-	 * @param gp The tapped guess point
+	 * 
+	 * @param gp
+	 *            The tapped guess point
 	 */
 	private void inputDialog(final GuessPoint gp) {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle("Please enter the guessed distance to " + gp.getDescription_());
+		alert.setTitle("Please enter the guessed distance [m] to "
+				+ gp.getDescription_());
 
 		final EditText input = new EditText(this);
 		input.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -370,45 +390,54 @@ public class MapActivity extends Activity implements LocationListener,
 				if (input.getText().toString().isEmpty()) {
 					gp.setGuessDistance_(0);
 				} else {
-					gp.setGuessDistance_(Double.valueOf(input.getText().toString()));
+					gp.setGuessDistance_(Double.valueOf(input.getText()
+							.toString()));
 				}
 
 				itemizedOverlay.removeOverlayByTitle(gp.getDescription_());
-				itemizedOverlay.addItem(new OverlayItem("", gp.getDescription_(),
-						gp.getLocation_().toGeoPoint()));
+				itemizedOverlay.addItem(new OverlayItem("", gp
+						.getDescription_(), gp.getLocation_().toGeoPoint()));
 
-				// if the game has successfully calculated a location the player has to go to
+				// if the player has entered enough guesses for computation
 				if (Game.getInstance().evaluateGuesses()) {
-					GeoLocation loc = Game.getInstance().getCalculatedLocation();
+					GeoLocation loc = Game.getInstance()
+							.getCalculatedLocation();
 					// if the player already is at this location
 					if (Game.getInstance().isNearGuessedLocation(curLoc)) {
-						Toast.makeText(MapActivity.this, "Great guess!", Toast.LENGTH_LONG).show();
+						Toast.makeText(MapActivity.this, "Great guess!",
+								Toast.LENGTH_LONG).show();
 						Game.getInstance().guessedLocationApproached();
 						getNewGuessPoints();
-						return;
+					} else {
+
+						proximityAlert.setProximityPoint(loc.toGeoPoint(), Game.getInstance().getLastHash());
+
+						drawRouteOnMap(new Route(new GeoLocation(curLoc), loc));
+
+						Log.i(TAG, "proxpoint: " + loc + "|" + loc);
+
+						for (GuessPoint gp : guessPoints) {
+							CircleOverlay circleOverlay = new CircleOverlay(
+									MapActivity.this, gp.getLocation_()
+											.toGeoPoint(), (int) gp
+											.getGuessDistance_(), 55, false);
+							circleOverlays.add(circleOverlay);
+						}
+						mapView.getOverlays().addAll(circleOverlays);
+
+						// try to show the current position and the goal
+						// location on the map view
+						mapController.zoomToSpan(
+								Math.abs(curLoc.getLatitudeE6()
+										- loc.toGeoPoint().getLatitudeE6()),
+								Math.abs(curLoc.getLongitudeE6()
+										- loc.toGeoPoint().getLongitudeE6()));
+						mapController.animateTo(new GeoPoint((curLoc
+								.getLatitudeE6() + loc.toGeoPoint()
+								.getLatitudeE6()) / 2,
+								(curLoc.getLongitudeE6() + loc.toGeoPoint()
+										.getLongitudeE6()) / 2));
 					}
-
-					proximityAlert.setProximityPoint(loc.toGeoPoint());
-
-					drawRouteOnMap(new Route(new GeoLocation(curLoc), loc));
-
-					Log.i(TAG, "proxpoint: " + loc + "|" + loc);
-
-					for (GuessPoint gp : guessPoints) {
-						CircleOverlay circleOverlay = new CircleOverlay(MapActivity.this,
-								gp.getLocation_().toGeoPoint(),
-								(int) gp.getGuessDistance_(), 55, false);
-						circleOverlays.add(circleOverlay);
-					}
-					mapView.getOverlays().addAll(circleOverlays);
-
-					// try to show the current position and the goal location on the map view
-					mapController.zoomToSpan(Math.abs(curLoc.getLatitudeE6()
-							- loc.toGeoPoint().getLatitudeE6()), Math.abs(curLoc.getLongitudeE6()
-							- loc.toGeoPoint().getLongitudeE6()));
-					mapController.animateTo(new GeoPoint((curLoc.getLatitudeE6() +
-							loc.toGeoPoint().getLatitudeE6()) / 2,
-							(curLoc.getLongitudeE6() + loc.toGeoPoint().getLongitudeE6()) / 2));
 				}
 			}
 		});
@@ -422,8 +451,9 @@ public class MapActivity extends Activity implements LocationListener,
 	/**
 	 * Draws the route on the current map. Uses a background task to offload
 	 * heavy task from the main UI thread.
-	 *
-	 * @param route {@link Route} - Route to be drawn
+	 * 
+	 * @param route
+	 *            {@link Route} - Route to be drawn
 	 */
 	public void drawRouteOnMap(IRoute route) {
 		new RetrieveRouteTask().execute(route);
@@ -440,7 +470,7 @@ public class MapActivity extends Activity implements LocationListener,
 	/**
 	 * Inner class for handling the route retrieval task which takes to long to
 	 * handle in the main UI thread.
-	 *
+	 * 
 	 * @author denis
 	 */
 	private class RetrieveRouteTask extends
@@ -460,7 +490,8 @@ public class MapActivity extends Activity implements LocationListener,
 			if (route != null) {
 				routePath = new PathOverlay(Color.RED, MapActivity.this);
 				for (GeoLocation aRoute : route) {
-					routePath.addPoint(new GeoPoint(aRoute.getLatitude(), aRoute.getLongitude()));
+					routePath.addPoint(new GeoPoint(aRoute.getLatitude(),
+							aRoute.getLongitude()));
 				}
 				MapActivity.this.mapView.getOverlays().add(routePath);
 			}
@@ -479,8 +510,9 @@ public class MapActivity extends Activity implements LocationListener,
 		protected List<GeoLocation> doInBackground(Void... params) {
 			long startTastTime = System.currentTimeMillis();
 
-			//wait until routePath is filled or Timeout
-			while (routePath == null && startTastTime < System.currentTimeMillis()) {
+			// wait until routePath is filled or Timeout
+			while (routePath == null
+					&& startTastTime < System.currentTimeMillis()) {
 				try {
 					Thread.sleep(250);
 				} catch (InterruptedException e) {
@@ -489,7 +521,8 @@ public class MapActivity extends Activity implements LocationListener,
 				}
 			}
 			if (routePath != null) {
-				Log.i(TAG + " - BackgroudTask", "ROUTE: removed Route successfully");
+				Log.i(TAG + " - BackgroudTask",
+						"ROUTE: removed Route successfully");
 				mapView.getOverlays().remove(routePath);
 				MapActivity.this.mapView.invalidate();
 			}
@@ -533,18 +566,18 @@ public class MapActivity extends Activity implements LocationListener,
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.showAll:
-				showAllPointsAndCurrentLocationOnMap();
-				break;
-			case R.id.giveUp:
-				countDownTimer.cancel();
-				Game.getInstance().giveUp();
-				proximityAlert.removeProximityPoint();
-				startActivity(new Intent(this, MainActivity.class));
-				break;
+		case R.id.showAll:
+			showAllPointsAndCurrentLocationOnMap();
+			break;
+		case R.id.giveUp:
+			countDownTimer.cancel();
+			Game.getInstance().giveUp();
+			proximityAlert.removeProximityPoint();
+			startActivity(new Intent(this, MainActivity.class));
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 
 		return super.onOptionsItemSelected(item);
