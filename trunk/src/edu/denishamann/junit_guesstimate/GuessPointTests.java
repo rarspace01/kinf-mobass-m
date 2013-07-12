@@ -11,6 +11,12 @@ import edu.denishamann.guesstimate.database.IGuessCollection;
 import edu.denishamann.guesstimate.model.GeoLocation;
 import edu.denishamann.guesstimate.model.GuessPoint;
 
+/**
+ * class for testing the getNearestAlgorithm
+ * 
+ * @author denis
+ * 
+ */
 public class GuessPointTests extends
 		ActivityInstrumentationTestCase2<MainActivity> {
 
@@ -22,45 +28,32 @@ public class GuessPointTests extends
 		super.setUp();
 	}
 
-	public void testGuessPoints() {
+	/**
+	 * test method testGetNearestGuessPoints
+	 */
+	public void testGetNearestGuessPoints() {
 
 		IGuessCollection guessc = new GuessCollection();
 
 		List<GuessPoint> gpl = new LinkedList<GuessPoint>();
 
-		Log.i("GM","try1");
+		// getting try 4 retrievals, which will empty the temp List of the guess
+		// collection
+		for (int i = 0; i < 4; i++) {
 
-		gpl = guessc.getNearest(new GeoLocation(49.904448, 10.859274), 4, 0);
+			Log.i("JUNIT", "try" + (i + 1));
 
-		for (int i = 0; i < gpl.size(); i++) {
-			Log.i("GM",gpl.get(i).getDescription_());
-		}
+			// retrieve the 4 nearest locations
+			gpl = guessc
+					.getNearest(new GeoLocation(49.904448, 10.859274), 4, 0);
 
-		// new
-		Log.i("GM","try2");
+			assertTrue(gpl.size() > 0);
 
-		gpl = guessc.getNearest(new GeoLocation(49.904448, 10.859274), 4, 0);
+			for (int j = 0; j < gpl.size(); j++) {
+				assertTrue(gpl.get(i).getDescription_().length() > 0);
+				Log.i("JUNIT", gpl.get(i).getDescription_());
+			}
 
-		for (int i = 0; i < gpl.size(); i++) {
-			Log.i("GM",gpl.get(i).getDescription_());
-		}
-
-		// new
-		Log.i("GM","try3");
-
-		gpl = guessc.getNearest(new GeoLocation(49.904448, 10.859274), 4, 0);
-
-		for (int i = 0; i < gpl.size(); i++) {
-			Log.i("GM",gpl.get(i).getDescription_());
-		}
-
-		// new
-		Log.i("GM","try4");
-
-		gpl = guessc.getNearest(new GeoLocation(49.904448, 10.859274), 4, 0);
-
-		for (int i = 0; i < gpl.size(); i++) {
-			Log.i("GM",gpl.get(i).getDescription_());
 		}
 
 	}
