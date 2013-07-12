@@ -14,6 +14,7 @@ import edu.denishamann.guesstimate.database.SQLiteDatamanager;
 import edu.denishamann.guesstimate.lateration.CircularLateration;
 import edu.denishamann.guesstimate.lateration.LocationUtil;
 import edu.denishamann.guesstimate.lateration.PseudoLateration;
+import edu.denishamann.io.HashUtil;
 
 /**
  * Class for managing the game states.
@@ -32,7 +33,7 @@ public class Game {
 	private String playerName_ = "";
 	private IGuessCollection currentGuessCollection;
 	private SQLiteDatabase   dbConn;
-	private long roundStartWalkTime;
+	private String lastHash_="";
 	private float alertRadius_ = 50; // Distance when location was
 	// successfully approached
 
@@ -79,7 +80,7 @@ public class Game {
 			Log.i(TAG, "not enough guesses");
 			return false;
 		}else{
-			roundStartWalkTime = System.currentTimeMillis();
+			lastHash_ = HashUtil.sha1(""+System.currentTimeMillis());
 		}
 
 		if (USE_CIRCULARLATERATION) {
@@ -206,8 +207,8 @@ public class Game {
 		return alertRadius_;
 	}
 
-	public long getRoundStartWalkTime() {
-		return roundStartWalkTime;
+	public String getLastHash() {
+		return lastHash_;
 	}
 	
 
