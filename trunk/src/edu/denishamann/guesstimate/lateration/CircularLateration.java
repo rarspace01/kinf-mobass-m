@@ -20,20 +20,21 @@ public class CircularLateration implements ILateration {
 	private int    MAXITERATIONS = 500;
 
 	private List<GuessPoint> locations;			/* locations of the objects */
-	//private Cartesian			ownCoordinates; 	/* own location in cartesian */
+	private Cartesian currentEstimation;		/* current best estimation */
 
-	private Cartesian currentEstimation;	/* current best estimation */
-
+	/**
+	 * calculates the circular lateration for a list of guessed points
+	 */
 	public GeoLocation getLateration(List<GuessPoint> guessPoints) {
 		this.locations = guessPoints;
-		this.currentEstimation = new Cartesian(0.0, 0.0, 0.0); // our first approximation, centre of earth
-		// TODO: get maybe a better estimation? -> use arethemtic AVG?
-
-		//setting Estimation on the first Guesspoint for faster interations
+		
+		// will contain the current best estimation
+		this.currentEstimation = new Cartesian(0.0, 0.0, 0.0);
 		if (guessPoints.size() > 0) {
-
+			
+			// iterate over all points and get arithmetic mean value
 			for (GuessPoint currentGP : guessPoints) {
-
+				
 				Cartesian newDelta = LocationUtil.convertLocationToCarthesian(currentGP.getLocation_());
 				this.currentEstimation.addDelta(newDelta);
 			}
@@ -118,19 +119,14 @@ public class CircularLateration implements ILateration {
 	}
 
 	/**
-	 * calculates the Pythagoras pseudo-range
+	 * calculates the (haversine) distance between two points on the surface
+	 * of a sphere
 	 *
 	 * @param baseStation - position of the base-station / object
 	 * @param terminal    - own position
-	 * @return                - Pythagoras distance
+	 * @return                - distance from haversine formula
 	 */
 	private double pseudoRange(Cartesian baseStation, Cartesian terminal) {
-		/*return Math.sqrt(
-				Math.pow((baseStation.getX() - terminal.getX()), 2) +
-						Math.pow((baseStation.getY() - terminal.getY()), 2) +
-						Math.pow((baseStation.getZ() - terminal.getZ()), 2)
-		);*/
-		
 		return LocationUtil.distance(
 				LocationUtil.convertCartesianToLocation(baseStation),
 				LocationUtil.convertCartesianToLocation(terminal)
