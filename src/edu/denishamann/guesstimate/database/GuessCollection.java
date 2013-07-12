@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import edu.denishamann.guesstimate.lateration.LocationUtil;
 import edu.denishamann.guesstimate.model.GeoLocation;
 import edu.denishamann.guesstimate.model.GuessPoint;
 
@@ -73,61 +72,62 @@ public class GuessCollection implements IGuessCollection {
 		guessPointListBase.add(guessPoint);
 	}
 
-	@Override
-	public List<GuessPoint> getNearest(GeoLocation searchLocation,
-									   int numberOfPoints, int offset) {
-
-		if (guessPointList.size() < numberOfPoints) {
-			guessPointList.clear();
-			guessPointList.addAll(getAll());
-		}
-
-		// List<GuessPoint> gpl=new LinkedList<GuessPoint>();
-
-		List<GuessPoint> gplTop = new LinkedList<GuessPoint>();
-
-		double distance = 0.0;
-		double maxDistance = 0.0;
-
-		// measure distance for everyone
-
-		for (int i = 0; i < guessPointList.size(); i++) {
-
-			distance = LocationUtil.distance(searchLocation, guessPointList
-					.get(i).getLocation_());
-			if (distance > maxDistance) {
-				maxDistance = distance;
-			}
-			guessPointList.get(i).setGuessCalcedDistance_(distance);
-		}
-
-		// ranksort
-
-		int foundGuessPoints = 0;
-		double minDistance = maxDistance;
-
-		while (foundGuessPoints < numberOfPoints) {
-			minDistance = maxDistance;
-			// getMin Distance
-			for (int i = 0; i < guessPointList.size(); i++) {
-				if (guessPointList.get(i).getGuessCalcedDistance_() < minDistance) {
-					minDistance = guessPointList.get(i)
-							.getGuessCalcedDistance_();
-				}
-			}
-			// retrieve Guesspoint with min Distance
-			for (int i = 0; i < guessPointList.size(); i++) {
-				if (guessPointList.get(i).getGuessCalcedDistance_() == minDistance) {
-					gplTop.add(guessPointList.get(i));
-					guessPointList.remove(i);
-					break;
-				}
-			}
-			// transfer guesspoint with min distance
-			foundGuessPoints++;
-		}
-		return gplTop;
-	}
+//	//code disabled because of switching to random mode
+//	@Override
+//	public List<GuessPoint> getNearest(GeoLocation searchLocation,
+//									   int numberOfPoints, int offset) {
+//
+//		if (guessPointList.size() < numberOfPoints) {
+//			guessPointList.clear();
+//			guessPointList.addAll(getAll());
+//		}
+//
+//		// List<GuessPoint> gpl=new LinkedList<GuessPoint>();
+//
+//		List<GuessPoint> gplTop = new LinkedList<GuessPoint>();
+//
+//		double distance = 0.0;
+//		double maxDistance = 0.0;
+//
+//		// measure distance for everyone
+//
+//		for (int i = 0; i < guessPointList.size(); i++) {
+//
+//			distance = LocationUtil.distance(searchLocation, guessPointList
+//					.get(i).getLocation_());
+//			if (distance > maxDistance) {
+//				maxDistance = distance;
+//			}
+//			guessPointList.get(i).setGuessCalcedDistance_(distance);
+//		}
+//
+//		// ranksort
+//
+//		int foundGuessPoints = 0;
+//		double minDistance = maxDistance;
+//
+//		while (foundGuessPoints < numberOfPoints) {
+//			minDistance = maxDistance;
+//			// getMin Distance
+//			for (int i = 0; i < guessPointList.size(); i++) {
+//				if (guessPointList.get(i).getGuessCalcedDistance_() < minDistance) {
+//					minDistance = guessPointList.get(i)
+//							.getGuessCalcedDistance_();
+//				}
+//			}
+//			// retrieve Guesspoint with min Distance
+//			for (int i = 0; i < guessPointList.size(); i++) {
+//				if (guessPointList.get(i).getGuessCalcedDistance_() == minDistance) {
+//					gplTop.add(guessPointList.get(i));
+//					guessPointList.remove(i);
+//					break;
+//				}
+//			}
+//			// transfer guesspoint with min distance
+//			foundGuessPoints++;
+//		}
+//		return gplTop;
+//	}
 
 	@Override
 	public List<GuessPoint> getRandom(int numberOfPoints) {

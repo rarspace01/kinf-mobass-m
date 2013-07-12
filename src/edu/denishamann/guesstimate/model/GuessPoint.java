@@ -1,11 +1,18 @@
 package edu.denishamann.guesstimate.model;
 
+/**
+ * class which represents the guess point. it's used for holding the location of
+ * a point to be guessed as well as the description and guessed distance
+ * 
+ * @author denis
+ * 
+ */
 public class GuessPoint {
 
 	private GeoLocation location_;
-	private String      description_;
-	private double      guessDistance_;
-	private double      guessCalcedDistance_;
+	private String description_;
+	private double guessDistance_;
+	// private double guessCalcedDistance_;
 	private boolean hasBeenGuessed = false;
 
 	public GuessPoint(GuessPoint gp) {
@@ -43,14 +50,13 @@ public class GuessPoint {
 		hasBeenGuessed = true;
 	}
 
-	public double getGuessCalcedDistance_() {
-		return guessCalcedDistance_;
-	}
-
-	public void setGuessCalcedDistance_(double guessCalcDistance_) {
-		this.guessCalcedDistance_ = guessCalcDistance_;
-	}
-
+	// public double getGuessCalcedDistance_() {
+	// return guessCalcedDistance_;
+	// }
+	//
+	// public void setGuessCalcedDistance_(double guessCalcDistance_) {
+	// this.guessCalcedDistance_ = guessCalcDistance_;
+	// }
 
 	public boolean hasBeenGuessed() {
 		return hasBeenGuessed;

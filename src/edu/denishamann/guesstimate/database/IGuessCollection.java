@@ -21,15 +21,15 @@ public interface IGuessCollection {
 	 */
 	public List<GuessPoint> getAll();
 
-	/**
-	 * retrieves the n. nearest locations, has the possibility to work with an offset
-	 *
-	 * @param searchLocation
-	 * @param numberOfPoints
-	 * @param offset
-	 * @return
-	 */
-	public List<GuessPoint> getNearest(GeoLocation searchLocation, int numberOfPoints, int offset);
+//	/**
+//	 * retrieves the n. nearest locations, has the possibility to work with an offset
+//	 *
+//	 * @param searchLocation
+//	 * @param numberOfPoints
+//	 * @param offset
+//	 * @return
+//	 */
+//	public List<GuessPoint> getNearest(GeoLocation searchLocation, int numberOfPoints, int offset);
 
 	public List<GuessPoint> getRandom(int numberOfPoints);
 
