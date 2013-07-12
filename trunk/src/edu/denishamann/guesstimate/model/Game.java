@@ -66,13 +66,13 @@ public class Game {
 		return pointsToGuess;
 	}
 
-	public List<GuessPoint> getLocationsToBeGuessed(GeoLocation currentLocation) {
-		if (pointsToGuess == null) {
-			pointsToGuess = currentGuessCollection.getNearest(currentLocation,
-					4, 0);
-		}
-		return pointsToGuess;
-	}
+//	public List<GuessPoint> getLocationsToBeGuessed(GeoLocation currentLocation) {
+//		if (pointsToGuess == null) {
+//			pointsToGuess = currentGuessCollection.getNearest(currentLocation,
+//					4, 0);
+//		}
+//		return pointsToGuess;
+//	}
 
 	public boolean evaluateGuesses() {
 		if (!everyPointHasGuess()) {
