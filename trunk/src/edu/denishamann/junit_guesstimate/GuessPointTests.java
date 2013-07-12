@@ -8,7 +8,6 @@ import android.util.Log;
 import edu.denishamann.guesstimate.activitys.MainActivity;
 import edu.denishamann.guesstimate.database.GuessCollection;
 import edu.denishamann.guesstimate.database.IGuessCollection;
-import edu.denishamann.guesstimate.model.GeoLocation;
 import edu.denishamann.guesstimate.model.GuessPoint;
 
 /**
