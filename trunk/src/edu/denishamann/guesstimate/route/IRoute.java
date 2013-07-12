@@ -12,7 +12,7 @@ import edu.denishamann.guesstimate.model.GeoLocation;
 public interface IRoute {
 
 	/**
-	 * Return the Route. If no Route could be retrived it's {@link null}
+	 * Return the Route. If no Route could be retrieved it's {@link null}
 	 * 
 	 * @return {@link List}<{@link GeoLocation}> - The Route represented as
 	 *         GeoLocations

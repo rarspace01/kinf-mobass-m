@@ -2,10 +2,19 @@ package edu.denishamann.guesstimate.model;
 
 import org.osmdroid.util.GeoPoint;
 
+/**
+ * a analog implementation of the {@link GeoPoint}, but reduced to our usecase.
+ * Needed for osmdroid independent Testing outside of the android framework.
+ * Basic idea is to have a higher modularity and being less depending on
+ * osmdroid.
+ * 
+ * @author denis
+ * 
+ */
 public class GeoLocation {
 
-	private double	longitude_;
-	private double	latitude_;
+	private double longitude_;
+	private double latitude_;
 
 	public GeoLocation(double latitude, double longitude) {
 		this.longitude_ = longitude;

@@ -13,7 +13,7 @@ public class GuessPoint {
 	private String description_;
 	private double guessDistance_;
 	// private double guessCalcedDistance_;
-	private boolean hasBeenGuessed = false;
+	private boolean hasBeenGuessed_ = false;
 
 	public GuessPoint(GuessPoint gp) {
 		location_ = gp.getLocation_();
@@ -47,7 +47,7 @@ public class GuessPoint {
 
 	public void setGuessDistance_(double guessDistance_) {
 		this.guessDistance_ = guessDistance_;
-		hasBeenGuessed = true;
+		hasBeenGuessed_ = true;
 	}
 
 	// public double getGuessCalcedDistance_() {
@@ -59,6 +59,6 @@ public class GuessPoint {
 	// }
 
 	public boolean hasBeenGuessed() {
-		return hasBeenGuessed;
+		return hasBeenGuessed_;
 	}
 }
