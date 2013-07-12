@@ -410,7 +410,8 @@ public class MapActivity extends Activity implements LocationListener,
 						getNewGuessPoints();
 					} else {
 
-						proximityAlert.setProximityPoint(loc.toGeoPoint(), Game.getInstance().getLastHash());
+						proximityAlert.setProximityPoint(loc.toGeoPoint(), Game
+								.getInstance().getLastHash());
 
 						drawRouteOnMap(new Route(new GeoLocation(curLoc), loc));
 
@@ -501,18 +502,20 @@ public class MapActivity extends Activity implements LocationListener,
 	}
 
 	/**
-	 * Class for a delayed deleting of an existing route.
+	 * InnerClass for a delayed deleting of an existing route.
+	 * 
+	 * @author denis
 	 */
 	private class RemoveRouteTask extends
 			AsyncTask<Void, Void, List<GeoLocation>> {
 
 		@Override
 		protected List<GeoLocation> doInBackground(Void... params) {
-			long startTastTime = System.currentTimeMillis();
+			long startTaskTime = System.currentTimeMillis();
 
 			// wait until routePath is filled or Timeout
 			while (routePath == null
-					&& startTastTime < System.currentTimeMillis()) {
+					&& (startTaskTime + 60 * 1000) > System.currentTimeMillis()) {
 				try {
 					Thread.sleep(250);
 				} catch (InterruptedException e) {

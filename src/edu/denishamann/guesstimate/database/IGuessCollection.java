@@ -2,7 +2,6 @@ package edu.denishamann.guesstimate.database;
 
 import java.util.List;
 
-import edu.denishamann.guesstimate.model.GeoLocation;
 import edu.denishamann.guesstimate.model.GuessPoint;
 
 /**
@@ -31,6 +30,11 @@ public interface IGuessCollection {
 //	 */
 //	public List<GuessPoint> getNearest(GeoLocation searchLocation, int numberOfPoints, int offset);
 
+	/**
+	 * retrieves a given amount of guesspoints from the collection
+	 * @param numberOfPoints
+	 * @return {@link List}<{@link GuessPoint}> - the random points
+	 */
 	public List<GuessPoint> getRandom(int numberOfPoints);
 
 	/**

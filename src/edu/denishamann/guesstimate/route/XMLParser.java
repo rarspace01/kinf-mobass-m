@@ -16,6 +16,13 @@ import org.xml.sax.SAXException;
 
 import android.util.Log;
 
+/**
+ * 
+ * class for DOM management.<br/>
+ * code copied from: <a href="http://stackoverflow.com/questions/17421506/how-to-parse-same-name-tag-in-android-xml-dom-parsing">http://stackoverflow.com/questions/17421506/how-to-parse-same-name-tag-in-android-xml-dom-parsing</a>
+ * @author denis
+ *
+ */
 public class XMLParser {
 	
 	private static final String TAG="XMLParser";

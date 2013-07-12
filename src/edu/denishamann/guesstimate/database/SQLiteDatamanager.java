@@ -5,6 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * class for SQLite management
+ * @author denis
+ *
+ */
 public class SQLiteDatamanager extends SQLiteOpenHelper{
 
 	private static final int DBVERSION = 2;
@@ -12,7 +17,7 @@ public class SQLiteDatamanager extends SQLiteOpenHelper{
 	public SQLiteDatamanager(Context context) { 
 	      super(context, "guesstimate.db", null, DBVERSION); 
 	} 
-	 
+
 	public void onCreate(SQLiteDatabase db) { 
 		Log.i("SQLLite","onCreate SQLite");
 	      db.execSQL("CREATE TABLE logging (trackid NUMERIC, timestamp NUMERIC, lat NUMERIC, long NUMERIC);"); 
