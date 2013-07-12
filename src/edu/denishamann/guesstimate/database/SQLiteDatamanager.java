@@ -18,6 +18,9 @@ public class SQLiteDatamanager extends SQLiteOpenHelper{
 	      super(context, "guesstimate.db", null, DBVERSION); 
 	} 
 
+	/**
+	 * get called on the creation of the db
+	 */
 	public void onCreate(SQLiteDatabase db) { 
 		Log.i("SQLLite","onCreate SQLite");
 	      db.execSQL("CREATE TABLE logging (trackid NUMERIC, timestamp NUMERIC, lat NUMERIC, long NUMERIC);"); 
@@ -25,6 +28,9 @@ public class SQLiteDatamanager extends SQLiteOpenHelper{
 	      db.execSQL("CREATE TABLE highscore (name TEXT, score NUMERIC, difficulty NUMERIC);");
 	} 
 	 
+	/**
+	 * get called on the upgrade of the db
+	 */
 	public void onUpgrade(SQLiteDatabase db,  
 	              int oldVersion, int newVersion) { 
 		Log.i("SQLLite","onUpgrade");

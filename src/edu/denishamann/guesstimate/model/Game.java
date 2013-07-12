@@ -37,7 +37,7 @@ public class Game {
 	private float alertRadius_ = 50; // Distance of approach radius in meters
 
 	private boolean useCircularLateration_ = true;
-	private int maxRoundTime_ = 30; // Rundenzeit in Min
+	private int maxRoundTime_ = 30; // roundtime in minutes
 
 	private static Game instance;
 
