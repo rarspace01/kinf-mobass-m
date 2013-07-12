@@ -16,14 +16,14 @@ import edu.denishamann.guesstimate.model.GuessPoint;
  */
 public class GuessCollection implements IGuessCollection {
 
-	private List<GuessPoint> guessPointList = new LinkedList<GuessPoint>();
-	private List<GuessPoint> guessPointListBase = new LinkedList<GuessPoint>();
+	private List<GuessPoint> guessPointList_ = new LinkedList<GuessPoint>();
+	private List<GuessPoint> guessPointListBase_ = new LinkedList<GuessPoint>();
 
-	Random generator;
+	private Random generator_;
 
 	public GuessCollection() {
 		// set Random generator
-		generator = new Random();
+		generator_ = new Random();
 
 		// add the known points manual., could be extended later for web URL
 		// access etc.
@@ -52,13 +52,13 @@ public class GuessCollection implements IGuessCollection {
 		addGuessPoint(new GuessPoint(new GeoLocation(49.901334, 10.888691),
 				"Ottokirche"));
 
-		guessPointList.addAll(getAll());
+		guessPointList_.addAll(getAll());
 	}
 
 	@Override
 	public List<GuessPoint> getAll() {
 		List<GuessPoint> clone = new LinkedList<GuessPoint>();
-		for (GuessPoint gp : guessPointListBase) {
+		for (GuessPoint gp : guessPointListBase_) {
 			clone.add(new GuessPoint(gp));
 		}
 		return clone;
@@ -66,7 +66,7 @@ public class GuessCollection implements IGuessCollection {
 
 	@Override
 	public void addGuessPoint(GuessPoint guessPoint) {
-		guessPointListBase.add(guessPoint);
+		guessPointListBase_.add(guessPoint);
 	}
 
 	// //code disabled because of switching to random mode
@@ -132,9 +132,9 @@ public class GuessCollection implements IGuessCollection {
 
 		// iterator on number of points to be retrieved
 		for (int i = 0; i < numberOfPoints; i++) {
-			int element = generator.nextInt(guessPointList.size());
+			int element = generator_.nextInt(guessPointList_.size());
 			// get random guesspoint from basetable
-			GuessPoint gp = guessPointList.get(element);
+			GuessPoint gp = guessPointList_.get(element);
 			int tmp = i;
 			// check if point is already in returnlist, if so, iteratoe one more time
 			for (GuessPoint gpl : gplTop) {
@@ -146,11 +146,11 @@ public class GuessCollection implements IGuessCollection {
 			// when gp was not in returnlist - add to list, remove from tempList
 			if (tmp == i) {
 				gplTop.add(gp);
-				guessPointList.remove(element);
+				guessPointList_.remove(element);
 
 				// when templist is empty refill it
-				if (guessPointList.isEmpty()) {
-					guessPointList.addAll(getAll());
+				if (guessPointList_.isEmpty()) {
+					guessPointList_.addAll(getAll());
 				}
 			}
 		}
